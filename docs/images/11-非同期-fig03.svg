@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 210" width="880" height="210" role="img" aria-label="Promise の 3 つの状態" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="30" y="65" width="230" height="80" rx="14" fill="url(#i1)"/>
+<text x="145" y="98" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">pending</text>
+<text x="145" y="124" fill="#fff" font-size="14" text-anchor="middle">待っている</text>
+<rect x="520" y="10" width="330" height="80" rx="14" fill="url(#i2)"/>
+<text x="685" y="44" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">fulfilled（成功）</text>
+<text x="685" y="70" fill="#fff" font-size="14" text-anchor="middle">resolve(値) → then に値が届く</text>
+<rect x="520" y="120" width="330" height="80" rx="14" fill="url(#i3)"/>
+<text x="685" y="154" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">rejected（失敗）</text>
+<text x="685" y="180" fill="#fff" font-size="14" text-anchor="middle">reject(エラー) → catch にエラーが届く</text>
+<line x1="264" y1="95" x2="514" y2="55" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="264" y1="115" x2="514" y2="158" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<text x="390" y="200" fill="#4a5568" font-size="14" text-anchor="middle">どちらかに決まったら、もう変わらない。finally はどちらでも呼ばれる</text>
+</svg>

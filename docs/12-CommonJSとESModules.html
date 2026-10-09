@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>12. CommonJS と ES Modules</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"12." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"12." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>12. CommonJS と ES Modules</h1>
+<p class="lead">Node.js にある 2 つのモジュール形式。require と import、拡張子 .cjs ・ .mjs ・ .js と package.json の "type"、古いコードの見分け方</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="11-非同期.html" aria-label="前へ" title="11. 非同期" style="--accent:hsl(25.5,78%,25%);--accent2:hsl(25.5,58%,55%);--soft:hsl(25.5,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">なぜ 2 つあるのか</a></li>
+<li class="ch02"><a href="#ch02">書き方の比較</a></li>
+<li class="ch03"><a href="#ch03">拡張子と "type" の決まり</a></li>
+<li class="ch04"><a href="#ch04">お互いを読み込む</a></li>
+<li class="ch05"><a href="#ch05">__dirname と import.meta</a></li>
+<li class="ch06"><a href="#ch06">古いコードの見分け方</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>なぜ 2 つあるのか</h1>
+<p>10 章で見た <code>import</code> ・ <code>export</code>（ES Modules）は、JavaScript の言語仕様として決まったモジュールの形式です。ところが Node.js は、言語仕様にモジュールが無かった時代に生まれたため、独自の形式 <strong>CommonJS</strong>（<code>require</code> と <code>module.exports</code>）を先に使い始めました。</p>
+<figure>
+<svg viewBox="0 0 880 200" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="2 つの形式の歩み">
+<defs>
+<linearGradient id="g-12-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-12-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-12-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+</defs>
+<line x1="20" y1="110" x2="860" y2="110" stroke="#9aa6b8" stroke-width="4" stroke-linecap="round"/>
+<rect x="30" y="20" width="250" height="70" rx="12" fill="url(#g-12-1a)"/>
+<text x="155" y="50" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">CommonJS</text>
+<text x="155" y="76" fill="#fff" font-size="14" text-anchor="middle">Node.js が独自に採用</text>
+<rect x="315" y="20" width="250" height="70" rx="12" fill="url(#g-12-1b)"/>
+<text x="440" y="50" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">ES Modules</text>
+<text x="440" y="76" fill="#fff" font-size="14" text-anchor="middle">言語仕様（ES2015）で決まる</text>
+<rect x="600" y="20" width="250" height="70" rx="12" fill="url(#g-12-1c)"/>
+<text x="725" y="50" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">両方が混ざって動く</text>
+<text x="725" y="76" fill="#fff" font-size="14" text-anchor="middle">いまの Node.js</text>
+<circle cx="155" cy="110" r="8" fill="hsl(30,58%,55%)"/><circle cx="440" cy="110" r="8" fill="hsl(210,58%,55%)"/><circle cx="725" cy="110" r="8" fill="hsl(140,58%,55%)"/>
+<text x="155" y="142" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">2009 〜</text>
+<text x="440" y="142" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">2015 〜</text>
+<text x="725" y="142" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">いま</text>
+<text x="440" y="182" fill="#4a5568" font-size="14" text-anchor="middle">古いコードと npm のパッケージには CommonJS がたくさん残っている。新しく書くなら ES Modules</text>
+</svg>
+<figcaption>先に広まった CommonJS と、言語の標準になった ES Modules が共存している</figcaption>
+</figure>
+<p>いまの Node.js は両方を扱えます。新しく書くコードは ES Modules にするのが基本ですが、古いコードや npm のパッケージには CommonJS がたくさん残っています。読めるようにしておく必要があります。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>書き方の比較</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>CommonJS</th><th>ES Modules</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">外に出す</td><td><code>module.exports = { add }</code><br><code>exports.add = add</code></td><td><code>export function add() {}</code><br><code>export default …</code></td></tr>
+<tr><td class="nowrap">取り込む</td><td><code>const { add } = require("./math.cjs")</code></td><td><code>import { add } from "./math.mjs"</code></td></tr>
+<tr><td class="nowrap">取り込むとき</td><td>その行を実行したとき（途中でも書ける）</td><td>実行の前に、ファイルの先頭でまとめて</td></tr>
+<tr><td class="nowrap">拡張子の省略</td><td>できる（<code>require("./math")</code>）</td><td>できない</td></tr>
+<tr><td class="nowrap">strict モード</td><td>書かなければ、ならない</td><td>いつもなる</td></tr>
+<tr><td class="nowrap">一番外側の <code>await</code></td><td>書けない</td><td>書ける</td></tr>
+</tbody>
+</table></div>
+<h2>CommonJS</h2>
+<div class="example" data-run="file">
+<p class="filename">math.cjs</p>
+<pre><code class="language-javascript">function add(a, b) {
+  return a + b;
+}
+module.exports = { add, PI_ISH: 3.14 };</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">main.cjs</p>
+<pre><code class="language-javascript">const { add } = require("./math.cjs");
+const math = require("./math.cjs");
+
+console.log(add(2, 3));
+console.log(math);</code></pre>
+<pre class="output"><code class="language-text">5
+{ add: [Function: add], PI_ISH: 3.14 }</code></pre>
+</div>
+<p><code>require</code> はふつうの関数で、呼んだところでファイルを読み込み、<code>module.exports</code> に入れたものを返します。</p>
+<h2>ES Modules</h2>
+<div class="example" data-run="file">
+<p class="filename">math.mjs</p>
+<pre><code class="language-javascript">export function add(a, b) {
+  return a + b;
+}
+export const PI_ISH = 3.14;</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">main.mjs</p>
+<pre><code class="language-javascript">import { add, PI_ISH } from "./math.mjs";
+
+console.log(add(2, 3));
+console.log(PI_ISH);</code></pre>
+<pre class="output"><code class="language-text">5
+3.14</code></pre>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>拡張子と "type" の決まり</h1>
+<p>Node.js がファイルをどちらの形式で読むかは、<strong>拡張子</strong>で決まります。<code>.js</code> のときだけは、近くの <code>package.json</code> の <code>"type"</code> で決まります。</p>
+<figure>
+<svg viewBox="0 0 880 300" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="形式の決まり方">
+<defs>
+<linearGradient id="g-12-3a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-12-3b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-12-3c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<marker id="m-12-3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="120" width="150" height="56" rx="12" fill="url(#g-12-3a)"/>
+<text x="95" y="154" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">拡張子は？</text>
+<line x1="174" y1="135" x2="250" y2="50" stroke="#7a8699" stroke-width="3" marker-end="url(#m-12-3)"/>
+<line x1="174" y1="148" x2="250" y2="148" stroke="#7a8699" stroke-width="3" marker-end="url(#m-12-3)"/>
+<line x1="174" y1="162" x2="250" y2="246" stroke="#7a8699" stroke-width="3" marker-end="url(#m-12-3)"/>
+<text x="216" y="80" fill="#1c2330" font-size="15" font-weight="700">.cjs</text>
+<text x="200" y="140" fill="#1c2330" font-size="15" font-weight="700">.js</text>
+<text x="216" y="226" fill="#1c2330" font-size="15" font-weight="700">.mjs</text>
+<rect x="254" y="24" width="220" height="50" rx="10" fill="url(#g-12-3b)"/><text x="364" y="55" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">いつも CommonJS</text>
+<rect x="254" y="222" width="220" height="50" rx="10" fill="url(#g-12-3c)"/><text x="364" y="253" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">いつも ES Modules</text>
+<rect x="254" y="120" width="260" height="56" rx="12" fill="#ffffff" stroke="#7a8699" stroke-width="2"/>
+<text x="384" y="144" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">近くの package.json の</text>
+<text x="384" y="166" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">"type" は？</text>
+<line x1="518" y1="135" x2="600" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#m-12-3)"/>
+<line x1="518" y1="148" x2="600" y2="148" stroke="#7a8699" stroke-width="3" marker-end="url(#m-12-3)"/>
+<line x1="518" y1="162" x2="600" y2="226" stroke="#7a8699" stroke-width="3" marker-end="url(#m-12-3)"/>
+<text x="540" y="92" fill="#1c2330" font-size="13">"module"</text>
+<text x="530" y="140" fill="#1c2330" font-size="13">"commonjs"</text>
+<text x="540" y="214" fill="#1c2330" font-size="13">書いていない</text>
+<rect x="604" y="44" width="256" height="50" rx="10" fill="url(#g-12-3c)"/><text x="732" y="75" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">ES Modules</text>
+<rect x="604" y="122" width="256" height="50" rx="10" fill="url(#g-12-3b)"/><text x="732" y="153" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">CommonJS</text>
+<rect x="604" y="200" width="256" height="80" rx="10" fill="#e9edf4" stroke="#9aa6b8"/>
+<text x="732" y="228" fill="#1c2330" font-size="14" font-weight="700" text-anchor="middle">中身から推測する</text>
+<text x="732" y="250" fill="#1c2330" font-size="13" text-anchor="middle">import ・ export があれば ESM</text>
+<text x="732" y="270" fill="#1c2330" font-size="13" text-anchor="middle">（警告が出ることがある）</text>
+</svg>
+<figcaption>迷いたくなければ .cjs ・ .mjs を使うか、package.json に "type" を書く</figcaption>
+</figure>
+<p>フォルダ <code>app-esm</code> に <code>"type": "module"</code> の <code>package.json</code> を置くと、その中の <code>.js</code> は ES Modules として読まれます。</p>
+<div class="example" data-run="file">
+<p class="filename">app-esm/package.json</p>
+<pre><code class="language-json">{
+  "type": "module"
+}</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">app-esm/main.js</p>
+<pre><code class="language-javascript">import { basename } from "node:path";
+
+console.log(basename(import.meta.filename));
+console.log(typeof require);</code></pre>
+<pre class="output"><code class="language-text">main.js
+undefined</code></pre>
+</div>
+<p><code>"type": "commonjs"</code> にすると、同じ <code>.js</code> でも CommonJS になります。CommonJS には <code>require</code> があり、ES Modules には無いことが分かります。</p>
+<div class="example" data-run="file">
+<p class="filename">app-cjs/package.json</p>
+<pre><code class="language-json">{
+  "type": "commonjs"
+}</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">app-cjs/main.js</p>
+<pre><code class="language-javascript">const { basename } = require("node:path");
+
+console.log(basename(__filename));
+console.log(typeof require);</code></pre>
+<pre class="output"><code class="language-text">main.js
+function</code></pre>
+</div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> <code>"type"</code> の無い <code>package.json</code> があるフォルダで、<code>.js</code> に <code>import</code> を書くと、動きはしますが「<code>MODULE_TYPELESS_PACKAGE_JSON</code>」という警告が出ます。形式が書かれていないので中身から推測した、という意味です。<code>package.json</code> に <code>"type": "module"</code> を書けば消えます。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>お互いを読み込む</h1>
+<p>2 つの形式は、お互いを読み込めます。ただし、できることに少し差があります。</p>
+<h2>ES Modules から CommonJS を読む</h2>
+<p><code>import</code> で読めます。<code>module.exports</code> 全体は、既定の export（<code>import 名前 from</code>）として受け取れます。名前付きで取り込めるのは、Node.js が中身から見つけられた名前だけです。</p>
+<div class="example" data-run="file">
+<p class="filename">cjs-lib.cjs</p>
+<pre><code class="language-javascript">exports.hello = () => "やあ";
+exports.count = 1;</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">use-cjs.mjs</p>
+<pre><code class="language-javascript">import lib, { hello } from "./cjs-lib.cjs";
+
+console.log(hello());
+console.log(Object.keys(lib));</code></pre>
+<pre class="output"><code class="language-text">やあ
+[ 'hello', 'count' ]</code></pre>
+</div>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> 名前付きの <code>import</code> がエラーになったら、既定の export として受け取ってから分けます。<code>import lib from "./x.cjs";</code> の次に <code>const { hello } = lib;</code> と書けば、どんな CommonJS でも読めます。エラーのメッセージにも、この書き方が案内されます。</p>
+</div>
+<h2>CommonJS から ES Modules を読む</h2>
+<p>この資料で使う Node.js（v26）では、<code>require</code> で ES Modules も読めます。受け取るのは、export したものをまとめたオブジェクトです。</p>
+<div class="example" data-run="file">
+<p class="filename">esm-lib.mjs</p>
+<pre><code class="language-javascript">export function add(a, b) {
+  return a + b;
+}
+export default "既定の値";</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">use-esm.cjs</p>
+<pre><code class="language-javascript">const lib = require("./esm-lib.mjs");
+
+console.log(lib.add(1, 2));
+console.log(lib.default);</code></pre>
+<pre class="output"><code class="language-text">3
+既定の値</code></pre>
+</div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> 一番外側で <code>await</code> を使っている ES Modules は、<code>require</code> では読めません。また、古い版の Node.js では <code>require</code> で ES Modules を読めず、<code>ERR_REQUIRE_ESM</code> というエラーになります。古い資料に「CommonJS から ES Modules は読めない」と書かれているのはそのためです。</p>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>__dirname と import.meta</h1>
+<p>「このスクリプトのファイルがある場所」を知りたいときの書き方が、形式によって違います。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>知りたいこと</th><th>CommonJS</th><th>ES Modules</th></tr></thead>
+<tbody>
+<tr><td>このファイルのパス</td><td><code>__filename</code></td><td><code>import.meta.filename</code></td></tr>
+<tr><td>このファイルのあるフォルダ</td><td><code>__dirname</code></td><td><code>import.meta.dirname</code></td></tr>
+<tr><td>このファイルの URL</td><td>（無い）</td><td><code>import.meta.url</code>（<code>file:///…</code>）</td></tr>
+</tbody>
+</table></div>
+<p>ファイルの読み込みで <code>"memo.txt"</code> のように書いたパスは、<strong>スクリプトの場所ではなく、<code>node</code> を実行したフォルダ（カレントフォルダ）から</strong>数えられます。スクリプトの隣のファイルを読みたいときは、<code>import.meta.dirname</code> から組み立てます。</p>
+<div class="example" data-run="node">
+<p class="filename">tools/show.mjs</p>
+<pre><code class="language-javascript">import { readFile } from "node:fs/promises";
+import { basename, join } from "node:path";
+
+console.log(basename(import.meta.dirname));
+const fromScript = await readFile(join(import.meta.dirname, "..", "memo.txt"), "utf8");
+const fromCurrent = await readFile("memo.txt", "utf8");
+console.log(fromScript === fromCurrent);</code></pre>
+<pre class="output"><code class="language-text">tools
+true</code></pre>
+</div>
+<p>この例は、<code>memo.txt</code> のあるフォルダで <code>node tools/show.mjs</code> と実行したものです。カレントフォルダから数えた <code>memo.txt</code> と、スクリプトの 1 つ上のフォルダの <code>memo.txt</code> が同じファイルを指しています。別のフォルダから実行すると、カレントフォルダから数えた方だけが見つからなくなります。</p>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>古いコードの見分け方</h1>
+<p>コードや資料を読むときは、次の手がかりで形式を見分けます。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>見えたもの</th><th>形式</th></tr></thead>
+<tbody>
+<tr><td><code>require(…)</code> ・ <code>module.exports</code> ・ <code>exports.名前</code></td><td><span class="badge b-warn">CommonJS</span></td></tr>
+<tr><td><code>__dirname</code> ・ <code>__filename</code></td><td><span class="badge b-warn">CommonJS</span></td></tr>
+<tr><td>拡張子 <code>.cjs</code></td><td><span class="badge b-warn">CommonJS</span></td></tr>
+<tr><td><code>import … from</code> ・ <code>export</code></td><td><span class="badge b-ok">ES Modules</span></td></tr>
+<tr><td><code>import.meta</code> ・ 一番外側の <code>await</code></td><td><span class="badge b-ok">ES Modules</span></td></tr>
+<tr><td>拡張子 <code>.mjs</code> ・ <code>package.json</code> に <code>"type": "module"</code></td><td><span class="badge b-ok">ES Modules</span></td></tr>
+</tbody>
+</table></div>
+<div class="callout callout-important">
+<p><span class="label">決まり:</span> 新しく書くコードは ES Modules にします。拡張子を <code>.mjs</code> にするか、<code>package.json</code> に <code>"type": "module"</code> を書きます。CommonJS は読めれば十分で、自分から書く必要はありません。ブラウザ（第2部）が理解するのも ES Modules だけです。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="11-非同期.html" aria-label="前へ" title="11. 非同期" style="--accent:hsl(25.5,78%,25%);--accent2:hsl(25.5,58%,55%);--soft:hsl(25.5,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

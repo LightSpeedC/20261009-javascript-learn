@@ -1,0 +1,531 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>11. 非同期</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(233.3,78%,25%);--accent2:hsl(233.3,58%,55%);--soft:hsl(233.3,28%,95%);}
+.ch03{--accent:hsl(186.7,78%,25%);--accent2:hsl(186.7,58%,55%);--soft:hsl(186.7,28%,95%);}
+.ch04{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch05{--accent:hsl(93.3,78%,25%);--accent2:hsl(93.3,58%,55%);--soft:hsl(93.3,28%,95%);}
+.ch06{--accent:hsl(46.7,78%,25%);--accent2:hsl(46.7,58%,55%);--soft:hsl(46.7,28%,95%);}
+.ch07{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"11." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"11." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>11. 非同期</h1>
+<p class="lead">★ 後半の山（最重要）。待たずに先へ進む仕組み、イベントループ、Promise と async ・ await、ファイルの読み書き</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="10-エラー処理とモジュール.html" aria-label="前へ" title="10. エラー処理とモジュール" style="--accent:hsl(50.9,78%,25%);--accent2:hsl(50.9,58%,55%);--soft:hsl(50.9,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="12-CommonJSとESModules.html" aria-label="次へ" title="12. CommonJS と ES Modules" style="--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">待たずに先へ進む</a></li>
+<li class="ch02"><a href="#ch02">イベントループ</a></li>
+<li class="ch03"><a href="#ch03">コールバックで書く</a></li>
+<li class="ch04"><a href="#ch04">Promise</a></li>
+<li class="ch05"><a href="#ch05">async と await</a></li>
+<li class="ch06"><a href="#ch06">非同期のエラー</a></li>
+<li class="ch07"><a href="#ch07">Node.js でファイルを読み書きする</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>待たずに先へ進む</h1>
+<p>プログラムには「時間のかかる処理」があります。タイマー、ファイルの読み込み、ネットワークの通信などです。JavaScript は、こうした処理を<strong>頼んだら結果を待たずに次の行へ進み</strong>、結果が出たときに続きを実行します。これを<strong>非同期</strong>処理と呼びます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log("1. 注文を受けた");
+setTimeout(() => {
+  console.log("3. 料理ができた（1 秒後）");
+}, 1000);
+console.log("2. 次のお客さんの注文を受けた");</code></pre>
+<pre class="output"><code class="language-text">1. 注文を受けた
+2. 次のお客さんの注文を受けた
+3. 料理ができた（1 秒後）</code></pre>
+</div>
+<p>書いた順は 1 ・ 3 ・ 2 ですが、表示は 1 ・ 2 ・ 3 です。<code>setTimeout</code> は「1 秒後にこの関数を呼んで」と頼むだけで、待ちません。</p>
+<figure>
+<svg viewBox="0 0 880 250" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="同期と非同期の違い">
+<defs>
+<linearGradient id="g-11-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(130,78%,25%)"/><stop offset="1" stop-color="hsl(130,58%,55%)"/></linearGradient>
+</defs>
+<text x="20" y="30" fill="#1c2330" font-size="17" font-weight="700">待つ書き方（同期）: 料理ができるまで、次の注文を受けない</text>
+<rect x="20" y="44" width="150" height="40" rx="8" fill="url(#g-11-1a)"/><text x="95" y="70" fill="#fff" font-size="15" text-anchor="middle">注文 1</text>
+<rect x="172" y="44" width="330" height="40" rx="8" fill="url(#g-11-1b)"/><text x="337" y="70" fill="#fff" font-size="15" text-anchor="middle">料理を待つ（何もできない）</text>
+<rect x="504" y="44" width="150" height="40" rx="8" fill="url(#g-11-1a)"/><text x="579" y="70" fill="#fff" font-size="15" text-anchor="middle">注文 2</text>
+<text x="20" y="140" fill="#1c2330" font-size="17" font-weight="700">待たない書き方（非同期）: 頼んだら次へ。できたら呼ばれる</text>
+<rect x="20" y="154" width="150" height="40" rx="8" fill="url(#g-11-1a)"/><text x="95" y="180" fill="#fff" font-size="15" text-anchor="middle">注文 1</text>
+<rect x="172" y="154" width="150" height="40" rx="8" fill="url(#g-11-1a)"/><text x="247" y="180" fill="#fff" font-size="15" text-anchor="middle">注文 2</text>
+<rect x="324" y="154" width="150" height="40" rx="8" fill="url(#g-11-1a)"/><text x="399" y="180" fill="#fff" font-size="15" text-anchor="middle">注文 3</text>
+<rect x="172" y="202" width="330" height="30" rx="8" fill="url(#g-11-1c)"/><text x="337" y="223" fill="#fff" font-size="14" text-anchor="middle">料理 1 は裏で進んでいる</text>
+<rect x="504" y="154" width="200" height="40" rx="8" fill="url(#g-11-1d)"/><text x="604" y="180" fill="#fff" font-size="15" text-anchor="middle">料理 1 ができた → 出す</text>
+</svg>
+<figcaption>非同期では、待ち時間の間に別の仕事を進められる</figcaption>
+</figure>
+<h2>JavaScript は 1 本の流れで動く</h2>
+<p>JavaScript のコードは、<strong>1 本の流れ（シングルスレッド）</strong>で順に実行されます。同時に 2 つの関数が動くことはありません。だからこそ、待ち時間で流れを止めないように、非同期の仕組みがあります。逆に、重い計算で流れを止めてしまうと、タイマーの時刻になっても呼ばれません。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const start = Date.now();
+setTimeout(() => console.log("タイマー: 0 ミリ秒後のはず"), 0);
+while (Date.now() - start &lt; 500) {} // 0.5 秒、何もせずに回り続ける
+console.log("重い処理が終わった");</code></pre>
+<pre class="output"><code class="language-text">重い処理が終わった
+タイマー: 0 ミリ秒後のはず</code></pre>
+</div>
+<div class="callout callout-important">
+<p><span class="label">Java ・ C# から来た人へ:</span> 非同期をスレッドで実現するのではありません。<code>Thread.sleep</code> のように「その場で待つ」命令もありません。ブラウザでは、流れを止めると画面がまるごと固まります。</p>
+</div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>イベントループ</h1>
+<p>「後で呼ばれる関数」は、どの順に呼ばれるのでしょうか。その順番を決めているのが<strong>イベントループ</strong>です。</p>
+<figure>
+<svg viewBox="0 0 880 300" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="イベントループの仕組み">
+<defs>
+<linearGradient id="g-11-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-11-2b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-2c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(330,78%,25%)"/><stop offset="1" stop-color="hsl(330,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-2d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<marker id="m-11-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="20" width="250" height="260" rx="14" fill="url(#g-11-2a)"/>
+<text x="145" y="52" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">いま実行中の処理</text>
+<text x="145" y="80" fill="#fff" font-size="14" text-anchor="middle">（コールスタック）</text>
+<text x="145" y="130" fill="#fff" font-size="15" text-anchor="middle">上から順に 1 行ずつ</text>
+<text x="145" y="160" fill="#fff" font-size="15" text-anchor="middle">終わるまで割り込めない</text>
+<rect x="330" y="20" width="230" height="110" rx="14" fill="url(#g-11-2d)"/>
+<text x="445" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">裏で進む待ち</text>
+<text x="445" y="82" fill="#fff" font-size="14" text-anchor="middle">タイマー ・ ファイル</text>
+<text x="445" y="106" fill="#fff" font-size="14" text-anchor="middle">通信 …</text>
+<rect x="620" y="20" width="240" height="110" rx="14" fill="url(#g-11-2c)"/>
+<text x="740" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">① マイクロタスク</text>
+<text x="740" y="82" fill="#fff" font-size="14" text-anchor="middle">Promise の then ・ await の続き</text>
+<text x="740" y="106" fill="#fff" font-size="14" text-anchor="middle">先に全部片付ける</text>
+<rect x="620" y="170" width="240" height="110" rx="14" fill="url(#g-11-2b)"/>
+<text x="740" y="202" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">② タスクの列</text>
+<text x="740" y="232" fill="#fff" font-size="14" text-anchor="middle">時間になったタイマー</text>
+<text x="740" y="256" fill="#fff" font-size="14" text-anchor="middle">読み終わったファイル …</text>
+<line x1="274" y1="75" x2="324" y2="75" stroke="#7a8699" stroke-width="3" marker-end="url(#m-11-2)"/>
+<text x="299" y="66" fill="#1c2330" font-size="12" text-anchor="middle">頼む</text>
+<line x1="564" y1="110" x2="660" y2="166" stroke="#7a8699" stroke-width="3" marker-end="url(#m-11-2)"/>
+<path d="M616 75 C 450 180, 400 230, 278 230" fill="none" stroke="#b8620a" stroke-width="3" marker-end="url(#m-11-2)"/>
+<path d="M616 250 C 500 280, 380 280, 278 262" fill="none" stroke="#b8620a" stroke-width="3" marker-end="url(#m-11-2)"/>
+<text x="440" y="210" fill="#b8620a" font-size="14" font-weight="700" text-anchor="middle">手が空いたら、① → ② の順に 1 つずつ取り出して実行</text>
+</svg>
+<figcaption>実行中の処理が終わってから、マイクロタスク、次にタスクの順で呼ばれる</figcaption>
+</figure>
+<ol>
+<li>いま実行中の処理（コードの上から下まで）を、最後まで実行する</li>
+<li>手が空いたら、<strong>マイクロタスク</strong>（Promise の続き）を全部片付ける</li>
+<li>次に、<strong>タスクの列</strong>（時間になったタイマーなど）から 1 つ取り出して実行する</li>
+<li>2 に戻る。これをずっとくり返す</li>
+</ol>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log("A");
+setTimeout(() => console.log("B（タイマー）"), 0);
+Promise.resolve().then(() => console.log("C（Promise）"));
+console.log("D");</code></pre>
+<pre class="output"><code class="language-text">A
+D
+C（Promise）
+B（タイマー）</code></pre>
+</div>
+<p>A と D は、いま実行中の処理なので先に出ます。C は Promise の続き（マイクロタスク）なので、0 ミリ秒のタイマー B よりも先に呼ばれます。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>コールバックで書く</h1>
+<p>非同期の結果を受け取る一番古い方法は、06 章のコールバックです。「終わったらこの関数を呼んで」と渡します。ただ、「A が終わったら B、B が終わったら C」と順につなぐと、字下げがどんどん深くなります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function step(label, ms, next) {
+  setTimeout(() => {
+    console.log(label);
+    next();
+  }, ms);
+}
+step("材料を切る", 100, () => {
+  step("炒める", 100, () => {
+    step("盛り付ける", 100, () => {
+      console.log("完成");
+    });
+  });
+});</code></pre>
+<pre class="output"><code class="language-text">材料を切る
+炒める
+盛り付ける
+完成</code></pre>
+</div>
+<p>手順が増えるほど右へずれていき、エラーの扱いも手順ごとに書く必要があります。この形は「コールバック地獄」と呼ばれました。これを解決するために生まれたのが Promise です。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>Promise</h1>
+<p><strong>Promise</strong> は「いつか結果が出る約束」を表すオブジェクトです。非同期の処理を頼むと、結果の代わりに Promise がすぐに返ってきます。結果が出たら、<code>then</code> に渡した関数が呼ばれます。</p>
+<figure>
+<svg viewBox="0 0 880 210" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="Promise の 3 つの状態">
+<defs>
+<linearGradient id="g-11-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-4c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<marker id="m-11-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="30" y="65" width="230" height="80" rx="14" fill="url(#g-11-4a)"/>
+<text x="145" y="98" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">pending</text>
+<text x="145" y="124" fill="#fff" font-size="14" text-anchor="middle">待っている</text>
+<rect x="520" y="10" width="330" height="80" rx="14" fill="url(#g-11-4b)"/>
+<text x="685" y="44" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">fulfilled（成功）</text>
+<text x="685" y="70" fill="#fff" font-size="14" text-anchor="middle">resolve(値) → then に値が届く</text>
+<rect x="520" y="120" width="330" height="80" rx="14" fill="url(#g-11-4c)"/>
+<text x="685" y="154" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">rejected（失敗）</text>
+<text x="685" y="180" fill="#fff" font-size="14" text-anchor="middle">reject(エラー) → catch にエラーが届く</text>
+<line x1="264" y1="95" x2="514" y2="55" stroke="#7a8699" stroke-width="3" marker-end="url(#m-11-4)"/>
+<line x1="264" y1="115" x2="514" y2="158" stroke="#7a8699" stroke-width="3" marker-end="url(#m-11-4)"/>
+<text x="390" y="200" fill="#4a5568" font-size="14" text-anchor="middle">どちらかに決まったら、もう変わらない。finally はどちらでも呼ばれる</text>
+</svg>
+<figcaption>Promise は待ち状態から、成功か失敗のどちらかに 1 回だけ決まる</figcaption>
+</figure>
+<p>Promise を自分で作るときは、<code>new Promise((resolve, reject) =&gt; { … })</code> と書きます。成功したら <code>resolve(値)</code>、失敗したら <code>reject(エラー)</code> を呼びます。次の <code>wait</code> は、指定したミリ秒の後に値を届ける Promise を返します。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function wait(ms, value) {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(value), ms);
+  });
+}
+const p = wait(300, "届いた");
+console.log(typeof p.then);
+p.then((value) => {
+  console.log(value);
+});
+console.log("待っている間も先へ進む");</code></pre>
+<pre class="output"><code class="language-text">function
+待っている間も先へ進む
+届いた</code></pre>
+</div>
+<h2>then をつなぐ</h2>
+<p><code>then</code> も Promise を返すので、つないで書けます。<code>then</code> の中で値を返すと次の <code>then</code> に渡り、Promise を返すと、その結果を待ってから次へ進みます。コールバックのように右へずれていきません。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function wait(ms, value) {
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+}
+wait(100, 1)
+  .then((n) => {
+    console.log("1 つ目:", n);
+    return n + 1;
+  })
+  .then((n) => {
+    console.log("2 つ目:", n);
+    return wait(100, n * 10);
+  })
+  .then((n) => {
+    console.log("3 つ目:", n);
+  });</code></pre>
+<pre class="output"><code class="language-text">1 つ目: 1
+2 つ目: 2
+3 つ目: 20</code></pre>
+</div>
+<h2>失敗を受け取る</h2>
+<p><code>reject</code> されると、途中の <code>then</code> は飛ばされ、<code>catch</code> が呼ばれます。<code>finally</code> は成功でも失敗でも呼ばれます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function fetchStock(item) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (item === "りんご") {
+        resolve(30);
+      } else {
+        reject(new Error(`${item} は扱っていません`));
+      }
+    }, 100);
+  });
+}
+fetchStock("りんご")
+  .then((n) => console.log("在庫:", n))
+  .catch((e) => console.log("失敗:", e.message))
+  .finally(() => console.log("問い合わせ 1 終わり"));
+fetchStock("メロン")
+  .then((n) => console.log("在庫:", n))
+  .catch((e) => console.log("失敗:", e.message))
+  .finally(() => console.log("問い合わせ 2 終わり"));</code></pre>
+<pre class="output"><code class="language-text">在庫: 30
+問い合わせ 1 終わり
+失敗: メロン は扱っていません
+問い合わせ 2 終わり</code></pre>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>async と await</h1>
+<p><code>async</code> ・ <code>await</code> を使うと、Promise を<strong>ふつうの上から下へのコードのように</strong>書けます。いまの JavaScript では、これが基本の書き方です。</p>
+<ul>
+<li>関数の前に <code>async</code> を付けると、その関数はいつも Promise を返す</li>
+<li><code>async</code> 関数の中で、Promise の前に <code>await</code> を付けると、結果が出るまでその関数の続きを止め、結果の値を受け取る</li>
+<li>止まるのは<strong>その関数の続きだけ</strong>。呼んだ側は待たずに先へ進む</li>
+</ul>
+<p>次の例で、<code>cook を呼んだ直後</code> が何番目に出るか、予想してから「▶ 実行」を押してみてください。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function wait(ms, value) {
+  return new Promise((resolve) => setTimeout(() => resolve(value), ms));
+}
+async function cook() {
+  console.log("調理開始");
+  const a = await wait(100, "材料を切った");
+  console.log(a);
+  const b = await wait(100, "炒めた");
+  console.log(b);
+  return "完成";
+}
+cook().then((result) => console.log(result));
+console.log("cook を呼んだ直後");</code></pre>
+<pre class="output"><code class="language-text">調理開始
+cook を呼んだ直後
+材料を切った
+炒めた
+完成</code></pre>
+</div>
+<p><code>cook</code> は最初の <code>await</code> までをすぐに実行し、そこで止まって呼んだ側に戻ります。だから <code>cook を呼んだ直後</code> は 2 番目に出ます。</p>
+<h2>失敗は try ・ catch で受ける</h2>
+<p><code>await</code> した Promise が失敗すると、その行で例外が起きたのと同じ扱いになります。10 章の <code>try</code> ・ <code>catch</code> がそのまま使えます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function fetchStock(item) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (item === "りんご") resolve(30);
+      else reject(new Error(`${item} は扱っていません`));
+    }, 100);
+  });
+}
+async function main() {
+  for (const item of ["りんご", "メロン"]) {
+    try {
+      const n = await fetchStock(item);
+      console.log(`${item}: 在庫 ${n}`);
+    } catch (e) {
+      console.log(`${item}: ${e.message}`);
+    }
+  }
+  console.log("すべて終わり");
+}
+main();</code></pre>
+<pre class="output"><code class="language-text">りんご: 在庫 30
+メロン: メロン は扱っていません
+すべて終わり</code></pre>
+</div>
+<h2>順番に待つか、同時に待つか</h2>
+<p><code>await</code> を 2 行続けると、1 つ目が終わってから 2 つ目を始めます。互いに関係のない処理なら、<code>Promise.all</code> で同時に始めてまとめて待つほうが早く終わります。</p>
+<figure>
+<svg viewBox="0 0 880 170" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="順番と同時の時間の違い">
+<defs>
+<linearGradient id="g-11-5a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-11-5b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+</defs>
+<text x="20" y="30" fill="#1c2330" font-size="16" font-weight="700">順番に（await を 2 回）</text>
+<rect x="230" y="12" width="280" height="30" rx="6" fill="url(#g-11-5a)"/><text x="370" y="33" fill="#fff" font-size="14" text-anchor="middle">A（0.4 秒）</text>
+<rect x="512" y="12" width="280" height="30" rx="6" fill="url(#g-11-5b)"/><text x="652" y="33" fill="#fff" font-size="14" text-anchor="middle">B（0.4 秒）</text>
+<text x="800" y="33" fill="#a51f22" font-size="14" font-weight="700">0.8 秒</text>
+<text x="20" y="100" fill="#1c2330" font-size="16" font-weight="700">同時に（Promise.all）</text>
+<rect x="230" y="70" width="280" height="30" rx="6" fill="url(#g-11-5a)"/><text x="370" y="91" fill="#fff" font-size="14" text-anchor="middle">C（0.4 秒）</text>
+<rect x="230" y="104" width="280" height="30" rx="6" fill="url(#g-11-5b)"/><text x="370" y="125" fill="#fff" font-size="14" text-anchor="middle">D（0.4 秒）</text>
+<text x="520" y="110" fill="#1d7a3c" font-size="14" font-weight="700">0.4 秒</text>
+<line x1="230" y1="150" x2="792" y2="150" stroke="#9aa6b8" stroke-width="2"/>
+<text x="230" y="166" fill="#4a5568" font-size="12">0</text><text x="505" y="166" fill="#4a5568" font-size="12">0.4</text><text x="785" y="166" fill="#4a5568" font-size="12">0.8 秒</text>
+</svg>
+<figcaption>関係のない待ちは、同時に始めると合計の時間が短くなる</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const wait = (ms, value) =>
+  new Promise((resolve) => setTimeout(() => resolve(value), ms));
+const seconds = (ms) => `${(Math.round(ms / 400) * 0.4).toFixed(1)} 秒くらい`;
+
+async function main() {
+  let start = Date.now();
+  const a = await wait(400, "A");
+  const b = await wait(400, "B");
+  console.log("順番に:", a, b, seconds(Date.now() - start));
+
+  start = Date.now();
+  const [c, d] = await Promise.all([wait(400, "C"), wait(400, "D")]);
+  console.log("同時に:", c, d, seconds(Date.now() - start));
+}
+main();</code></pre>
+<pre class="output"><code class="language-text">順番に: A B 0.8 秒くらい
+同時に: C D 0.4 秒くらい</code></pre>
+</div>
+<p><code>Promise.all</code> は、配列で渡した Promise が<strong>全部成功したら</strong>、結果を同じ順の配列で返します。1 つでも失敗すると、その時点で失敗になります。全部の結果を成功 ・ 失敗にかかわらず受け取りたいときは <code>Promise.allSettled</code> を使います。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const ok = (v) => new Promise((resolve) => setTimeout(() => resolve(v), 100));
+const ng = (msg) =>
+  new Promise((_, reject) => setTimeout(() => reject(new Error(msg)), 50));
+
+async function main() {
+  try {
+    await Promise.all([ok("A"), ng("B が失敗"), ok("C")]);
+  } catch (e) {
+    console.log("all:", e.message);
+  }
+  const results = await Promise.allSettled([ok("A"), ng("B が失敗")]);
+  for (const r of results) {
+    console.log("allSettled:", r.status, r.value ?? r.reason.message);
+  }
+}
+main();</code></pre>
+<pre class="output"><code class="language-text">all: B が失敗
+allSettled: fulfilled A
+allSettled: rejected B が失敗</code></pre>
+</div>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>非同期のエラー</h1>
+<h2>受け取り手のいない失敗</h2>
+<p>失敗した Promise を誰も <code>catch</code> しないと、「<code>Uncaught (in promise)</code>」と表示されます。<code>async</code> 関数の中で投げたエラーも、呼んだ側で受けなければ同じです。Node.js では、この状態になるとプログラムが止まります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">async function load() {
+  throw new Error("読み込み失敗");
+}
+load();
+console.log("呼んだ後も先へ進む");</code></pre>
+<pre class="output"><code class="language-text">呼んだ後も先へ進む
+Uncaught (in promise) Error: 読み込み失敗</code></pre>
+</div>
+<p><code>async</code> 関数を呼ぶときは、<code>await</code> して <code>try</code> ・ <code>catch</code> で囲むか、<code>.catch(…)</code> を付けます。</p>
+<h2>try はその場のエラーしか捕まえない</h2>
+<p>10 章の注意の続きです。<code>setTimeout</code> に渡した関数は、<code>try</code> を抜けた後で呼ばれるので、中で起きたエラーは外側の <code>try</code> では捕まりません。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">try {
+  setTimeout(() => {
+    throw new Error("タイマーの中のエラー");
+  }, 0);
+} catch (e) {
+  console.log("捕まえた？", e.message);
+}
+console.log("try を抜けた");</code></pre>
+<pre class="output"><code class="language-text">try を抜けた
+Uncaught Error: タイマーの中のエラー</code></pre>
+</div>
+<p>タイマーなどの古い仕組みは、Promise で包んでから <code>await</code> すると、<code>try</code> ・ <code>catch</code> で扱えるようになります（前の節の <code>wait</code> や <code>fetchStock</code> がその形です）。</p>
+</section>
+
+<section class="ch07" id="ch07">
+<h1>Node.js でファイルを読み書きする</h1>
+<p>非同期の代表例が、ファイルの読み書きです。Node.js の <code>node:fs/promises</code> は、Promise を返す関数をそろえています。ここからの例は Node.js でしか動かないので、「▶ 実行」は Node.js で実行した結果（記録）を表示します。使っているファイルは <a href="https://github.com/LightSpeedC/20261009-javascript-learn/tree/develop/docs/samples">docs/samples</a> にあります。</p>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> <code>.mjs</code> のファイル（ES Modules）では、関数の外でも <code>await</code> を書けます（トップレベル await）。ここからの例はその書き方です。</p>
+</div>
+<h2>読む</h2>
+<div class="example" data-run="node">
+<p class="filename">read.mjs</p>
+<pre><code class="language-javascript">import { readFile } from "node:fs/promises";
+
+const text = await readFile("memo.txt", "utf8");
+const lines = text.trim().split(/\r?\n/);
+console.log(`${lines.length} 行`);
+for (const line of lines) {
+  console.log(`- ${line}`);
+}</code></pre>
+<pre class="output"><code class="language-text">3 行
+- 牛乳
+- パン
+- たまご</code></pre>
+</div>
+<p><code>split(/\r?\n/)</code> は、改行で分けるときの書き方です。Windows で作ったファイルは改行が <code>\r\n</code> になっていることがあるので、どちらでも分けられるようにしています。</p>
+<h2>読めなかったとき</h2>
+<div class="example" data-run="node">
+<p class="filename">missing.mjs</p>
+<pre><code class="language-javascript">import { readFile } from "node:fs/promises";
+
+try {
+  await readFile("nothing.txt", "utf8");
+} catch (e) {
+  console.log(e.code);
+  console.log(e.syscall);
+}</code></pre>
+<pre class="output"><code class="language-text">ENOENT
+open</code></pre>
+</div>
+<p><code>ENOENT</code> は「そのファイルやフォルダは無い（Error NO ENTry）」という意味のコードで、<code>syscall</code> は失敗した操作（ここではファイルを開く <code>open</code>）です。<code>e.message</code> には「<code>ENOENT: no such file or directory, open '…'</code>」のように、開こうとしたファイルの場所まで入っています。</p>
+<h2>書く</h2>
+<div class="example" data-run="node">
+<p class="filename">write.mjs</p>
+<pre><code class="language-javascript">import { appendFile, readFile, writeFile } from "node:fs/promises";
+
+await writeFile("log.txt", "1 行目\n");
+await appendFile("log.txt", "2 行目\n");
+const text = await readFile("log.txt", "utf8");
+console.log(text.trimEnd());</code></pre>
+<pre class="output"><code class="language-text">1 行目
+2 行目</code></pre>
+</div>
+<p><code>writeFile</code> は中身を置き換え、<code>appendFile</code> は末尾に足します。どちらもファイルが無ければ作ります。</p>
+<h2>フォルダの一覧</h2>
+<div class="example" data-run="node">
+<p class="filename">list.mjs</p>
+<pre><code class="language-javascript">import { readdir, stat } from "node:fs/promises";
+
+const names = (await readdir("notes")).sort();
+for (const name of names) {
+  const info = await stat(`notes/${name}`);
+  console.log(`${name}  ${info.size} バイト`);
+}</code></pre>
+<pre class="output"><code class="language-text">a.txt  18 バイト
+b.txt  31 バイト
+c.md  27 バイト</code></pre>
+</div>
+<p><code>readdir</code> が返す順番は、OS によって違うことがあります。順番が大事なときは <code>sort()</code> で並べ替えます。大きさが文字数より大きいのは、日本語が 1 文字 3 バイト（UTF-8）で保存されているからです。</p>
+<h2>まとめて読む</h2>
+<p>複数のファイルを読むときは、<code>Promise.all</code> で同時に読みます。</p>
+<div class="example" data-run="node">
+<p class="filename">many.mjs</p>
+<pre><code class="language-javascript">import { readdir, readFile } from "node:fs/promises";
+
+const names = (await readdir("notes")).filter((n) => n.endsWith(".txt")).sort();
+const texts = await Promise.all(names.map((n) => readFile(`notes/${n}`, "utf8")));
+names.forEach((n, i) => {
+  console.log(`${n}: ${texts[i].split(/\r?\n/)[0]}`);
+});</code></pre>
+<pre class="output"><code class="language-text">a.txt: 1 行目のメモ
+b.txt: 2 つ目のメモ</code></pre>
+</div>
+<h2>古い書き方: コールバック</h2>
+<p><code>node:fs</code>（<code>/promises</code> が付かない方）は、コールバックで結果を受け取る古い形です。古いコードや資料でよく見かけます。コールバックの 1 つ目の引数がエラー、2 つ目が結果、という決まりです。</p>
+<div class="example" data-run="node">
+<p class="filename">callback.mjs</p>
+<pre><code class="language-javascript">import { readFile } from "node:fs";
+
+readFile("memo.txt", "utf8", (err, text) => {
+  if (err) {
+    console.log("読めませんでした:", err.code);
+    return;
+  }
+  console.log("読めた文字数:", text.length);
+});
+console.log("読み込みを頼んだ");</code></pre>
+<pre class="output"><code class="language-text">読み込みを頼んだ
+読めた文字数: 10</code></pre>
+</div>
+<div class="callout callout-tip">
+<p><span class="label">この章のまとめ:</span> 時間のかかる処理は、頼んだら待たずに先へ進む。後で呼ばれる順番はイベントループが決める。Promise は「いつか出る結果」で、<code>async</code> ・ <code>await</code> で上から下へ書ける。失敗は <code>try</code> ・ <code>catch</code> で受け、関係のない待ちは <code>Promise.all</code> で同時に待つ。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="10-エラー処理とモジュール.html" aria-label="前へ" title="10. エラー処理とモジュール" style="--accent:hsl(50.9,78%,25%);--accent2:hsl(50.9,58%,55%);--soft:hsl(50.9,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="12-CommonJSとESModules.html" aria-label="次へ" title="12. CommonJS と ES Modules" style="--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

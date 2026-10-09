@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 170" width="880" height="170" role="img" aria-label="順番と同時の時間の違い" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="20" y="30" fill="#1c2330" font-size="16" font-weight="700">順番に（await を 2 回）</text>
+<rect x="230" y="12" width="280" height="30" rx="6" fill="url(#i1)"/><text x="370" y="33" fill="#fff" font-size="14" text-anchor="middle">A（0.4 秒）</text>
+<rect x="512" y="12" width="280" height="30" rx="6" fill="url(#i2)"/><text x="652" y="33" fill="#fff" font-size="14" text-anchor="middle">B（0.4 秒）</text>
+<text x="800" y="33" fill="#a51f22" font-size="14" font-weight="700">0.8 秒</text>
+<text x="20" y="100" fill="#1c2330" font-size="16" font-weight="700">同時に（Promise.all）</text>
+<rect x="230" y="70" width="280" height="30" rx="6" fill="url(#i1)"/><text x="370" y="91" fill="#fff" font-size="14" text-anchor="middle">C（0.4 秒）</text>
+<rect x="230" y="104" width="280" height="30" rx="6" fill="url(#i2)"/><text x="370" y="125" fill="#fff" font-size="14" text-anchor="middle">D（0.4 秒）</text>
+<text x="520" y="110" fill="#1d7a3c" font-size="14" font-weight="700">0.4 秒</text>
+<line x1="230" y1="150" x2="792" y2="150" stroke="#9aa6b8" stroke-width="2"/>
+<text x="230" y="166" fill="#4a5568" font-size="12">0</text><text x="505" y="166" fill="#4a5568" font-size="12">0.4</text><text x="785" y="166" fill="#4a5568" font-size="12">0.8 秒</text>
+</svg>
