@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript 入門 ローカルルール</title>
+<style>
+:root{--navy1:#12224d;--navy2:#2f5fbf;--ink:#1c2330;--ink-soft:#4a5568;--line:#d9dfe8;--code-bg:#f4f6fa;--link:#1a4fa0;--accent:var(--navy1);--accent2:var(--navy2);--soft:#f2f5fb;}
+body{margin:0;background:#ffffff;color:var(--ink,#1c2330);font-family:"Segoe UI","Yu Gothic UI","Meiryo",sans-serif;font-size:15.5px;line-height:1.85;}
+.titlebar{background:linear-gradient(135deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;padding:34px 30px 30px;}
+.titlebar .inner{max-width:1600px;margin:0 auto;padding:0 30px;}
+.titlebar h1{font-size:1.9em;margin:0 0 6px;color:#fff;}
+.titlebar .date{color:#e6ecf8;background:transparent;margin:4px 0;font-size:0.92em;}
+.wrap{max-width:1600px;margin:0 auto;padding:0 30px;}
+a{color:var(--link,#1a4fa0);background:transparent;}
+.wrap > .back-home{margin-top:18px;}
+.back-home{display:inline-block;padding:2px 12px;border-radius:6px;background:linear-gradient(100deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;text-decoration:none;font-weight:700;}
+section{margin:34px 0;padding:4px 26px 26px;border-radius:10px;background:linear-gradient(180deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
+section h1{font-size:1.45em;margin:26px 0 20px;padding:14px 20px;border-radius:8px;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.18);}
+code{background:var(--code-bg,#f4f6fa);border:1px solid var(--line,#d9dfe8);color:#17335f;padding:0 4px;border-radius:4px;font-size:0.92em;}
+footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;color:var(--ink-soft,#4a5568);}
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>JavaScript 入門 ローカルルール</h1>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<a class="back-home" href="../../README.html" title="README">⌂</a>
+
+<section id="ch01">
+<h1>commit ・ push の進め方</h1>
+<ul>
+<li>共通ルールの「修正は1点ずつ、確認を重視」と「重大な操作の確認方法」を、このプロジェクトでは次のように変える。<strong>資料 1 章、または計画書・記録の更新など、ひとまとまりの作業が済むたびに、指示を待たずに commit して push する</strong></li>
+<li>理由: 学習資料を少しずつ公開しながら作るため</li>
+<li>commit の前に、共通ルールのとおりに全件テストを流し、載せるファイルを <code>git diff --cached --name-only</code> で確かめる</li>
+<li>対象は <code>develop</code> ブランチだけ。release ・ master へのマージ、タグ打ち、リモートリポジトリの作成は、これまでどおり指示を待つ</li>
+</ul>
+</section>
+
+</div>
+<footer><a class="back-home" href="../../README.html" title="README">⌂</a></footer>
+</body>
+</html>
