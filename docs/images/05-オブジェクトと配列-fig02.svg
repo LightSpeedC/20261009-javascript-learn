@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 230" width="880" height="230" role="img" aria-label="参照とコピー" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="230" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">const b = a;（同じ中身を指す）</text>
+<rect x="40" y="50" width="110" height="48" rx="24" fill="url(#i1)"/><text x="95" y="81" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">a</text>
+<rect x="40" y="130" width="110" height="48" rx="24" fill="url(#i2)"/><text x="95" y="161" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">b</text>
+<rect x="260" y="80" width="190" height="70" rx="12" fill="url(#i3)"/><text x="355" y="122" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">{ count: 99 }</text>
+<line x1="154" y1="76" x2="254" y2="102" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="154" y1="152" x2="254" y2="128" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<text x="245" y="210" fill="#a51f22" font-size="15" font-weight="700" text-anchor="middle">b.count を変えると a.count も変わる</text>
+<line x1="480" y1="20" x2="480" y2="215" stroke="#d9dfe8" stroke-width="2"/>
+<text x="680" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">const c = { ...a };（中身を写す）</text>
+<rect x="520" y="50" width="110" height="48" rx="24" fill="url(#i1)"/><text x="575" y="81" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">a</text>
+<rect x="520" y="130" width="110" height="48" rx="24" fill="url(#i4)"/><text x="575" y="161" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">c</text>
+<rect x="690" y="44" width="170" height="60" rx="12" fill="url(#i3)"/><text x="775" y="80" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">{ count: 99 }</text>
+<rect x="690" y="124" width="170" height="60" rx="12" fill="url(#i4)"/><text x="775" y="160" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">{ count: 0 }</text>
+<line x1="634" y1="74" x2="684" y2="74" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="634" y1="154" x2="684" y2="154" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<text x="680" y="210" fill="#1d7a3c" font-size="15" font-weight="700" text-anchor="middle">c を変えても a は変わらない</text>
+</svg>

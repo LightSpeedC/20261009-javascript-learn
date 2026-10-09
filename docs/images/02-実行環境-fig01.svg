@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 150" width="880" height="150" role="img" aria-label="Node.js を入れてから動かすまで" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(205,78%,25%)"/><stop offset="1" stop-color="hsl(205,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(130,78%,25%)"/><stop offset="1" stop-color="hsl(130,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="10" y="30" width="185" height="80" rx="12" fill="url(#i1)"/>
+<text x="102" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">① ダウンロード</text>
+<text x="102" y="90" fill="#fff" font-size="13" text-anchor="middle">nodejs.org から</text>
+<rect x="235" y="30" width="185" height="80" rx="12" fill="url(#i2)"/>
+<text x="327" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">② インストール</text>
+<text x="327" y="90" fill="#fff" font-size="13" text-anchor="middle">既定のまま進める</text>
+<rect x="460" y="30" width="185" height="80" rx="12" fill="url(#i3)"/>
+<text x="552" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">③ 版を確かめる</text>
+<text x="552" y="90" fill="#fff" font-size="13" text-anchor="middle">node --version</text>
+<rect x="685" y="30" width="185" height="80" rx="12" fill="url(#i4)"/>
+<text x="777" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">④ 動かす</text>
+<text x="777" y="90" fill="#fff" font-size="13" text-anchor="middle">node hello.js</text>
+<line x1="197" y1="70" x2="231" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="422" y1="70" x2="456" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="647" y1="70" x2="681" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+</svg>

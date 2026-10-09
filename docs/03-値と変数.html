@@ -1,0 +1,283 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>03. 値と変数</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"03." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"03." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>03. 値と変数</h1>
+<p class="lead"><code>const</code> と <code>let</code> の使い分け、7 種類のプリミティブ型、数値と文字列の性質、<code>null</code> と <code>undefined</code></p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="02-実行環境.html" aria-label="前へ" title="02. 実行環境" style="--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="04-演算子と型変換.html" aria-label="次へ" title="04. 演算子と型変換" style="--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">変数を作る</a></li>
+<li class="ch02"><a href="#ch02">値の型</a></li>
+<li class="ch03"><a href="#ch03">数値</a></li>
+<li class="ch04"><a href="#ch04">文字列</a></li>
+<li class="ch05"><a href="#ch05">null と undefined</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>変数を作る</h1>
+<p>変数は <code>const</code> か <code>let</code> で作ります。違いは<strong>あとで別の値を入れ直せるかどうか</strong>です。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>入れ直し</th><th>使いどころ</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>const</code></td><td class="nowrap"><span class="badge b-ng">できない</span></td><td>基本はこれ。値が変わらないことが読み手に伝わる</td></tr>
+<tr><td class="nowrap"><code>let</code></td><td class="nowrap"><span class="badge b-ok">できる</span></td><td>数え上げや合計など、途中で値が変わるもの</td></tr>
+<tr><td class="nowrap"><code>var</code></td><td class="nowrap"><span class="badge b-ok">できる</span></td><td>古い書き方。新しいコードでは使わない（理由は 07 章）</td></tr>
+</tbody>
+</table></div>
+<figure>
+<svg viewBox="0 0 880 210" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="変数は値に付けた名札">
+<defs>
+<linearGradient id="g-03-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(150,78%,25%)"/><stop offset="1" stop-color="hsl(150,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<marker id="m-03-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<text x="220" y="28" fill="#1c2330" font-size="17" font-weight="700" text-anchor="middle">const price = 120;</text>
+<rect x="40" y="50" width="140" height="56" rx="28" fill="url(#g-03-1a)"/>
+<text x="110" y="85" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">price</text>
+<line x1="184" y1="78" x2="266" y2="78" stroke="#7a8699" stroke-width="3" marker-end="url(#m-03-1)"/>
+<rect x="270" y="50" width="130" height="56" rx="10" fill="url(#g-03-1b)"/>
+<text x="335" y="85" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">120</text>
+<text x="220" y="140" fill="#a51f22" font-size="15" font-weight="700" text-anchor="middle">price = 150; → エラー（付け替えできない）</text>
+<text x="660" y="28" fill="#1c2330" font-size="17" font-weight="700" text-anchor="middle">let count = 0;  count = 1;</text>
+<rect x="480" y="50" width="140" height="56" rx="28" fill="url(#g-03-1c)"/>
+<text x="550" y="85" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">count</text>
+<rect x="710" y="30" width="130" height="50" rx="10" fill="#c9d1dc"/>
+<text x="775" y="62" fill="#4a5568" font-size="20" font-weight="700" text-anchor="middle">0</text>
+<rect x="710" y="110" width="130" height="56" rx="10" fill="url(#g-03-1d)"/>
+<text x="775" y="145" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">1</text>
+<line x1="624" y1="70" x2="704" y2="55" stroke="#c0c8d4" stroke-width="3" stroke-dasharray="6 5"/>
+<line x1="624" y1="88" x2="704" y2="130" stroke="#7a8699" stroke-width="3" marker-end="url(#m-03-1)"/>
+<text x="660" y="196" fill="#1d7a3c" font-size="15" font-weight="700" text-anchor="middle">let は名札を別の値へ付け替えられる</text>
+</svg>
+<figcaption>変数は「値に付けた名札」と考えると分かりやすい</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const price = 120;
+let count = 0;
+count = count + 1;
+count += 2;
+console.log(price, count);</code></pre>
+<pre class="output"><code class="language-text">120 3</code></pre>
+</div>
+<p><code>const</code> の変数に入れ直そうとすると、エラーになります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const price = 120;
+price = 150;</code></pre>
+<pre class="output"><code class="language-text">Uncaught TypeError: Assignment to constant variable.</code></pre>
+</div>
+<p>「<code>TypeError</code>: 定数の変数への代入」という意味です。迷ったら <code>const</code> で書き、入れ直す必要が出たときだけ <code>let</code> に変えます。</p>
+<div class="callout callout-important">
+<p><span class="label">Java ・ C# ・ VBA から来た人へ:</span> <code>int</code> や <code>As Long</code> のような型は書きません。<code>const</code> は Java の <code>final</code>、C# の <code>readonly</code> に近いものです。変数名には日本語も使えますが、英語で書くのがふつうです。</p>
+</div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>値の型</h1>
+<p>変数に型はありませんが、<strong>値には型があります</strong>。JavaScript の値は、7 種類の<strong>プリミティブ</strong>と、それ以外の<strong>オブジェクト</strong>に分かれます。</p>
+<figure>
+<svg viewBox="0 0 880 250" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="値の型の一覧">
+<defs>
+<linearGradient id="g-03-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-03-2-1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(240,78%,25%)"/><stop offset="1" stop-color="hsl(240,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(160,78%,25%)"/><stop offset="1" stop-color="hsl(160,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-5" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-6" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(80,78%,25%)"/><stop offset="1" stop-color="hsl(80,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-7" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(40,78%,25%)"/><stop offset="1" stop-color="hsl(40,58%,55%)"/></linearGradient>
+<linearGradient id="g-03-2-8" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+</defs>
+<rect x="10" y="10" width="600" height="230" rx="14" fill="#eef1f7" stroke="#c9d1dc"/>
+<text x="310" y="38" fill="#1c2330" font-size="17" font-weight="700" text-anchor="middle">プリミティブ（それ以上分けられない値）</text>
+<rect x="30" y="56" width="135" height="76" rx="10" fill="url(#g-03-2-1)"/><text x="97" y="88" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">number</text><text x="97" y="114" fill="#fff" font-size="14" text-anchor="middle">120 ・ 3.14</text>
+<rect x="175" y="56" width="135" height="76" rx="10" fill="url(#g-03-2-2)"/><text x="242" y="88" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">string</text><text x="242" y="114" fill="#fff" font-size="14" text-anchor="middle">"りんご"</text>
+<rect x="320" y="56" width="135" height="76" rx="10" fill="url(#g-03-2-3)"/><text x="387" y="88" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">boolean</text><text x="387" y="114" fill="#fff" font-size="14" text-anchor="middle">true ・ false</text>
+<rect x="465" y="56" width="125" height="76" rx="10" fill="url(#g-03-2-4)"/><text x="527" y="88" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">undefined</text><text x="527" y="114" fill="#fff" font-size="14" text-anchor="middle">未設定</text>
+<rect x="30" y="146" width="135" height="76" rx="10" fill="url(#g-03-2-5)"/><text x="97" y="178" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">null</text><text x="97" y="204" fill="#fff" font-size="14" text-anchor="middle">わざと空</text>
+<rect x="175" y="146" width="135" height="76" rx="10" fill="url(#g-03-2-6)"/><text x="242" y="178" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">bigint</text><text x="242" y="204" fill="#fff" font-size="14" text-anchor="middle">10n（巨大な整数）</text>
+<rect x="320" y="146" width="135" height="76" rx="10" fill="url(#g-03-2-7)"/><text x="387" y="178" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">symbol</text><text x="387" y="204" fill="#fff" font-size="14" text-anchor="middle">一意な目印</text>
+<rect x="630" y="10" width="240" height="230" rx="14" fill="url(#g-03-2-8)"/>
+<text x="750" y="44" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">オブジェクト</text>
+<text x="750" y="80" fill="#fff" font-size="15" text-anchor="middle">{ name: "りんご" }</text>
+<text x="750" y="110" fill="#fff" font-size="15" text-anchor="middle">配列 [1, 2, 3]</text>
+<text x="750" y="140" fill="#fff" font-size="15" text-anchor="middle">関数 ・ クラス</text>
+<text x="750" y="170" fill="#fff" font-size="15" text-anchor="middle">Date ・ Map ・ Set …</text>
+<text x="750" y="212" fill="#fff" font-size="13" text-anchor="middle">05 章 ・ 06 章 ・ 08 章で扱う</text>
+</svg>
+<figcaption>値は 7 種類のプリミティブと、オブジェクトに分かれる。ふだんよく使うのは左上の 4 つと null</figcaption>
+</figure>
+<p>値の型は <code>typeof</code> で調べられます。結果は型の名前の文字列です。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(typeof 120);
+console.log(typeof "りんご");
+console.log(typeof true);
+console.log(typeof undefined);
+console.log(typeof 10n);
+console.log(typeof { name: "りんご" });
+console.log(typeof [1, 2, 3]);
+console.log(typeof null);</code></pre>
+<pre class="output"><code class="language-text">number
+string
+boolean
+undefined
+bigint
+object
+object
+object</code></pre>
+</div>
+<p>最後の 2 つに注意してください。配列も <code>"object"</code> になります。配列かどうかは <code>Array.isArray(値)</code> で調べます。<code>typeof null</code> が <code>"object"</code> になるのは、最初の実装の誤りが互換性のために残ったものです。<code>null</code> かどうかは <code>値 === null</code> で調べます。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>数値</h1>
+<p>JavaScript の数値（<code>number</code>）は 1 種類だけで、中身はいつも小数を扱える 64 ビットの浮動小数点数（Java ・ C# の <code>double</code>）です。整数と小数を区別しません。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(7 / 2);
+console.log(7 % 2);
+console.log(Math.floor(7 / 2));
+console.log(2 ** 10);
+console.log(0.1 + 0.2);</code></pre>
+<pre class="output"><code class="language-text">3.5
+1
+3
+1024
+0.30000000000000004</code></pre>
+</div>
+<ul>
+<li><code>7 / 2</code> は <code>3.5</code>。Java ・ C# の整数どうしの割り算のように切り捨てられない。切り捨てたいときは <code>Math.floor</code> を使う</li>
+<li><code>%</code> は割った余り、<code>**</code> はべき乗</li>
+<li><code>0.1 + 0.2</code> がぴったり <code>0.3</code> にならないのは、<code>double</code> を使う言語に共通の性質。お金の計算は円単位の整数で行う</li>
+</ul>
+<p>整数として正確に扱えるのは、およそ 9000 兆（<code>Number.MAX_SAFE_INTEGER</code>）までです。それを超える整数は <code>bigint</code> を使います。数字の後ろに <code>n</code> を付けて書きます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(Number.MAX_SAFE_INTEGER);
+console.log(9007199254740993);
+console.log(9007199254740993n);</code></pre>
+<pre class="output"><code class="language-text">9007199254740991
+9007199254740992
+9007199254740993n</code></pre>
+</div>
+<p>2 行目は、書いた数と違う値が出ています。正確に表せない大きさだからです。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>文字列</h1>
+<p>文字列は <code>"…"</code> か <code>'…'</code> で囲みます。どちらも同じ意味です。この資料では <code>"…"</code> を使います。</p>
+<p>3 つ目の囲み方として、バッククォート <code>`…`</code> を使う<strong>テンプレート文字列</strong>があります。中に <code>${式}</code> を書くと、式の値が埋め込まれます。改行もそのまま書けます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const item = "りんご";
+const price = 120;
+const count = 3;
+console.log(item + "を" + count + "個で" + price * count + "円");
+console.log(`${item}を${count}個で${price * count}円`);
+console.log(`1 行目
+2 行目`);</code></pre>
+<pre class="output"><code class="language-text">りんごを3個で360円
+りんごを3個で360円
+1 行目
+2 行目</code></pre>
+</div>
+<p><code>+</code> でつなぐより、テンプレート文字列のほうが読みやすくなります。C# の <code>$"{item}"</code>（文字列補間）と同じ役割です。</p>
+<p>文字列には、便利なメソッドがたくさんあります。元の文字列は変わらず、新しい文字列が返ります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const text = "JavaScript Primer";
+console.log(text.length);
+console.log(text.toUpperCase());
+console.log(text.includes("Script"));
+console.log(text.slice(0, 4));
+console.log(text.split(" "));
+console.log(text.replace("Primer", "入門"));
+console.log(text);</code></pre>
+<pre class="output"><code class="language-text">17
+JAVASCRIPT PRIMER
+true
+Java
+[ 'JavaScript', 'Primer' ]
+JavaScript 入門
+JavaScript Primer</code></pre>
+</div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> <code>length</code> は「文字数」ではなく、内部の単位（UTF-16）の数です。日本語の多くは 1 文字が 1 ですが、絵文字などは 1 文字が 2 になります。</p>
+</div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log("日本語".length);
+console.log("🍎".length);
+console.log([..."🍎"].length);</code></pre>
+<pre class="output"><code class="language-text">3
+2
+1</code></pre>
+</div>
+<p>見た目の文字数を数えたいときは、3 行目のように <code>[...文字列]</code> で 1 文字ずつの配列に分けてから数えます（<code>...</code> は 05 章で扱います）。</p>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>null と undefined</h1>
+<p>「値が無い」ことを表す値が 2 つあります。どちらも、Java ・ C# の <code>null</code>、VBA の <code>Nothing</code> や <code>Empty</code> に近いものです。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>値</th><th>意味</th><th>出てくる場面</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>undefined</code></td><td>まだ決まっていない</td><td>値を入れずに作った変数 ・ 無いプロパティ ・ <code>return</code> の無い関数の戻り値 ・ 渡されなかった引数</td></tr>
+<tr><td class="nowrap"><code>null</code></td><td>わざと空にしてある</td><td>プログラムを書く人が「ここは空です」と明示したいとき</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">let selected;
+console.log(selected);
+
+const item = { name: "りんご" };
+console.log(item.price);
+
+function noReturn() {}
+console.log(noReturn());
+
+let winner = null;
+console.log(winner);</code></pre>
+<pre class="output"><code class="language-text">undefined
+undefined
+undefined
+null</code></pre>
+</div>
+<p><code>undefined</code> は JavaScript が自動で入れる値、<code>null</code> は人が入れる値、と覚えておくと区別しやすくなります。自分で「空」を表すときは <code>null</code> を使います。</p>
+<p>無いものに対してさらにプロパティを読もうとすると、エラーになります。実務でいちばんよく見るエラーの 1 つです。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const item = { name: "りんご" };
+console.log(item.shop.address);</code></pre>
+<pre class="output"><code class="language-text">Uncaught TypeError: Cannot read properties of undefined (reading 'address')</code></pre>
+</div>
+<p>「<code>TypeError</code>: <code>undefined</code> のプロパティは読めない（<code>address</code> を読もうとした）」という意味です。<code>item.shop</code> が <code>undefined</code> だったのが原因です。安全に読む書き方（<code>?.</code>）は 04 章で扱います。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="02-実行環境.html" aria-label="前へ" title="02. 実行環境" style="--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="04-演算子と型変換.html" aria-label="次へ" title="04. 演算子と型変換" style="--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

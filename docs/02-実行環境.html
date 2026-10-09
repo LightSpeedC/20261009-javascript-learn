@@ -1,0 +1,217 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>02. 実行環境</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"02." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"02." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>02. 実行環境</h1>
+<p class="lead">Node.js を入れて、1 行ずつ試す方法と、ファイルに書いて実行する方法を身につける</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="01-背景.html" aria-label="前へ" title="01. 背景" style="--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="03-値と変数.html" aria-label="次へ" title="03. 値と変数" style="--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">Node.js を入れる</a></li>
+<li class="ch02"><a href="#ch02">REPL で 1 行ずつ試す</a></li>
+<li class="ch03"><a href="#ch03">ファイルに書いて実行する</a></li>
+<li class="ch04"><a href="#ch04">console で値を見る</a></li>
+<li class="ch05"><a href="#ch05">エディタと書き方の決まり</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>Node.js を入れる</h1>
+<p>Node.js は、JavaScript をパソコンの上で直接動かすためのプログラムです。公式サイト（<a href="https://nodejs.org/">https://nodejs.org/</a>）からインストーラーを取ってきて入れます。</p>
+<figure>
+<svg viewBox="0 0 880 150" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="Node.js を入れてから動かすまで">
+<defs>
+<linearGradient id="g-02-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-02-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(205,78%,25%)"/><stop offset="1" stop-color="hsl(205,58%,55%)"/></linearGradient>
+<linearGradient id="g-02-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(130,78%,25%)"/><stop offset="1" stop-color="hsl(130,58%,55%)"/></linearGradient>
+<linearGradient id="g-02-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<marker id="m-02-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="10" y="30" width="185" height="80" rx="12" fill="url(#g-02-1a)"/>
+<text x="102" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">① ダウンロード</text>
+<text x="102" y="90" fill="#fff" font-size="13" text-anchor="middle">nodejs.org から</text>
+<rect x="235" y="30" width="185" height="80" rx="12" fill="url(#g-02-1b)"/>
+<text x="327" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">② インストール</text>
+<text x="327" y="90" fill="#fff" font-size="13" text-anchor="middle">既定のまま進める</text>
+<rect x="460" y="30" width="185" height="80" rx="12" fill="url(#g-02-1c)"/>
+<text x="552" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">③ 版を確かめる</text>
+<text x="552" y="90" fill="#fff" font-size="13" text-anchor="middle">node --version</text>
+<rect x="685" y="30" width="185" height="80" rx="12" fill="url(#g-02-1d)"/>
+<text x="777" y="64" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">④ 動かす</text>
+<text x="777" y="90" fill="#fff" font-size="13" text-anchor="middle">node hello.js</text>
+<line x1="197" y1="70" x2="231" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-1)"/>
+<line x1="422" y1="70" x2="456" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-1)"/>
+<line x1="647" y1="70" x2="681" y2="70" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-1)"/>
+</svg>
+<figcaption>入れてから動かすまでの 4 段階</figcaption>
+</figure>
+<p>入れ終えたら、ターミナル（Windows なら PowerShell かコマンドプロンプト）を開き、版を表示させます。数字が出れば成功です。</p>
+<pre><code class="language-shell">node --version</code></pre>
+<pre class="output"><code class="language-text">v26.10.0</code></pre>
+<p>数字は、入れた時期によって違います。この資料は v26 系で確かめています。</p>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> サイトには「LTS」と「Current」の 2 種類が並んでいることがあります。LTS は長く保守される安定版、Current は最新の機能が入った版です。迷ったら LTS を選びます。</p>
+</div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> <code>node</code> が見つからないと言われたら、インストールの前から開いていたターミナルを閉じて、開き直してください。インストールで足された設定は、新しく開いたターミナルにしか効きません。</p>
+</div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>REPL で 1 行ずつ試す</h1>
+<p>ターミナルで <code>node</code> とだけ打つと、<code>&gt;</code> が出て入力を待つ状態になります。これを <strong>REPL</strong> と呼びます。打った式をその場で計算して、結果を表示します。</p>
+<figure>
+<svg viewBox="0 0 880 230" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="REPL の 4 つの段階">
+<defs>
+<linearGradient id="g-02-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-02-2b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-02-2c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="g-02-2d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<marker id="m-02-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="60" y="20" width="200" height="70" rx="12" fill="url(#g-02-2a)"/>
+<text x="160" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Read</text>
+<text x="160" y="74" fill="#fff" font-size="14" text-anchor="middle">入力を読む</text>
+<rect x="620" y="20" width="200" height="70" rx="12" fill="url(#g-02-2b)"/>
+<text x="720" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Eval</text>
+<text x="720" y="74" fill="#fff" font-size="14" text-anchor="middle">計算する</text>
+<rect x="620" y="140" width="200" height="70" rx="12" fill="url(#g-02-2c)"/>
+<text x="720" y="170" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Print</text>
+<text x="720" y="194" fill="#fff" font-size="14" text-anchor="middle">結果を表示する</text>
+<rect x="60" y="140" width="200" height="70" rx="12" fill="url(#g-02-2d)"/>
+<text x="160" y="170" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Loop</text>
+<text x="160" y="194" fill="#fff" font-size="14" text-anchor="middle">また入力を待つ</text>
+<line x1="264" y1="55" x2="614" y2="55" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-2)"/>
+<line x1="720" y1="94" x2="720" y2="134" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-2)"/>
+<line x1="616" y1="175" x2="266" y2="175" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-2)"/>
+<line x1="160" y1="136" x2="160" y2="96" stroke="#7a8699" stroke-width="3" marker-end="url(#m-02-2)"/>
+<text x="440" y="122" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">&gt; 1 + 2  →  3</text>
+</svg>
+<figcaption>REPL は Read ・ Eval ・ Print ・ Loop の頭文字。この 4 つをくり返す</figcaption>
+</figure>
+<p>実際のやり取りはこうなります。<code>&gt;</code> の後ろが打った内容で、その次の行が結果です。</p>
+<pre><code class="language-text">&gt; 1 + 2
+3
+&gt; "Java" + "Script"
+'JavaScript'
+&gt; Math.max(3, 9, 4)
+9
+&gt; .exit</code></pre>
+<p>終えるときは <code>.exit</code> と打つか、<kbd>Ctrl</kbd>+<kbd>C</kbd> を 2 回押します。ちょっとした計算や、メソッドの動きを確かめるのに便利です。</p>
+<div class="callout">
+<p><span class="label">メモ:</span> 文字列の結果が <code>'JavaScript'</code> のように引用符付きで出るのは、「これは文字列です」と分かるようにするためです。<code>console.log</code> で表示したときは引用符が付きません。</p>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>ファイルに書いて実行する</h1>
+<p>何行もあるプログラムは、ファイルに書いて実行します。拡張子は <code>.js</code> にします。好きなフォルダに <code>hello.js</code> を作り、次の内容を書いて保存します。</p>
+<div class="example" data-run="node">
+<p class="filename">hello.js</p>
+<pre><code class="language-javascript">console.log("Node.js から、こんにちは");
+console.log("1 + 2 =", 1 + 2);
+console.log("今日の作業:", ["読む", "書く", "動かす"]);</code></pre>
+<pre class="output"><code class="language-text">Node.js から、こんにちは
+1 + 2 = 3
+今日の作業: [ '読む', '書く', '動かす' ]</code></pre>
+</div>
+<p>ターミナルで、そのファイルのあるフォルダへ移ってから、<code>node</code> の後ろにファイル名を付けて実行します。</p>
+<pre><code class="language-shell">cd 作業フォルダ
+node hello.js</code></pre>
+<p>この例の「▶ 実行」ボタンは、Node.js で実際に動かしたときの結果（記録）を表示します。ここに載せている結果は、資料を作るときに Node.js で実行して確かめたものです。</p>
+<div class="callout callout-important">
+<p><span class="label">Java ・ C# ・ VBA から来た人へ:</span> コンパイルの手順はありません。<code>node hello.js</code> の 1 回で、読み込みから実行まで終わります。書き換えたら、保存してもう一度 <code>node hello.js</code> を打つだけです。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>console で値を見る</h1>
+<p><code>console.log</code> には、値をいくつでも渡せます。間は空白 1 つでつながります。配列やオブジェクトも、中身が分かる形で表示されます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log("合計", 10, "円");
+console.log([1, 2, 3]);
+console.log({ name: "りんご", price: 120 });
+console.log(true, null, undefined);</code></pre>
+<pre class="output"><code class="language-text">合計 10 円
+[ 1, 2, 3 ]
+{ name: 'りんご', price: 120 }
+true null undefined</code></pre>
+</div>
+<p>直接渡した文字列は引用符なしで出ますが、オブジェクトの中の文字列は <code>'りんご'</code> のように引用符付きで出ます。数値の <code>120</code> と文字列の <code>'120'</code> を見分けるためです。</p>
+<p>ほかにも、目的に合わせた仲間があります。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>使いどころ</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>console.log(…)</code></td><td>ふだんの表示</td></tr>
+<tr><td class="nowrap"><code>console.error(…)</code></td><td>エラーの表示。Node.js では標準エラー出力に出る</td></tr>
+<tr><td class="nowrap"><code>console.warn(…)</code></td><td>警告の表示</td></tr>
+<tr><td class="nowrap"><code>console.count(名前)</code></td><td>呼ばれた回数を数えて表示する</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.warn("在庫が少なくなっています");
+console.error("在庫がありません");
+console.count("呼び出し");
+console.count("呼び出し");</code></pre>
+<pre class="output"><code class="language-text">在庫が少なくなっています
+在庫がありません
+呼び出し: 1
+呼び出し: 2</code></pre>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>エディタと書き方の決まり</h1>
+<h2>エディタ</h2>
+<p>メモ帳でも書けますが、色付けや補完のあるエディタを使うと楽です。よく使われるのは Visual Studio Code（VS Code）です。保存するときの文字コードは UTF-8 にします。</p>
+<h2>コメント</h2>
+<p>コメントの書き方は Java ・ C# と同じです。VBA の <code>'</code> とは違います。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">// 1 行のコメント
+/*
+  複数行のコメント
+*/
+console.log("コメントは実行されない"); // 行の途中からも書ける</code></pre>
+<pre class="output"><code class="language-text">コメントは実行されない</code></pre>
+</div>
+<h2>セミコロン</h2>
+<p>文の終わりにはセミコロン <code>;</code> を書きます。JavaScript は省略しても多くの場合に補ってくれますが、補い方が思いどおりにならないことがあります。この資料では必ず書きます。</p>
+<h2>大文字と小文字</h2>
+<p>大文字と小文字は区別されます。<code>console.log</code> を <code>Console.Log</code> と書くと動きません。VBA は区別しないので、特に気をつけてください。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">Console.log("動く？");</code></pre>
+<pre class="output"><code class="language-text">Uncaught ReferenceError: Console is not defined</code></pre>
+</div>
+<p>「<code>ReferenceError</code>: <code>Console</code> は定義されていない」というエラーです。<code>Console</code>（大文字）という名前のものは無い、と言われています。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="01-背景.html" aria-label="前へ" title="01. 背景" style="--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="03-値と変数.html" aria-label="次へ" title="03. 値と変数" style="--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

@@ -1,0 +1,391 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>04. 演算子と型変換</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"04." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"04." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>04. 演算子と型変換</h1>
+<p class="lead">★ 前半の山。値が知らないうちに別の型へ変わる「暗黙の型変換」と、その落とし穴を避ける書き方</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="03-値と変数.html" aria-label="前へ" title="03. 値と変数" style="--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="05-オブジェクトと配列.html" aria-label="次へ" title="05. オブジェクトと配列" style="--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">演算子のおさらい</a></li>
+<li class="ch02"><a href="#ch02">+ は足し算か、連結か</a></li>
+<li class="ch03"><a href="#ch03">== と ===</a></li>
+<li class="ch04"><a href="#ch04">truthy と falsy</a></li>
+<li class="ch05"><a href="#ch05">NaN と明示的な変換</a></li>
+<li class="ch06"><a href="#ch06">?? と ?.</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>演算子のおさらい</h1>
+<p>演算子の見た目は、Java ・ C# とほぼ同じです。VBA と違うところに印を付けました。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>種類</th><th>JavaScript</th><th>VBA では</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">算術</td><td><code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>%</code>（余り） <code>**</code>（べき乗）</td><td><code>Mod</code> ・ <code>^</code></td></tr>
+<tr><td class="nowrap">比較</td><td><code>===</code> <code>!==</code> <code>&lt;</code> <code>&lt;=</code> <code>&gt;</code> <code>&gt;=</code></td><td><code>=</code> ・ <code>&lt;&gt;</code></td></tr>
+<tr><td class="nowrap">論理</td><td><code>&amp;&amp;</code>（かつ） <code>||</code>（または） <code>!</code>（でない）</td><td><code>And</code> ・ <code>Or</code> ・ <code>Not</code></td></tr>
+<tr><td class="nowrap">代入</td><td><code>=</code> <code>+=</code> <code>-=</code> <code>++</code> <code>--</code></td><td><code>=</code> だけ</td></tr>
+<tr><td class="nowrap">文字列の連結</td><td><code>+</code></td><td><code>&amp;</code></td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(10 + 3, 10 - 3, 10 * 3, 10 / 4, 10 % 3);
+console.log(10 > 3, 10 &lt;= 3, 10 === 10, 10 !== 10);
+console.log(true && false, true || false, !true);</code></pre>
+<pre class="output"><code class="language-text">13 7 30 2.5 1
+true false true false
+false true false</code></pre>
+</div>
+<p>ここまでは素直です。問題は、<strong>型の違う値どうし</strong>を演算したときに起きます。JavaScript はエラーにせず、どちらかの値を<strong>勝手に別の型へ変えてから</strong>計算します。これを<strong>暗黙の型変換</strong>と呼びます。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>+ は足し算か、連結か</h1>
+<p><code>+</code> は 2 つの仕事を持っています。数値の足し算と、文字列の連結です。どちらになるかは、<strong>どちらかが文字列かどうか</strong>で決まります。</p>
+<figure>
+<svg viewBox="0 0 880 250" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="+ の動きの決まり方">
+<defs>
+<linearGradient id="g-04-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-04-2b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="g-04-2c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<marker id="m-04-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="30" y="85" width="170" height="70" rx="12" fill="url(#g-04-2a)"/>
+<text x="115" y="128" fill="#fff" font-size="22" font-weight="700" text-anchor="middle">a + b</text>
+<line x1="204" y1="120" x2="266" y2="120" stroke="#7a8699" stroke-width="3" marker-end="url(#m-04-2)"/>
+<polygon points="400,40 530,120 400,200 270,120" fill="#ffffff" stroke="#7a8699" stroke-width="3"/>
+<text x="400" y="113" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">どちらかが</text>
+<text x="400" y="137" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">文字列？</text>
+<line x1="510" y1="95" x2="596" y2="62" stroke="#7a8699" stroke-width="3" marker-end="url(#m-04-2)"/>
+<text x="548" y="66" fill="#b8620a" font-size="15" font-weight="700" text-anchor="middle">はい</text>
+<line x1="510" y1="145" x2="596" y2="178" stroke="#7a8699" stroke-width="3" marker-end="url(#m-04-2)"/>
+<text x="548" y="186" fill="#1d7a3c" font-size="15" font-weight="700" text-anchor="middle">いいえ</text>
+<rect x="600" y="20" width="260" height="84" rx="12" fill="url(#g-04-2b)"/>
+<text x="730" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">文字列に変えて連結</text>
+<text x="730" y="84" fill="#fff" font-size="16" text-anchor="middle">"1" + 2 → "12"</text>
+<rect x="600" y="140" width="260" height="84" rx="12" fill="url(#g-04-2c)"/>
+<text x="730" y="172" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">数値に変えて足し算</text>
+<text x="730" y="204" fill="#fff" font-size="16" text-anchor="middle">1 + 2 → 3</text>
+</svg>
+<figcaption>+ は「どちらかが文字列なら連結」。左から順に 2 つずつ計算される</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(1 + 2);
+console.log("1" + 2);
+console.log(1 + "2");
+console.log(1 + 2 + "3");
+console.log("1" + 2 + 3);</code></pre>
+<pre class="output"><code class="language-text">3
+12
+12
+33
+123</code></pre>
+</div>
+<p>4 行目と 5 行目に注意してください。<code>+</code> は左から 2 つずつ計算されます。<code>1 + 2 + "3"</code> は、先に <code>1 + 2</code> が <code>3</code> になり、次に <code>3 + "3"</code> で <code>"33"</code> になります。<code>"1" + 2 + 3</code> は、最初から文字列なので <code>"12"</code> → <code>"123"</code> と連結が続きます。</p>
+<p>一方、<code>-</code> ・ <code>*</code> ・ <code>/</code> には連結の仕事がないので、文字列を<strong>数値に変えて</strong>計算します。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log("3" * "4");
+console.log("10" - 1);
+console.log("10" / "4");
+console.log("abc" * 2);</code></pre>
+<pre class="output"><code class="language-text">12
+9
+2.5
+NaN</code></pre>
+</div>
+<p>数値にできない文字列は <code>NaN</code>（Not a Number、数ではない）になります。エラーにならずに計算が続いてしまうのが厄介な点です。</p>
+<h2>よくある事故</h2>
+<p>画面の入力欄やファイルから読んだ値は、数字に見えても<strong>文字列</strong>です。そのまま <code>+</code> すると連結されます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">// 入力欄から来た値は、いつも文字列
+const a = "100";
+const b = "50";
+console.log(a + b);
+console.log(Number(a) + Number(b));</code></pre>
+<pre class="output"><code class="language-text">10050
+150</code></pre>
+</div>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> 外から来た値は、使う前に <code>Number(値)</code> で数値に変えます。<strong>変換は暗黙に任せず、自分で書く</strong>のが落とし穴を避ける基本です。</p>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>== と ===</h1>
+<p>等しいかどうかを比べる演算子は 2 つあります。</p>
+<ul>
+<li><code>===</code>（厳密等価）: <strong>型も値も</strong>同じときだけ <code>true</code>。型が違えば、その時点で <code>false</code></li>
+<li><code>==</code>（等価）: 型が違うと、<strong>型を変換してから</strong>比べる</li>
+</ul>
+<figure>
+<svg viewBox="0 0 880 210" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="== と === の違い">
+<defs>
+<linearGradient id="g-04-3a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-04-3b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-04-3c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-04-3d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<marker id="m-04-3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<text x="20" y="34" fill="#1c2330" font-size="18" font-weight="700">1 === "1"</text>
+<rect x="190" y="12" width="300" height="36" rx="8" fill="url(#g-04-3d)"/>
+<text x="340" y="36" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">型が違う（number と string）</text>
+<line x1="494" y1="30" x2="566" y2="30" stroke="#7a8699" stroke-width="3" marker-end="url(#m-04-3)"/>
+<rect x="570" y="12" width="140" height="36" rx="8" fill="url(#g-04-3b)"/>
+<text x="640" y="36" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">false</text>
+<text x="20" y="114" fill="#1c2330" font-size="18" font-weight="700">1 == "1"</text>
+<rect x="190" y="92" width="300" height="36" rx="8" fill="url(#g-04-3c)"/>
+<text x="340" y="116" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">"1" を数値の 1 に変える</text>
+<line x1="494" y1="110" x2="566" y2="110" stroke="#7a8699" stroke-width="3" marker-end="url(#m-04-3)"/>
+<rect x="570" y="92" width="140" height="36" rx="8" fill="url(#g-04-3d)"/>
+<text x="640" y="116" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">1 === 1</text>
+<line x1="714" y1="110" x2="736" y2="110" stroke="#7a8699" stroke-width="3" marker-end="url(#m-04-3)"/>
+<rect x="740" y="92" width="120" height="36" rx="8" fill="url(#g-04-3a)"/>
+<text x="800" y="116" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">true</text>
+<text x="440" y="176" fill="#4a5568" font-size="15" text-anchor="middle">== は「変換してから ===」。変換の決まりが複雑で、思わぬ組み合わせが true になる</text>
+</svg>
+<figcaption>=== は変換しない。== は変換してから比べる</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(1 === 1);
+console.log(1 === "1");
+console.log(1 == "1");
+console.log(0 == "");
+console.log(0 == "0");
+console.log("" == "0");
+console.log(null == undefined);
+console.log(null == 0);</code></pre>
+<pre class="output"><code class="language-text">true
+false
+true
+true
+true
+false
+true
+false</code></pre>
+</div>
+<p>4 〜 6 行目を見てください。<code>0 == ""</code> も <code>0 == "0"</code> も <code>true</code> なのに、<code>"" == "0"</code> は <code>false</code> です。「A と B が等しく、A と C が等しいのに、B と C は等しくない」という、直感に反する結果です。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>式</th><th><code>==</code></th><th><code>===</code></th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>1</code> と <code>"1"</code></td><td><span class="badge b-warn">true</span></td><td><span class="badge b-ng">false</span></td></tr>
+<tr><td class="nowrap"><code>0</code> と <code>""</code></td><td><span class="badge b-warn">true</span></td><td><span class="badge b-ng">false</span></td></tr>
+<tr><td class="nowrap"><code>0</code> と <code>false</code></td><td><span class="badge b-warn">true</span></td><td><span class="badge b-ng">false</span></td></tr>
+<tr><td class="nowrap"><code>null</code> と <code>undefined</code></td><td><span class="badge b-warn">true</span></td><td><span class="badge b-ng">false</span></td></tr>
+<tr><td class="nowrap"><code>null</code> と <code>0</code></td><td><span class="badge b-ng">false</span></td><td><span class="badge b-ng">false</span></td></tr>
+</tbody>
+</table></div>
+<div class="callout callout-important">
+<p><span class="label">決まり:</span> 比べるときは<strong>いつも <code>===</code> と <code>!==</code> を使います</strong>。型の違う値を比べたいときは、先に <code>Number()</code> などで型をそろえてから <code>===</code> で比べます。</p>
+</div>
+<div class="callout callout-important">
+<p><span class="label">VBA から来た人へ:</span> VBA の比較は <code>=</code> ですが、JavaScript の <code>=</code> は代入です。<code>if (x = 1)</code> と書くと、比べるのではなく <code>x</code> に 1 を入れてしまいます。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>truthy と falsy</h1>
+<p><code>if</code> の条件には、<code>true</code> ・ <code>false</code> 以外の値も書けます。そのとき値は真偽値に変換されます。<strong>偽になる値（falsy）は 8 つだけ</strong>で、それ以外はすべて真（truthy）です。</p>
+<figure>
+<svg viewBox="0 0 880 230" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="falsy な値と truthy な値">
+<defs>
+<linearGradient id="g-04-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-04-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+</defs>
+<rect x="20" y="20" width="410" height="190" rx="16" fill="url(#g-04-4a)"/>
+<text x="225" y="54" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">falsy（偽になる 8 つ）</text>
+<text x="225" y="96" fill="#fff" font-size="19" text-anchor="middle">false　0　-0　0n</text>
+<text x="225" y="134" fill="#fff" font-size="19" text-anchor="middle">""（空の文字列）</text>
+<text x="225" y="172" fill="#fff" font-size="19" text-anchor="middle">null　undefined　NaN</text>
+<rect x="450" y="20" width="410" height="190" rx="16" fill="url(#g-04-4b)"/>
+<text x="655" y="54" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">truthy（それ以外すべて）</text>
+<text x="655" y="96" fill="#fff" font-size="19" text-anchor="middle">"0"　"false"　" "（空白）</text>
+<text x="655" y="134" fill="#fff" font-size="19" text-anchor="middle">[]（空の配列）　{}（空のオブジェクト）</text>
+<text x="655" y="172" fill="#fff" font-size="19" text-anchor="middle">-1　Infinity　関数</text>
+</svg>
+<figcaption>文字列の "0" や空の配列 [] は truthy。ほかの言語の感覚と違う</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const values = [0, "", null, undefined, NaN, "0", "false", [], {}, -1];
+for (const v of values) {
+  console.log([v], v ? "真" : "偽");
+}</code></pre>
+<pre class="output"><code class="language-text">[ 0 ] 偽
+[ '' ] 偽
+[ null ] 偽
+[ undefined ] 偽
+[ NaN ] 偽
+[ '0' ] 真
+[ 'false' ] 真
+[ [] ] 真
+[ {} ] 真
+[ -1 ] 真</code></pre>
+</div>
+<p>値を <code>[v]</code> のように配列に入れて表示しているのは、文字列の引用符が見えるようにするためです。<code>条件 ? A : B</code> は、条件が真なら A、偽なら B になる式です（三項演算子。Java ・ C# と同じ）。</p>
+<h2>よくある事故</h2>
+<p>「値があるかどうか」を <code>if (値)</code> で調べると、<code>0</code> や <code>""</code> という<strong>正しい値</strong>まで「無い」と判断してしまいます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function showStock(count) {
+  if (count) {
+    console.log(`在庫 ${count} 個`);
+  } else {
+    console.log("在庫の情報がありません");
+  }
+}
+showStock(5);
+showStock(0);
+showStock(undefined);</code></pre>
+<pre class="output"><code class="language-text">在庫 5 個
+在庫の情報がありません
+在庫の情報がありません</code></pre>
+</div>
+<p>在庫 0 個は「情報がある」のに、無いと判断されました。<code>if (count === undefined)</code> のように、<strong>何を調べたいのかを明確に書きます</strong>。</p>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>NaN と明示的な変換</h1>
+<p>暗黙の変換に任せず、自分で変換する書き方をまとめます。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>変換</th><th>書き方</th><th>メモ</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">数値へ</td><td><code>Number(値)</code></td><td>全体が数として読めなければ <code>NaN</code></td></tr>
+<tr><td class="nowrap">数値へ（先頭だけ）</td><td><code>parseInt(値, 10)</code> ・ <code>parseFloat(値)</code></td><td>先頭から読めるところまで読む。<code>parseInt</code> には基数 <code>10</code> を渡す</td></tr>
+<tr><td class="nowrap">文字列へ</td><td><code>String(値)</code></td><td><code>null</code> ・ <code>undefined</code> でもエラーにならない</td></tr>
+<tr><td class="nowrap">真偽値へ</td><td><code>Boolean(値)</code></td><td>truthy なら <code>true</code></td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(Number("42"));
+console.log(Number(" 42 "));
+console.log(Number(""));
+console.log(Number("42px"));
+console.log(parseInt("42px", 10));
+console.log(parseFloat("3.5kg"));
+console.log(Number(true), Number(null), Number(undefined));</code></pre>
+<pre class="output"><code class="language-text">42
+42
+0
+NaN
+42
+3.5
+1 0 NaN</code></pre>
+</div>
+<p><code>Number("")</code> が <code>0</code> になる点に注意してください。空の入力欄を数値にすると、エラーにならず <code>0</code> になります。</p>
+<h2>NaN の調べ方</h2>
+<p><code>NaN</code> は、自分自身とも等しくならない特別な値です。<code>=== NaN</code> では調べられないので、<code>Number.isNaN</code> を使います。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const n = Number("abc");
+console.log(n);
+console.log(n === NaN);
+console.log(Number.isNaN(n));</code></pre>
+<pre class="output"><code class="language-text">NaN
+false
+true</code></pre>
+</div>
+<h2>文字列への変換と桁の指定</h2>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(String(120) + "円");
+console.log((3.14159).toFixed(2));
+console.log((1234567).toLocaleString());
+console.log(Boolean(""), Boolean("a"), !!0);</code></pre>
+<pre class="output"><code class="language-text">120円
+3.14
+1,234,567
+false true false</code></pre>
+</div>
+<p><code>toFixed(桁数)</code> は小数点以下の桁をそろえた文字列を、<code>toLocaleString()</code> は 3 桁区切りの文字列を返します。<code>!!値</code> は <code>Boolean(値)</code> と同じ意味の短い書き方です。</p>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>?? と ?.</h1>
+<h2>既定値は ?? で決める</h2>
+<p>「値が無ければ既定値を使う」とき、昔は <code>||</code> がよく使われました。しかし <code>||</code> は falsy な値をすべて「無い」と扱うため、<code>0</code> や <code>""</code> も既定値に置き換えてしまいます。<code>??</code>（Null 合体演算子）は <strong><code>null</code> と <code>undefined</code> のときだけ</strong>既定値を使います。</p>
+<figure>
+<svg viewBox="0 0 880 250" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="|| と ?? の違い">
+<defs>
+<linearGradient id="g-04-6a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-04-6b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-04-6c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+</defs>
+<rect x="20" y="10" width="240" height="40" rx="8" fill="url(#g-04-6a)"/>
+<text x="140" y="37" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">左の値</text>
+<rect x="290" y="10" width="270" height="40" rx="8" fill="url(#g-04-6b)"/>
+<text x="425" y="37" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">値 || 50</text>
+<rect x="590" y="10" width="270" height="40" rx="8" fill="url(#g-04-6c)"/>
+<text x="725" y="37" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">値 ?? 50</text>
+<g font-size="17" text-anchor="middle" fill="#1c2330">
+<text x="140" y="84">0</text><text x="425" y="84" fill="#a51f22" font-weight="700">50（0 が消える）</text><text x="725" y="84">0</text>
+<text x="140" y="120">""</text><text x="425" y="120" fill="#a51f22" font-weight="700">50（"" が消える）</text><text x="725" y="120">""</text>
+<text x="140" y="156">null</text><text x="425" y="156">50</text><text x="725" y="156">50</text>
+<text x="140" y="192">undefined</text><text x="425" y="192">50</text><text x="725" y="192">50</text>
+<text x="140" y="228">7</text><text x="425" y="228">7</text><text x="725" y="228">7</text>
+</g>
+<line x1="20" y1="100" x2="860" y2="100" stroke="#d9dfe8"/>
+<line x1="20" y1="136" x2="860" y2="136" stroke="#d9dfe8"/>
+<line x1="20" y1="172" x2="860" y2="172" stroke="#d9dfe8"/>
+<line x1="20" y1="208" x2="860" y2="208" stroke="#d9dfe8"/>
+</svg>
+<figcaption>|| は falsy をすべて置き換える。?? は null と undefined だけを置き換える</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const settings = { volume: 0, title: "" };
+console.log(settings.volume || 50);
+console.log(settings.volume ?? 50);
+console.log(`「${settings.title || "無題"}」`);
+console.log(`「${settings.title ?? "無題"}」`);
+console.log(settings.speed ?? 1.5);</code></pre>
+<pre class="output"><code class="language-text">50
+0
+「無題」
+「」
+1.5</code></pre>
+</div>
+<p>音量 0 は「消音」という正しい設定です。<code>||</code> では 50 に戻ってしまいます。既定値には <code>??</code> を使います。</p>
+<h2>無いかもしれないものは ?. で読む</h2>
+<p><code>?.</code>（オプショナルチェーン）は、左が <code>null</code> か <code>undefined</code> なら、その先を読まずに <code>undefined</code> を返します。03 章で見た「<code>Cannot read properties of undefined</code>」のエラーを防げます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const order = { item: "りんご", shop: null };
+console.log(order.shop?.address);
+console.log(order.customer?.name ?? "名前なし");
+console.log(order.item?.length);</code></pre>
+<pre class="output"><code class="language-text">undefined
+名前なし
+3</code></pre>
+</div>
+<p>2 行目のように <code>?.</code> と <code>??</code> を組み合わせると、「あればその値、無ければ既定値」を 1 行で書けます。C# の <code>?.</code> ・ <code>??</code> と同じ考え方です。</p>
+<div class="callout callout-tip">
+<p><span class="label">この章のまとめ:</span> 比べるときは <code>===</code>。外から来た値は <code>Number()</code> で変換してから使う。「無い」の判定は何を調べたいのかを明確に書き、既定値は <code>??</code>、無いかもしれない先は <code>?.</code> で読む。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="03-値と変数.html" aria-label="前へ" title="03. 値と変数" style="--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="05-オブジェクトと配列.html" aria-label="次へ" title="05. オブジェクトと配列" style="--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 220" width="880" height="220" role="img" aria-label="オブジェクトはキーと値の組" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="30" y="20" width="200" height="180" rx="14" fill="url(#i1)"/>
+<text x="130" y="60" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">item</text>
+<text x="130" y="96" fill="#fff" font-size="14" text-anchor="middle">オブジェクト 1 つに</text>
+<text x="130" y="120" fill="#fff" font-size="14" text-anchor="middle">3 つの組が入っている</text>
+<rect x="270" y="20" width="200" height="50" rx="10" fill="url(#i2)"/><text x="370" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">name</text>
+<rect x="490" y="20" width="360" height="50" rx="10" fill="#ffffff" stroke="#9aa6b8" stroke-width="2"/><text x="670" y="52" fill="#1c2330" font-size="17" text-anchor="middle">"りんご"（文字列）</text>
+<rect x="270" y="85" width="200" height="50" rx="10" fill="url(#i3)"/><text x="370" y="117" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">price</text>
+<rect x="490" y="85" width="360" height="50" rx="10" fill="#ffffff" stroke="#9aa6b8" stroke-width="2"/><text x="670" y="117" fill="#1c2330" font-size="17" text-anchor="middle">120（数値）</text>
+<rect x="270" y="150" width="200" height="50" rx="10" fill="url(#i4)"/><text x="370" y="182" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">tags</text>
+<rect x="490" y="150" width="360" height="50" rx="10" fill="#ffffff" stroke="#9aa6b8" stroke-width="2"/><text x="670" y="182" fill="#1c2330" font-size="17" text-anchor="middle">["果物", "赤"]（配列）</text>
+</svg>

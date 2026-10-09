@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 230" width="880" height="230" role="img" aria-label="REPL の 4 つの段階" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="60" y="20" width="200" height="70" rx="12" fill="url(#i1)"/>
+<text x="160" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Read</text>
+<text x="160" y="74" fill="#fff" font-size="14" text-anchor="middle">入力を読む</text>
+<rect x="620" y="20" width="200" height="70" rx="12" fill="url(#i2)"/>
+<text x="720" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Eval</text>
+<text x="720" y="74" fill="#fff" font-size="14" text-anchor="middle">計算する</text>
+<rect x="620" y="140" width="200" height="70" rx="12" fill="url(#i3)"/>
+<text x="720" y="170" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Print</text>
+<text x="720" y="194" fill="#fff" font-size="14" text-anchor="middle">結果を表示する</text>
+<rect x="60" y="140" width="200" height="70" rx="12" fill="url(#i4)"/>
+<text x="160" y="170" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">Loop</text>
+<text x="160" y="194" fill="#fff" font-size="14" text-anchor="middle">また入力を待つ</text>
+<line x1="264" y1="55" x2="614" y2="55" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="720" y1="94" x2="720" y2="134" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="616" y1="175" x2="266" y2="175" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="160" y1="136" x2="160" y2="96" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<text x="440" y="122" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">&gt; 1 + 2  →  3</text>
+</svg>
