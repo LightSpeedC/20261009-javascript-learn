@@ -1,0 +1,349 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13. ハンズオン</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"13." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"13." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>13. ハンズオン</h1>
+<p class="lead">宿題。家計簿の CSV を集計するコマンドラインのツールを、4 つの手順で作る。第1部で学んだことを 1 つにつなげる</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="12-CommonJSとESModules.html" aria-label="前へ" title="12. CommonJS と ES Modules" style="--accent:hsl(23.3,78%,25%);--accent2:hsl(23.3,58%,55%);--soft:hsl(23.3,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">作るもの</a></li>
+<li class="ch02"><a href="#ch02">手順 1: CSV を読み取る</a></li>
+<li class="ch03"><a href="#ch03">手順 2: 集計して並べる</a></li>
+<li class="ch04"><a href="#ch04">手順 3: ファイルから読む</a></li>
+<li class="ch05"><a href="#ch05">手順 4: まとめて集計する</a></li>
+<li class="ch06"><a href="#ch06">振り返りと発展課題</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>作るもの</h1>
+<p>家計簿の CSV ファイルを読み、項目ごとの合計を、金額の大きい順に表示するツールを作ります。第2部の初回の冒頭で、できたものを見せ合って振り返ります。</p>
+<pre><code class="language-text">date,category,amount
+2026-10-01,食費,1200
+2026-10-02,交通費,480
+2026-10-02,食費,860
+2026-10-05,日用品,1530</code></pre>
+<p>この CSV から、次の表示を作るのが目標です。</p>
+<pre><code class="language-text">食費: 2,060 円
+日用品: 1,530 円
+交通費: 480 円
+合計: 4,070 円</code></pre>
+<figure>
+<svg viewBox="0 0 880 170" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="ツールの処理の流れ">
+<defs>
+<linearGradient id="g-13-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-13-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-13-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-13-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(70,78%,25%)"/><stop offset="1" stop-color="hsl(70,58%,55%)"/></linearGradient>
+<linearGradient id="g-13-1e" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(10,78%,25%)"/><stop offset="1" stop-color="hsl(10,58%,55%)"/></linearGradient>
+<marker id="m-13-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="10" y="40" width="150" height="80" rx="12" fill="url(#g-13-1a)"/><text x="85" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">CSV ファイル</text><text x="85" y="100" fill="#fff" font-size="13" text-anchor="middle">readFile（11 章）</text>
+<rect x="190" y="40" width="150" height="80" rx="12" fill="url(#g-13-1b)"/><text x="265" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">parseCsv</text><text x="265" y="100" fill="#fff" font-size="13" text-anchor="middle">文字列 → 配列</text>
+<rect x="370" y="40" width="150" height="80" rx="12" fill="url(#g-13-1c)"/><text x="445" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">summarize</text><text x="445" y="100" fill="#fff" font-size="13" text-anchor="middle">項目ごとに合計</text>
+<rect x="550" y="40" width="150" height="80" rx="12" fill="url(#g-13-1d)"/><text x="625" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">format</text><text x="625" y="100" fill="#fff" font-size="13" text-anchor="middle">表示の文字列に</text>
+<rect x="730" y="40" width="140" height="80" rx="12" fill="url(#g-13-1e)"/><text x="800" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">画面</text><text x="800" y="100" fill="#fff" font-size="13" text-anchor="middle">console.log</text>
+<line x1="162" y1="80" x2="186" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-13-1)"/>
+<line x1="342" y1="80" x2="366" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-13-1)"/>
+<line x1="522" y1="80" x2="546" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-13-1)"/>
+<line x1="702" y1="80" x2="726" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-13-1)"/>
+<text x="440" y="155" fill="#4a5568" font-size="14" text-anchor="middle">真ん中の 3 つは「値を受け取って値を返す」だけの関数にする。ファイルと画面は両端に寄せる（06 章）</text>
+</svg>
+<figcaption>処理を 3 つの関数に分け、両端でファイルを読み、画面に出す</figcaption>
+</figure>
+<h2>進め方</h2>
+<ol>
+<li>手順 1 と 2 は、このページの「▶ 実行」と「✎ 書き換える」で試しながら進められる</li>
+<li>手順 3 と 4 は、自分のパソコンに Node.js でファイルを作って動かす。CSV は <a href="https://github.com/LightSpeedC/20261009-javascript-learn/tree/develop/docs/samples/kakeibo">docs/samples/kakeibo</a> にある</li>
+<li>各手順の例は、答えの一例です。まず自分で書いてから、見比べてください</li>
+</ol>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>手順 1: CSV を読み取る</h1>
+<p>CSV の文字列を、1 行 1 件のオブジェクトの配列にします。1 行目は見出し（キーの名前）です。</p>
+<div class="callout">
+<p><span class="label">ヒント:</span> 改行で分ける（03 章 <code>split</code>）→ 1 行目と残りに分ける（05 章 分割代入）→ 各行をカンマで分けて、見出しと組にする（05 章 <code>map</code>）。キーと値の組の配列からオブジェクトを作るには <code>Object.fromEntries</code> が使えます。</p>
+</div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const csv = `date,category,amount
+2026-10-01,食費,1200
+2026-10-02,交通費,480
+2026-10-02,食費,860
+2026-10-05,日用品,1530`;
+
+function parseCsv(text) {
+  const [header, ...lines] = text.trim().split(/\r?\n/);
+  const keys = header.split(",");
+  return lines.map((line) => {
+    const cells = line.split(",");
+    return Object.fromEntries(keys.map((key, i) => [key, cells[i]]));
+  });
+}
+
+const rows = parseCsv(csv);
+console.log(rows.length);
+console.log(rows[0]);</code></pre>
+<pre class="output"><code class="language-text">4
+{ date: '2026-10-01', category: '食費', amount: '1200' }</code></pre>
+</div>
+<p><code>amount</code> が <code>'1200'</code> と文字列のままであることに注意してください。CSV から読んだ値はすべて文字列です（04 章）。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>手順 2: 集計して並べる</h1>
+<p>項目ごとに金額を足し、大きい順に並べて、表示用の文字列を作ります。関数は 3 つに分けます。</p>
+<ul>
+<li><code>summarize(rows)</code>: 項目ごとの合計を、<code>[項目, 合計]</code> の配列にして大きい順に返す</li>
+<li><code>format(entries)</code>: 表示用の文字列を返す。最後に全体の合計を付ける</li>
+<li>金額が数値にできないときは、黙って <code>NaN</code> を広げずに、エラーを投げる（10 章）</li>
+</ul>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const csv = `date,category,amount
+2026-10-01,食費,1200
+2026-10-02,交通費,480
+2026-10-02,食費,860
+2026-10-05,日用品,1530`;
+
+function parseCsv(text) {
+  const [header, ...lines] = text.trim().split(/\r?\n/);
+  const keys = header.split(",");
+  return lines.map((line) => {
+    const cells = line.split(",");
+    return Object.fromEntries(keys.map((key, i) => [key, cells[i]]));
+  });
+}
+
+function summarize(rows) {
+  const totals = {};
+  for (const row of rows) {
+    const amount = Number(row.amount);
+    if (Number.isNaN(amount)) {
+      throw new Error(`金額が数値ではありません: ${row.amount}`);
+    }
+    totals[row.category] = (totals[row.category] ?? 0) + amount;
+  }
+  return Object.entries(totals).sort((a, b) => b[1] - a[1]);
+}
+
+function format(entries) {
+  const lines = entries.map(([category, sum]) => `${category}: ${sum.toLocaleString()} 円`);
+  const total = entries.reduce((s, [, sum]) => s + sum, 0);
+  lines.push(`合計: ${total.toLocaleString()} 円`);
+  return lines.join("\n");
+}
+
+console.log(format(summarize(parseCsv(csv))));</code></pre>
+<pre class="output"><code class="language-text">食費: 2,060 円
+日用品: 1,530 円
+交通費: 480 円
+合計: 4,070 円</code></pre>
+</div>
+<p>「✎ 書き換える」で CSV の金額を <code>abc</code> に変えて実行し、エラーで止まることも確かめてください。</p>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> <code>(totals[row.category] ?? 0) + amount</code> は「まだ無ければ 0 から足す」という意味です（04 章 <code>??</code>）。<code>[, sum]</code> は、配列の 1 つ目を読み飛ばして 2 つ目だけを受け取る分割代入です。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>手順 3: ファイルから読む</h1>
+<p>ここから先は、自分のパソコンで作ります。作業フォルダを 1 つ作り、その中に <code>kakeibo</code> フォルダを作って、CSV を 2 つ置きます。</p>
+<pre><code class="language-text">作業フォルダ/
+  lib.mjs
+  report.mjs
+  kakeibo.mjs
+  kakeibo/
+    2026-09.csv
+    2026-10.csv</code></pre>
+<p>手順 2 の 3 つの関数は、<code>lib.mjs</code> に移して <code>export</code> します（10 章）。</p>
+<div class="example" data-run="file">
+<p class="filename">lib.mjs</p>
+<pre><code class="language-javascript">export function parseCsv(text) {
+  const [header, ...lines] = text.trim().split(/\r?\n/);
+  const keys = header.split(",");
+  return lines.map((line) => {
+    const cells = line.split(",");
+    return Object.fromEntries(keys.map((key, i) => [key, cells[i]]));
+  });
+}
+
+export function summarize(rows) {
+  const totals = {};
+  for (const row of rows) {
+    const amount = Number(row.amount);
+    if (Number.isNaN(amount)) {
+      throw new Error(`金額が数値ではありません: ${row.amount}`);
+    }
+    totals[row.category] = (totals[row.category] ?? 0) + amount;
+  }
+  return Object.entries(totals).sort((a, b) => b[1] - a[1]);
+}
+
+export function format(entries) {
+  const lines = entries.map(([category, sum]) => `${category}: ${sum.toLocaleString()} 円`);
+  const total = entries.reduce((s, [, sum]) => s + sum, 0);
+  lines.push(`合計: ${total.toLocaleString()} 円`);
+  return lines.join("\n");
+}</code></pre>
+</div>
+<p>ファイルを読んで集計するのは、<code>readFile</code> と <code>await</code> の 2 行です（11 章）。</p>
+<div class="example" data-run="node">
+<p class="filename">report.mjs</p>
+<pre><code class="language-javascript">import { readFile } from "node:fs/promises";
+import { format, parseCsv, summarize } from "./lib.mjs";
+
+const text = await readFile("kakeibo/2026-10.csv", "utf8");
+console.log(format(summarize(parseCsv(text))));</code></pre>
+<pre class="output"><code class="language-text">食費: 2,060 円
+日用品: 1,530 円
+交通費: 480 円
+合計: 4,070 円</code></pre>
+</div>
+<pre><code class="language-shell">node report.mjs</code></pre>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>手順 4: まとめて集計する</h1>
+<p>最後に、ツールとして仕上げます。</p>
+<ul>
+<li>コマンドラインでファイルを指定できるようにする。<code>process.argv</code> は、<code>node</code> に渡した引数の配列で、3 つ目以降（<code>slice(2)</code>）が自分で渡したもの</li>
+<li>指定が無ければ、<code>kakeibo</code> フォルダの CSV を全部読む。読むのは <code>Promise.all</code> で同時に（11 章）</li>
+<li>ファイルごとの集計と、全部をまとめた集計を表示する</li>
+<li>ファイルが無いときは、分かりやすいメッセージを出して、終了コードを 1 にする</li>
+</ul>
+<div class="example" data-run="node">
+<p class="filename">kakeibo.mjs</p>
+<pre><code class="language-javascript">import { readdir, readFile } from "node:fs/promises";
+import { basename, join } from "node:path";
+import { format, parseCsv, summarize } from "./lib.mjs";
+
+async function loadRows(file) {
+  try {
+    return parseCsv(await readFile(file, "utf8"));
+  } catch (e) {
+    if (e.code === "ENOENT") {
+      throw new Error(`ファイルが見つかりません: ${file}`);
+    }
+    throw e;
+  }
+}
+
+async function listCsv(dir) {
+  const names = await readdir(dir);
+  return names.filter((n) => n.endsWith(".csv")).sort().map((n) => join(dir, n));
+}
+
+async function main(args) {
+  const files = args.length > 0 ? args : await listCsv("kakeibo");
+  const all = await Promise.all(files.map(loadRows));
+  files.forEach((file, i) => {
+    console.log(`== ${basename(file)}`);
+    console.log(format(summarize(all[i])));
+  });
+  console.log("== すべて");
+  console.log(format(summarize(all.flat())));
+}
+
+try {
+  await main(process.argv.slice(2));
+} catch (e) {
+  console.log(e.message);
+  process.exitCode = 1;
+}</code></pre>
+<pre class="output"><code class="language-text">== 2026-09.csv
+趣味: 2,800 円
+食費: 2,430 円
+日用品: 640 円
+交通費: 320 円
+合計: 6,190 円
+== 2026-10.csv
+食費: 2,060 円
+日用品: 1,530 円
+交通費: 480 円
+合計: 4,070 円
+== すべて
+食費: 4,490 円
+趣味: 2,800 円
+日用品: 2,170 円
+交通費: 800 円
+合計: 10,260 円</code></pre>
+</div>
+<p>上の結果は、引数を付けずに <code>node kakeibo.mjs</code> と実行したものです。ファイルを指定したときと、無いファイルを指定したときは、次のようになります。</p>
+<pre><code class="language-shell">node kakeibo.mjs kakeibo/2026-09.csv
+node kakeibo.mjs nothing.csv</code></pre>
+<pre class="output"><code class="language-text">== 2026-09.csv
+趣味: 2,800 円
+食費: 2,430 円
+日用品: 640 円
+交通費: 320 円
+合計: 6,190 円
+== すべて
+趣味: 2,800 円
+食費: 2,430 円
+日用品: 640 円
+交通費: 320 円
+合計: 6,190 円
+ファイルが見つかりません: nothing.csv</code></pre>
+<p><code>all.flat()</code> は、配列の配列を 1 段の配列にするメソッドです。ファイルごとの行をまとめて 1 つの <code>summarize</code> に渡しています。</p>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>振り返りと発展課題</h1>
+<h2>使ったもの</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>使ったもの</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>テンプレート文字列 ・ <code>split</code> ・ 文字列は数値ではない</td><td class="nowrap">03 ・ 04</td></tr>
+<tr><td>分割代入 ・ <code>map</code> ・ <code>sort</code> ・ <code>reduce</code> ・ <code>Object.entries</code></td><td class="nowrap">05</td></tr>
+<tr><td>関数を分ける ・ アロー関数 ・ コールバック</td><td class="nowrap">06</td></tr>
+<tr><td><code>throw</code> ・ <code>try</code> ・ <code>catch</code> ・ <code>import</code> ・ <code>export</code></td><td class="nowrap">10</td></tr>
+<tr><td><code>async</code> ・ <code>await</code> ・ <code>Promise.all</code> ・ ファイルの読み込み</td><td class="nowrap">11</td></tr>
+<tr><td><code>.mjs</code> ・ <code>import.meta</code></td><td class="nowrap">12</td></tr>
+</tbody>
+</table></div>
+<h2>発展課題</h2>
+<p>余裕があれば、次のどれかに挑戦してください。答えは載せていません。第2部の初回で見せ合いましょう。</p>
+<ol>
+<li><strong>前の月との比較</strong>: 項目ごとに、前の月から増えたか減ったかを <code>+120 円</code> のように表示する</li>
+<li><strong>壊れた行を飛ばす</strong>: 金額が空や数値でない行は、エラーで止めずに飛ばし、最後に「3 行を飛ばしました」と表示する</li>
+<li><strong>JSON で保存する</strong>: 集計結果を <code>summary.json</code> に書き出す（05 章 <code>JSON.stringify</code>、11 章 <code>writeFile</code>）</li>
+<li><strong>項目で絞り込む</strong>: <code>node kakeibo.mjs --category 食費</code> のように指定した項目だけを表示する</li>
+<li><strong>Map で書き直す</strong>: <code>summarize</code> の <code>totals</code> を、オブジェクトではなく <code>Map</code>（09 章）で書き直す</li>
+</ol>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> 書き換えたら、手順 2 の例で確かめた入力と同じ結果になるかを毎回確かめます。期待する結果を先に決めてから書き換えると、壊したときにすぐ気づけます。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="12-CommonJSとESModules.html" aria-label="前へ" title="12. CommonJS と ES Modules" style="--accent:hsl(23.3,78%,25%);--accent2:hsl(23.3,58%,55%);--soft:hsl(23.3,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

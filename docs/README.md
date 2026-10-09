@@ -22,6 +22,7 @@ Java ・ C# ・ VBA を少し触った人のための JavaScript 学習資料
 | 第1部 言語編 | [10. エラー処理とモジュール](10-エラー処理とモジュール.md) | try ・ catch ・ throw でエラーを扱う。ファイルを分けて import ・ export でつなぐ。npm の最小限 |
 | 第1部 言語編 | [11. 非同期](11-非同期.md) | ★ 後半の山（最重要）。待たずに先へ進む仕組み、イベントループ、Promise と async ・ await、ファイルの読み書き |
 | 第1部 言語編 | [12. CommonJS と ES Modules](12-CommonJSとESModules.md) | Node.js にある 2 つのモジュール形式。require と import、拡張子 .cjs ・ .mjs ・ .js と package.json の "type"、古いコードの見分け方 |
+| 第1部 言語編 | [13. ハンズオン](13-ハンズオン.md) | 宿題。家計簿の CSV を集計するコマンドラインのツールを、4 つの手順で作る。第1部で学んだことを 1 つにつなげる |
 
 資料の作り方・勉強会の進め方・確かめた Node.js の版は、[ZZ. 資料の構成](ZZ-構成.md) にあります。
 
