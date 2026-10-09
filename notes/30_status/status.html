@@ -14,6 +14,7 @@ body{margin:0;background:#ffffff;color:var(--ink,#1c2330);font-family:"Segoe UI"
 .wrap{max-width:1600px;margin:0 auto;padding:0 30px;}
 a{color:var(--link,#1a4fa0);background:transparent;}
 .wrap > .back-home{margin-top:18px;}
+.back-home svg{width:16px;height:16px;vertical-align:-3px;}
 .back-home{display:inline-block;padding:2px 12px;border-radius:6px;background:linear-gradient(100deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;text-decoration:none;font-weight:700;}
 section{margin:34px 0;padding:4px 26px 26px;border-radius:10px;background:linear-gradient(180deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
 section h1{font-size:1.45em;margin:26px 0 20px;padding:14px 20px;border-radius:8px;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;}
@@ -37,7 +38,7 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 </div></div>
 
 <div class="wrap">
-<a class="back-home" href="../../README.html" title="README">⌂</a>
+<a class="back-home" href="../../README.html" aria-label="戻る" title="README"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>
 
 <section id="ch01">
 <h1>進捗</h1>
@@ -45,15 +46,15 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 <thead><tr><th>項目</th><th>状態</th><th>メモ</th></tr></thead>
 <tbody>
 <tr><td>計画書</td><td class="nowrap"><span class="badge b-ok">済</span></td><td><a href="../10_plan/p261009-01-JavaScript入門.html">p261009-01</a></td></tr>
-<tr><td>公開（GitHub Pages）</td><td class="nowrap"><span class="badge b-ok">済</span></td><td>develop ブランチの root から公開。<a href="https://lightspeedc.com/20261009-javascript-learn/">https://lightspeedc.com/20261009-javascript-learn/</a>。lightspeedc.com の 1 章へ掲載を依頼済み</td></tr>
-<tr><td>サンプル実行の仕組み（<code>docs/js/</code>）</td><td class="nowrap"><span class="badge b-none">未</span></td><td></td></tr>
-<tr><td>第1部 01〜13 ＋付録 A1〜A3</td><td class="nowrap"><span class="badge b-none">未</span></td><td></td></tr>
+<tr><td>公開（GitHub Pages）</td><td class="nowrap"><span class="badge b-ok">済</span></td><td>develop ブランチの root から公開。<a href="https://lightspeedc.com/20261009-javascript-learn/">https://lightspeedc.com/20261009-javascript-learn/</a>。lightspeedc.com の 1 章に掲載済み</td></tr>
+<tr><td>サンプル実行の仕組み（<code>docs/js/</code>）</td><td class="nowrap"><span class="badge b-ok">済</span></td><td>Worker で実行。テストは Node と Chromium の両方で、載せた出力と比べる</td></tr>
+<tr><td>第1部 01〜13 ＋付録 A1〜A3</td><td class="nowrap"><span class="badge b-warn">着手</span></td><td>01 ・ ZZ 済</td></tr>
 <tr><td>第2部 14〜23</td><td class="nowrap"><span class="badge b-none">未</span></td><td></td></tr>
 </tbody>
 </table></div>
 </section>
 
 </div>
-<footer><a class="back-home" href="../../README.html" title="README">⌂</a></footer>
+<footer><a class="back-home" href="../../README.html" aria-label="戻る" title="README"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></footer>
 </body>
 </html>
