@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 260" width="880" height="260" role="img" aria-label="入れ子のスコープ" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b8620a"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="10" width="600" height="240" rx="16" fill="url(#i1)"/>
+<text x="40" y="40" fill="#fff" font-size="17" font-weight="700">グローバル　appName = "メモ帳"</text>
+<rect x="60" y="60" width="540" height="170" rx="14" fill="url(#i2)"/>
+<text x="80" y="90" fill="#fff" font-size="17" font-weight="700">関数 outer　user = "user1"</text>
+<rect x="100" y="110" width="480" height="100" rx="12" fill="url(#i3)"/>
+<text x="120" y="140" fill="#fff" font-size="17" font-weight="700">関数 inner　page = "一覧"</text>
+<text x="120" y="176" fill="#fff" font-size="15">console.log(appName, user, page)</text>
+<path d="M600 160 C 660 160, 660 100, 620 80" fill="none" stroke="#b8620a" stroke-width="3" marker-end="url(#i4)"/>
+<path d="M630 75 C 700 70, 700 40, 650 30" fill="none" stroke="#b8620a" stroke-width="3" marker-end="url(#i4)"/>
+<text x="700" y="120" fill="#b8620a" font-size="15" font-weight="700">見つかるまで</text>
+<text x="700" y="142" fill="#b8620a" font-size="15" font-weight="700">外側へ探す</text>
+<text x="700" y="200" fill="#a51f22" font-size="14" font-weight="700">outer から page は</text>
+<text x="700" y="220" fill="#a51f22" font-size="14" font-weight="700">見えない</text>
+</svg>

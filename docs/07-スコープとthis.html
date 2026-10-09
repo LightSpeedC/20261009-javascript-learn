@@ -1,0 +1,411 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>07. スコープ・this・グローバル</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"07." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"07." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>07. スコープ・this・グローバル</h1>
+<p class="lead">★ 前半の山。変数が見える範囲、var の巻き上げ、グローバル変数の事故、呼び方で変わる this</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="06-関数.html" aria-label="前へ" title="06. 関数" style="--accent:hsl(80,78%,25%);--accent2:hsl(80,58%,55%);--soft:hsl(80,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="08-クラスとプロトタイプ.html" aria-label="次へ" title="08. クラスとプロトタイプ" style="--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">スコープ</a></li>
+<li class="ch02"><a href="#ch02">var と巻き上げ</a></li>
+<li class="ch03"><a href="#ch03">グローバル変数の事故</a></li>
+<li class="ch04"><a href="#ch04">this は呼び方で決まる</a></li>
+<li class="ch05"><a href="#ch05">this を失わない書き方</a></li>
+<li class="ch06"><a href="#ch06">strict モード</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>スコープ</h1>
+<p>変数が見える範囲を<strong>スコープ</strong>と呼びます。<code>let</code> と <code>const</code> の変数は、作った <code>{ }</code>（ブロック）の中だけで見えます。Java ・ C# と同じ考え方です。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const x = "外";
+{
+  const x = "内";
+  console.log(x);
+}
+console.log(x);
+
+if (true) {
+  let y = 1;
+}
+console.log(typeof y);</code></pre>
+<pre class="output"><code class="language-text">内
+外
+undefined</code></pre>
+</div>
+<p>内側で同じ名前の変数を作ると、内側ではそちらが優先されます（外側の <code>x</code> は隠れるだけで、変わりません）。<code>y</code> はブロックの外からは見えないので、<code>typeof y</code> は <code>"undefined"</code> です。</p>
+<h2>内から外は見え、外から内は見えない</h2>
+<p>関数の中に関数を書くと、スコープは入れ子になります。変数を探すときは、<strong>今いる場所から外側へ順に</strong>探します。外から内の変数は見えません。</p>
+<figure>
+<svg viewBox="0 0 880 260" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="入れ子のスコープ">
+<defs>
+<linearGradient id="g-07-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<marker id="m-07-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b8620a"/></marker>
+</defs>
+<rect x="20" y="10" width="600" height="240" rx="16" fill="url(#g-07-1a)"/>
+<text x="40" y="40" fill="#fff" font-size="17" font-weight="700">グローバル　appName = "メモ帳"</text>
+<rect x="60" y="60" width="540" height="170" rx="14" fill="url(#g-07-1b)"/>
+<text x="80" y="90" fill="#fff" font-size="17" font-weight="700">関数 outer　user = "user1"</text>
+<rect x="100" y="110" width="480" height="100" rx="12" fill="url(#g-07-1c)"/>
+<text x="120" y="140" fill="#fff" font-size="17" font-weight="700">関数 inner　page = "一覧"</text>
+<text x="120" y="176" fill="#fff" font-size="15">console.log(appName, user, page)</text>
+<path d="M600 160 C 660 160, 660 100, 620 80" fill="none" stroke="#b8620a" stroke-width="3" marker-end="url(#m-07-1)"/>
+<path d="M630 75 C 700 70, 700 40, 650 30" fill="none" stroke="#b8620a" stroke-width="3" marker-end="url(#m-07-1)"/>
+<text x="700" y="120" fill="#b8620a" font-size="15" font-weight="700">見つかるまで</text>
+<text x="700" y="142" fill="#b8620a" font-size="15" font-weight="700">外側へ探す</text>
+<text x="700" y="200" fill="#a51f22" font-size="14" font-weight="700">outer から page は</text>
+<text x="700" y="220" fill="#a51f22" font-size="14" font-weight="700">見えない</text>
+</svg>
+<figcaption>inner からは 3 つとも見える。outer からは page が見えない</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const appName = "メモ帳";
+function outer() {
+  const user = "user1";
+  function inner() {
+    const page = "一覧";
+    console.log(appName, user, page);
+  }
+  inner();
+  console.log(typeof page);
+}
+outer();</code></pre>
+<pre class="output"><code class="language-text">メモ帳 user1 一覧
+undefined</code></pre>
+</div>
+<p>この「関数は、書かれた場所の外側の変数が見える」という決まりは、09 章のクロージャの土台になります。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>var と巻き上げ</h1>
+<p>古い書き方の <code>var</code> は、スコープの決まりが違います。<strong>ブロックを無視して、関数全体</strong>（関数の外ならグローバル全体）が範囲になります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">for (var i = 0; i &lt; 3; i++) {}
+console.log(i);
+
+for (let j = 0; j &lt; 3; j++) {}
+console.log(typeof j);</code></pre>
+<pre class="output"><code class="language-text">3
+undefined</code></pre>
+</div>
+<p><code>var i</code> はループが終わっても残っています。<code>let j</code> はループの中だけです。</p>
+<h2>巻き上げ</h2>
+<p><code>var</code> の変数は、実行の前にスコープの先頭で作られ、<code>undefined</code> が入った状態になります。これを<strong>巻き上げ（hoisting）</strong>と呼びます。そのため、宣言より前で読んでもエラーにならず、<code>undefined</code> が返ります。<code>let</code> ・ <code>const</code> は、宣言より前で読むとエラーになります。</p>
+<figure>
+<svg viewBox="0 0 880 220" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="var と let の巻き上げの違い">
+<defs>
+<linearGradient id="g-07-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-2b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+</defs>
+<rect x="20" y="10" width="410" height="200" rx="14" fill="url(#g-07-2a)"/>
+<text x="225" y="40" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">var</text>
+<rect x="40" y="56" width="370" height="34" rx="6" fill="rgba(255,255,255,0.18)" stroke="#fff" stroke-dasharray="5 4"/>
+<text x="56" y="79" fill="#fff" font-size="15" font-family="Consolas, monospace">var a;  ← 先頭で作られる（中身は undefined）</text>
+<text x="56" y="120" fill="#fff" font-size="15" font-family="Consolas, monospace">console.log(a);  → undefined</text>
+<text x="56" y="150" fill="#fff" font-size="15" font-family="Consolas, monospace">a = 1;</text>
+<text x="56" y="180" fill="#fff" font-size="15" font-family="Consolas, monospace">console.log(a);  → 1</text>
+<rect x="450" y="10" width="410" height="200" rx="14" fill="url(#g-07-2b)"/>
+<text x="655" y="40" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">let ・ const</text>
+<rect x="470" y="56" width="370" height="78" rx="6" fill="rgba(255,255,255,0.18)" stroke="#fff" stroke-dasharray="5 4"/>
+<text x="486" y="79" fill="#fff" font-size="15">ここは「一時的な使用禁止区間」</text>
+<text x="486" y="105" fill="#fff" font-size="15" font-family="Consolas, monospace">console.log(b);  → エラー</text>
+<text x="486" y="160" fill="#fff" font-size="15" font-family="Consolas, monospace">let b = 2;  ← ここから使える</text>
+<text x="486" y="190" fill="#fff" font-size="15" font-family="Consolas, monospace">console.log(b);  → 2</text>
+</svg>
+<figcaption>var は先頭で undefined として用意される。let ・ const は宣言の行まで使えない</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(a);
+var a = 1;
+console.log(a);
+
+console.log(b);
+let b = 2;</code></pre>
+<pre class="output"><code class="language-text">undefined
+1
+Uncaught ReferenceError: Cannot access 'b' before initialization</code></pre>
+</div>
+<p>宣言の前で読めてしまうのは、書き間違いに気づけない原因になります。<strong>新しいコードでは <code>var</code> を使わず、<code>const</code> と <code>let</code> だけを使います</strong>。古いコードや資料で <code>var</code> を見かけたら、このような違いがあることを思い出してください。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>グローバル変数の事故</h1>
+<p>どの関数にも入っていない一番外側を<strong>グローバル</strong>と呼びます。グローバルには、<code>globalThis</code> という特別なオブジェクトがあり、ブラウザでは <code>window</code>、Node.js では <code>global</code> という名前でも呼べます。</p>
+<figure>
+<svg viewBox="0 0 880 240" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="グローバルオブジェクト">
+<defs>
+<linearGradient id="g-07-3a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-3b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+</defs>
+<rect x="20" y="10" width="520" height="220" rx="16" fill="url(#g-07-3a)"/>
+<text x="280" y="44" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">globalThis（みんなで共有する 1 つの箱）</text>
+<text x="44" y="84" fill="#fff" font-size="15">console ・ setTimeout ・ Math … 元からある</text>
+<text x="44" y="118" fill="#fff" font-size="15">var で作った変数（関数の外で）</text>
+<text x="44" y="152" fill="#fff" font-size="15">宣言を忘れて代入した変数（どこからでも）</text>
+<text x="44" y="196" fill="#fff" font-size="14">→ 別のスクリプトと名前がぶつかると上書きされる</text>
+<rect x="560" y="10" width="300" height="220" rx="16" fill="url(#g-07-3b)"/>
+<text x="710" y="44" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">箱の外の置き場</text>
+<text x="580" y="84" fill="#fff" font-size="15">関数の外の let ・ const</text>
+<text x="580" y="118" fill="#fff" font-size="15">globalThis には載らない</text>
+<text x="580" y="196" fill="#fff" font-size="14">→ モジュール（10 章）にすると</text>
+<text x="580" y="218" fill="#fff" font-size="14">　ファイルごとに分かれる</text>
+</svg>
+<figcaption>var と宣言忘れは、共有の箱を汚す</figcaption>
+</figure>
+<h2>宣言を忘れると、グローバルに作られる</h2>
+<p><code>let</code> ・ <code>const</code> を付けずに代入すると、関数の中であっても、<strong>グローバルに変数ができてしまいます</strong>。エラーにならないので気づけません。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function setCount() {
+  count = 10; // let も const も付け忘れた
+}
+setCount();
+console.log(count);
+console.log(globalThis.count);</code></pre>
+<pre class="output"><code class="language-text">10
+10</code></pre>
+</div>
+<h2>var はグローバルオブジェクトに載る</h2>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">var fromVar = "var";
+let fromLet = "let";
+console.log(globalThis.fromVar);
+console.log(globalThis.fromLet);</code></pre>
+<pre class="output"><code class="language-text">var
+undefined</code></pre>
+</div>
+<h2>名前がぶつかる</h2>
+<p>ブラウザでは、1 つのページに複数のスクリプトを読み込みます。グローバルの名前は全スクリプトで共有なので、別の人が同じ名前を使うと上書きされます。次の例は、2 つのスクリプトが続けて読み込まれた様子を 1 つにまとめたものです。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">// a.js
+var total = 100;
+
+// b.js（別の人が書いた）
+var total = "合計";
+
+// a.js の関数があとで呼ばれる
+console.log(total + 1);</code></pre>
+<pre class="output"><code class="language-text">合計1</code></pre>
+</div>
+<p>エラーにはならず、計算結果だけがおかしくなります。グローバルに置くものは最小限にし、関数やモジュール（10 章）の中に閉じ込めます。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>this は呼び方で決まる</h1>
+<p><code>this</code> は「この関数を呼んだ持ち主」を指す特別な変数です。Java ・ C# の <code>this</code> は「そのクラスのインスタンス」に決まっていますが、JavaScript の <code>this</code> は<strong>関数を書いた場所ではなく、呼んだときの書き方で決まります</strong>。</p>
+<figure>
+<svg viewBox="0 0 880 290" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="this の決まり方">
+<defs>
+<linearGradient id="g-07-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-4c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-4d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(45,78%,25%)"/><stop offset="1" stop-color="hsl(45,58%,55%)"/></linearGradient>
+<linearGradient id="g-07-4e" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<marker id="m-07-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<g font-size="16" font-weight="700" text-anchor="middle">
+<text x="210" y="24" fill="#1c2330">呼び方</text>
+<text x="660" y="24" fill="#1c2330">this は</text>
+</g>
+<rect x="20" y="36" width="380" height="44" rx="8" fill="url(#g-07-4a)"/><text x="210" y="64" fill="#fff" font-size="16" text-anchor="middle" font-family="Consolas, monospace">obj.method()</text>
+<rect x="480" y="36" width="380" height="44" rx="8" fill="url(#g-07-4a)"/><text x="670" y="64" fill="#fff" font-size="16" text-anchor="middle">点の左のオブジェクト（obj）</text>
+<rect x="20" y="88" width="380" height="44" rx="8" fill="url(#g-07-4b)"/><text x="210" y="116" fill="#fff" font-size="16" text-anchor="middle" font-family="Consolas, monospace">f()（点なしで呼ぶ）</text>
+<rect x="480" y="88" width="380" height="44" rx="8" fill="url(#g-07-4b)"/><text x="670" y="116" fill="#fff" font-size="16" text-anchor="middle">undefined（strict）・ globalThis</text>
+<rect x="20" y="140" width="380" height="44" rx="8" fill="url(#g-07-4c)"/><text x="210" y="168" fill="#fff" font-size="16" text-anchor="middle" font-family="Consolas, monospace">f.call(x) ・ f.bind(x)()</text>
+<rect x="480" y="140" width="380" height="44" rx="8" fill="url(#g-07-4c)"/><text x="670" y="168" fill="#fff" font-size="16" text-anchor="middle">指定した x</text>
+<rect x="20" y="192" width="380" height="44" rx="8" fill="url(#g-07-4d)"/><text x="210" y="220" fill="#fff" font-size="16" text-anchor="middle" font-family="Consolas, monospace">new F()</text>
+<rect x="480" y="192" width="380" height="44" rx="8" fill="url(#g-07-4d)"/><text x="670" y="220" fill="#fff" font-size="16" text-anchor="middle">新しく作られたオブジェクト（08 章）</text>
+<rect x="20" y="244" width="380" height="44" rx="8" fill="url(#g-07-4e)"/><text x="210" y="272" fill="#fff" font-size="16" text-anchor="middle" font-family="Consolas, monospace">アロー関数 () =&gt; …</text>
+<rect x="480" y="244" width="380" height="44" rx="8" fill="url(#g-07-4e)"/><text x="670" y="272" fill="#fff" font-size="16" text-anchor="middle">自分の this を持たない。外側の this</text>
+<line x1="404" y1="58" x2="474" y2="58" stroke="#7a8699" stroke-width="3" marker-end="url(#m-07-4)"/>
+<line x1="404" y1="110" x2="474" y2="110" stroke="#7a8699" stroke-width="3" marker-end="url(#m-07-4)"/>
+<line x1="404" y1="162" x2="474" y2="162" stroke="#7a8699" stroke-width="3" marker-end="url(#m-07-4)"/>
+<line x1="404" y1="214" x2="474" y2="214" stroke="#7a8699" stroke-width="3" marker-end="url(#m-07-4)"/>
+<line x1="404" y1="266" x2="474" y2="266" stroke="#7a8699" stroke-width="3" marker-end="url(#m-07-4)"/>
+</svg>
+<figcaption>同じ関数でも、呼び方が変わると this が変わる</figcaption>
+</figure>
+<h2>メソッドとして呼ぶ</h2>
+<p><code>obj.method()</code> の形で呼ぶと、<code>this</code> は点の左のオブジェクトになります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const counter = {
+  count: 0,
+  up() {
+    this.count++;
+    return this.count;
+  },
+};
+console.log(counter.up());
+console.log(counter.up());</code></pre>
+<pre class="output"><code class="language-text">1
+2</code></pre>
+</div>
+<h2>取り出して呼ぶと、this を失う</h2>
+<p>同じ関数を変数に取り出してから呼ぶと、点の左が無くなります。すると <code>this</code> は <code>counter</code> ではなくなります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const counter = {
+  count: 0,
+  up() {
+    this.count++;
+    return this.count;
+  },
+};
+const up = counter.up;
+console.log(up());
+console.log(counter.count);</code></pre>
+<pre class="output"><code class="language-text">NaN
+0</code></pre>
+</div>
+<p>点なしで呼んだので、<code>this</code> はグローバルオブジェクト（<code>globalThis</code>）になりました。<code>globalThis.count</code> は無い（<code>undefined</code>）ので、<code>undefined + 1</code> で <code>NaN</code> です。<code>counter.count</code> は変わっていません。しかもエラーにならず、グローバルを汚しています。</p>
+<h2>呼ぶ相手を指定する</h2>
+<p><code>call</code> は <code>this</code> を指定して呼びます。<code>bind</code> は <code>this</code> を固定した新しい関数を作ります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function introduce(greeting) {
+  return `${greeting}、${this.title}です`;
+}
+const shop = { title: "青果店" };
+console.log(introduce.call(shop, "こんにちは"));
+
+const bound = introduce.bind(shop);
+console.log(bound("いらっしゃいませ"));</code></pre>
+<pre class="output"><code class="language-text">こんにちは、青果店です
+いらっしゃいませ、青果店です</code></pre>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>this を失わない書き方</h1>
+<p>実務で <code>this</code> を失うのは、ほとんどが<strong>メソッドをコールバックとして渡したとき</strong>です。渡した先では、点なしで呼ばれるからです。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const timer = {
+  label: "タイマー",
+  show() {
+    console.log(this.label);
+  },
+};
+setTimeout(timer.show, 0);
+setTimeout(timer.show.bind(timer), 0);
+setTimeout(() => timer.show(), 0);</code></pre>
+<pre class="output"><code class="language-text">undefined
+タイマー
+タイマー</code></pre>
+</div>
+<p>1 つ目は <code>this</code> を失っています。2 つ目は <code>bind</code> で固定し、3 つ目はアロー関数の中で <code>timer.show()</code> と点付きで呼び直しています。</p>
+<h2>アロー関数は外側の this を使う</h2>
+<p>アロー関数は自分の <code>this</code> を持たず、<strong>書かれた場所の外側の <code>this</code></strong> をそのまま使います。メソッドの中でコールバックを書くときは、アロー関数にしておくと <code>this</code> を失いません。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const timer = {
+  label: "タイマー",
+  start() {
+    setTimeout(function () {
+      console.log("function:", this.label);
+    }, 0);
+    setTimeout(() => {
+      console.log("アロー関数:", this.label);
+    }, 0);
+  },
+};
+timer.start();</code></pre>
+<pre class="output"><code class="language-text">function: undefined
+アロー関数: タイマー</code></pre>
+</div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> 逆に、<strong>メソッドそのものをアロー関数で書くと</strong>、<code>this</code> がオブジェクトになりません。オブジェクトの外側の <code>this</code> を使ってしまうからです。メソッドは <code>up() { … }</code> の形で書き、その中のコールバックをアロー関数にします。</p>
+</div>
+<div class="tablewrap"><table>
+<thead><tr><th>場面</th><th>書き方</th></tr></thead>
+<tbody>
+<tr><td>オブジェクトやクラスのメソッド</td><td><code>method() { … }</code></td></tr>
+<tr><td>メソッドの中で渡すコールバック</td><td>アロー関数 <code>() =&gt; { … }</code></td></tr>
+<tr><td>メソッドを外へ渡す</td><td><code>obj.method.bind(obj)</code> か <code>() =&gt; obj.method()</code></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>strict モード</h1>
+<p>ファイルや関数の先頭に <code>"use strict";</code> と書くと、<strong>strict モード</strong>になります。この章で見た事故のいくつかが、黙って進まずにエラーになります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">"use strict";
+function setTotal() {
+  total = 10;
+}
+setTotal();</code></pre>
+<pre class="output"><code class="language-text">Uncaught ReferenceError: total is not defined</code></pre>
+</div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">"use strict";
+const counter = {
+  count: 0,
+  up() {
+    this.count++;
+    return this.count;
+  },
+};
+const up = counter.up;
+console.log(up());</code></pre>
+<pre class="output"><code class="language-text">Uncaught TypeError: Cannot read properties of undefined (reading 'count')</code></pre>
+</div>
+<p>宣言忘れはエラーになり、点なしで呼んだ関数の <code>this</code> は <code>undefined</code> になります。グローバルを黙って汚すより、その場で止まるほうが原因を見つけやすくなります。</p>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> ES Modules（<code>import</code> ・ <code>export</code> を使うファイル。10 章 ・ 12 章）と、<code>class</code> の中は、<strong>自動で strict モード</strong>になります。モジュールで書いていれば、<code>"use strict";</code> を書く必要はありません。</p>
+</div>
+<h2>一番外側の this は、環境で違う</h2>
+<p>関数の外に書いた <code>this</code> の値は、どう実行されたかで変わります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">console.log(this === globalThis);</code></pre>
+<pre class="output"><code class="language-text">true</code></pre>
+</div>
+<p>このページの「▶ 実行」のように、ふつうのスクリプトとして動かすと <code>globalThis</code> です。Node.js でファイルを実行すると、形式によって違います（形式の違いは 12 章）。</p>
+<div class="example" data-run="node">
+<p class="filename">top-this.cjs</p>
+<pre><code class="language-javascript">console.log(this);
+console.log(this === module.exports);</code></pre>
+<pre class="output"><code class="language-text">{}
+true</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">top-this.mjs</p>
+<pre><code class="language-javascript">console.log(this);</code></pre>
+<pre class="output"><code class="language-text">undefined</code></pre>
+</div>
+<p>一番外側の <code>this</code> に頼るコードは、環境が変わると壊れます。グローバルオブジェクトが欲しいときは <code>globalThis</code> と名前で書きます。</p>
+<div class="callout">
+<p><span class="label">メモ:</span> ブラウザのページに直接書いたスクリプトでは、<code>globalThis</code> は <code>window</code> です。この資料の「▶ 実行」は、ページを固まらせないために Web Worker という別の場所で動いているので、<code>globalThis</code> は <code>self</code> という名前のオブジェクトです。どちらも「グローバルオブジェクト」として同じように振る舞います。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="06-関数.html" aria-label="前へ" title="06. 関数" style="--accent:hsl(80,78%,25%);--accent2:hsl(80,58%,55%);--soft:hsl(80,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="08-クラスとプロトタイプ.html" aria-label="次へ" title="08. クラスとプロトタイプ" style="--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

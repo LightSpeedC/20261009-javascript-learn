@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 210" width="880" height="210" role="img" aria-label="クラスからインスタンスを作る" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(150,78%,25%)"/><stop offset="1" stop-color="hsl(150,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="30" width="290" height="150" rx="14" fill="url(#i1)"/>
+<text x="165" y="64" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">class Item（設計図）</text>
+<text x="165" y="98" fill="#fff" font-size="15" text-anchor="middle">constructor(title, price)</text>
+<text x="165" y="126" fill="#fff" font-size="15" text-anchor="middle">priceWithTax()</text>
+<text x="165" y="154" fill="#fff" font-size="15" text-anchor="middle">describe()</text>
+<line x1="314" y1="80" x2="520" y2="56" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="314" y1="130" x2="520" y2="154" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<text x="420" y="60" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">new Item("りんご", 120)</text>
+<text x="420" y="168" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">new Item("メロン", 980)</text>
+<rect x="526" y="20" width="330" height="72" rx="12" fill="url(#i2)"/>
+<text x="691" y="50" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">apple（インスタンス）</text>
+<text x="691" y="76" fill="#fff" font-size="15" text-anchor="middle">title: "りんご"　price: 120</text>
+<rect x="526" y="118" width="330" height="72" rx="12" fill="url(#i3)"/>
+<text x="691" y="148" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">melon（インスタンス）</text>
+<text x="691" y="174" fill="#fff" font-size="15" text-anchor="middle">title: "メロン"　price: 980</text>
+</svg>

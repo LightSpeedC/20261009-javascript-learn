@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 250" width="880" height="250" role="img" aria-label="プロトタイプチェーン" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(150,78%,25%)"/><stop offset="1" stop-color="hsl(150,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(70,78%,25%)"/><stop offset="1" stop-color="hsl(70,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(270,78%,25%)"/><stop offset="1" stop-color="hsl(270,58%,55%)"/></linearGradient>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="20" width="180" height="100" rx="12" fill="url(#i1)"/>
+<text x="110" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">a</text>
+<text x="110" y="84" fill="#fff" font-size="15" text-anchor="middle">title: "A"</text>
+<rect x="20" y="140" width="180" height="100" rx="12" fill="url(#i2)"/>
+<text x="110" y="172" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">b</text>
+<text x="110" y="204" fill="#fff" font-size="15" text-anchor="middle">title: "B"</text>
+<rect x="290" y="70" width="230" height="110" rx="12" fill="url(#i3)"/>
+<text x="405" y="104" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">Item.prototype</text>
+<text x="405" y="136" fill="#fff" font-size="15" text-anchor="middle">hello()</text>
+<text x="405" y="160" fill="#fff" font-size="13" text-anchor="middle">全員で 1 つを共有</text>
+<rect x="610" y="70" width="190" height="110" rx="12" fill="url(#i4)"/>
+<text x="705" y="104" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">Object.prototype</text>
+<text x="705" y="136" fill="#fff" font-size="15" text-anchor="middle">toString()</text>
+<text x="705" y="160" fill="#fff" font-size="15" text-anchor="middle">hasOwnProperty() …</text>
+<text x="840" y="132" fill="#4a5568" font-size="16" font-weight="700" text-anchor="middle">null</text>
+<line x1="204" y1="70" x2="284" y2="110" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="204" y1="190" x2="284" y2="150" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="524" y1="125" x2="604" y2="125" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="804" y1="125" x2="822" y2="125" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<text x="560" y="230" fill="#4a5568" font-size="14" text-anchor="middle">a.hello() → a に無い → Item.prototype で見つかる。a.toString() → さらにその先で見つかる</text>
+</svg>

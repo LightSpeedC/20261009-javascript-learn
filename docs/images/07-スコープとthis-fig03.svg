@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 240" width="880" height="240" role="img" aria-label="グローバルオブジェクト" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="10" width="520" height="220" rx="16" fill="url(#i1)"/>
+<text x="280" y="44" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">globalThis（みんなで共有する 1 つの箱）</text>
+<text x="44" y="84" fill="#fff" font-size="15">console ・ setTimeout ・ Math … 元からある</text>
+<text x="44" y="118" fill="#fff" font-size="15">var で作った変数（関数の外で）</text>
+<text x="44" y="152" fill="#fff" font-size="15">宣言を忘れて代入した変数（どこからでも）</text>
+<text x="44" y="196" fill="#fff" font-size="14">→ 別のスクリプトと名前がぶつかると上書きされる</text>
+<rect x="560" y="10" width="300" height="220" rx="16" fill="url(#i2)"/>
+<text x="710" y="44" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">箱の外の置き場</text>
+<text x="580" y="84" fill="#fff" font-size="15">関数の外の let ・ const</text>
+<text x="580" y="118" fill="#fff" font-size="15">globalThis には載らない</text>
+<text x="580" y="196" fill="#fff" font-size="14">→ モジュール（10 章）にすると</text>
+<text x="580" y="218" fill="#fff" font-size="14">　ファイルごとに分かれる</text>
+</svg>

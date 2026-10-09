@@ -1,0 +1,355 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>08. クラスとプロトタイプ</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"08." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"08." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>08. クラスとプロトタイプ</h1>
+<p class="lead">class 構文の書き方と継承。その裏で動いているプロトタイプの仕組み。Java ・ C# のクラスとの違い</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="07-スコープとthis.html" aria-label="前へ" title="07. スコープ・this・グローバル" style="--accent:hsl(40,78%,25%);--accent2:hsl(40,58%,55%);--soft:hsl(40,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">class の基本</a></li>
+<li class="ch02"><a href="#ch02">フィールド ・ private ・ static ・ getter</a></li>
+<li class="ch03"><a href="#ch03">継承</a></li>
+<li class="ch04"><a href="#ch04">裏にあるプロトタイプ</a></li>
+<li class="ch05"><a href="#ch05">Java ・ C# のクラスとの違い</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>class の基本</h1>
+<p><code>class</code> で、同じ形のオブジェクトを作るための設計図を書きます。<code>new クラス名(…)</code> で、設計図から実物（インスタンス）を作ります。見た目は Java ・ C# のクラスとよく似ています。</p>
+<figure>
+<svg viewBox="0 0 880 210" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="クラスからインスタンスを作る">
+<defs>
+<linearGradient id="g-08-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-08-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="g-08-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(150,78%,25%)"/><stop offset="1" stop-color="hsl(150,58%,55%)"/></linearGradient>
+<marker id="m-08-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="30" width="290" height="150" rx="14" fill="url(#g-08-1a)"/>
+<text x="165" y="64" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">class Item（設計図）</text>
+<text x="165" y="98" fill="#fff" font-size="15" text-anchor="middle">constructor(title, price)</text>
+<text x="165" y="126" fill="#fff" font-size="15" text-anchor="middle">priceWithTax()</text>
+<text x="165" y="154" fill="#fff" font-size="15" text-anchor="middle">describe()</text>
+<line x1="314" y1="80" x2="520" y2="56" stroke="#7a8699" stroke-width="3" marker-end="url(#m-08-1)"/>
+<line x1="314" y1="130" x2="520" y2="154" stroke="#7a8699" stroke-width="3" marker-end="url(#m-08-1)"/>
+<text x="420" y="60" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">new Item("りんご", 120)</text>
+<text x="420" y="168" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">new Item("メロン", 980)</text>
+<rect x="526" y="20" width="330" height="72" rx="12" fill="url(#g-08-1b)"/>
+<text x="691" y="50" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">apple（インスタンス）</text>
+<text x="691" y="76" fill="#fff" font-size="15" text-anchor="middle">title: "りんご"　price: 120</text>
+<rect x="526" y="118" width="330" height="72" rx="12" fill="url(#g-08-1c)"/>
+<text x="691" y="148" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">melon（インスタンス）</text>
+<text x="691" y="174" fill="#fff" font-size="15" text-anchor="middle">title: "メロン"　price: 980</text>
+</svg>
+<figcaption>設計図は 1 つ、実物はいくつでも作れる。データは実物ごとに別々に持つ</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Item {
+  constructor(title, price) {
+    this.title = title;
+    this.price = price;
+  }
+  priceWithTax() {
+    return Math.floor(this.price * 1.1);
+  }
+  describe() {
+    return `${this.title}（税込 ${this.priceWithTax()} 円）`;
+  }
+}
+const apple = new Item("りんご", 120);
+console.log(apple.describe());
+console.log(apple);
+console.log(apple instanceof Item);</code></pre>
+<pre class="output"><code class="language-text">りんご（税込 132 円）
+Item { title: 'りんご', price: 120 }
+true</code></pre>
+</div>
+<ul>
+<li><code>constructor</code> は <code>new</code> のときに呼ばれる。中の <code>this</code> は作られたばかりのインスタンス</li>
+<li>メソッドの中で自分のデータやメソッドを使うときは、<strong>必ず <code>this.</code> を付ける</strong>。Java ・ C# のように省略はできない</li>
+<li>メソッドの書き方は、オブジェクトリテラルのメソッドと同じ。<code>function</code> は付けない</li>
+</ul>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>フィールド ・ private ・ static ・ getter</h1>
+<p>クラスの中には、メソッドのほかに次のものを書けます。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>count = 0;</code></td><td>フィールド。インスタンスごとに作られ、初期値が入る</td></tr>
+<tr><td class="nowrap"><code>#count = 0;</code></td><td>private フィールド。クラスの外からは読めない</td></tr>
+<tr><td class="nowrap"><code>static created = 0;</code></td><td>static。インスタンスではなく、クラスそのものに 1 つだけ持つ</td></tr>
+<tr><td class="nowrap"><code>get value() { … }</code></td><td>getter。<code>c.value</code> とプロパティのように読めるメソッド</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Counter {
+  #count = 0;
+  static created = 0;
+  constructor() {
+    Counter.created++;
+  }
+  up() {
+    this.#count++;
+    return this;
+  }
+  get value() {
+    return this.#count;
+  }
+}
+const c = new Counter();
+c.up().up().up();
+console.log(c.value);
+new Counter();
+console.log(Counter.created);
+console.log(c);
+console.log(c.count);</code></pre>
+<pre class="output"><code class="language-text">3
+2
+Counter {}
+undefined</code></pre>
+</div>
+<p><code>up</code> は <code>this</code> を返すので、<code>c.up().up().up()</code> とつなげて呼べます。<code>#count</code> は外からは見えず、表示しても <code>Counter {}</code> です。外から <code>#count</code> を読もうとすると、実行する前の段階でエラーになります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Wallet {
+  #balance = 1000;
+}
+const w = new Wallet();
+console.log(w.#balance);</code></pre>
+<pre class="output"><code class="language-text">Uncaught SyntaxError: Private field '#balance' must be declared in an enclosing class</code></pre>
+</div>
+<div class="callout callout-important">
+<p><span class="label">Java ・ C# から来た人へ:</span> <code>private</code> ・ <code>public</code> というキーワードはありません。<code>#</code> を付けたものだけが private で、それ以外はすべて public です。<code>#</code> の付かない名前に <code>_balance</code> のように <code>_</code> を付けるのは「外から触らないで」という昔からの目印ですが、実際には触れてしまいます。</p>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>継承</h1>
+<p><code>extends</code> で、別のクラスを引き継いだクラスを作れます。親のメソッドは <code>super.メソッド名()</code> で呼びます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Animal {
+  constructor(label) {
+    this.label = label;
+  }
+  speak() {
+    return `${this.label}が鳴いた`;
+  }
+}
+class Dog extends Animal {
+  speak() {
+    return `${super.speak()}（ワン）`;
+  }
+}
+class Cat extends Animal {
+  constructor(label, indoor) {
+    super(label);
+    this.indoor = indoor;
+  }
+}
+const animals = [new Dog("ポチ"), new Cat("タマ", true)];
+for (const a of animals) {
+  console.log(a.speak());
+}
+console.log(animals[1]);
+console.log(animals[0] instanceof Animal);</code></pre>
+<pre class="output"><code class="language-text">ポチが鳴いた（ワン）
+タマが鳴いた
+Cat { label: 'タマ', indoor: true }
+true</code></pre>
+</div>
+<p>子クラスで <code>constructor</code> を書くときは、<code>this</code> を使う前に <code>super(…)</code> で親の <code>constructor</code> を呼ぶ決まりです。忘れるとエラーになります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Base {}
+class Child extends Base {
+  constructor() {
+    this.x = 1;
+  }
+}
+new Child();</code></pre>
+<pre class="output"><code class="language-text">Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor</code></pre>
+</div>
+<p>「派生クラスでは、<code>this</code> に触る前か戻る前に、親の constructor を呼ばなければならない」という意味です。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>裏にあるプロトタイプ</h1>
+<p>JavaScript の <code>class</code> は、Java ・ C# のクラスとは仕組みが違います。中身は<strong>プロトタイプ</strong>という仕組みで、<code>class</code> はそれを書きやすくした見た目（糖衣構文）です。</p>
+<p>インスタンスが自分で持っているのは、<code>this.title = …</code> で入れた<strong>データだけ</strong>です。メソッドは、すべてのインスタンスが共有する<strong>プロトタイプ</strong>というオブジェクトに 1 つだけ置かれています。インスタンスに無いものを読もうとすると、JavaScript は自動でプロトタイプを探しに行きます。</p>
+<figure>
+<svg viewBox="0 0 880 250" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="プロトタイプチェーン">
+<defs>
+<linearGradient id="g-08-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="g-08-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(150,78%,25%)"/><stop offset="1" stop-color="hsl(150,58%,55%)"/></linearGradient>
+<linearGradient id="g-08-4c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-08-4d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(270,78%,25%)"/><stop offset="1" stop-color="hsl(270,58%,55%)"/></linearGradient>
+<marker id="m-08-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="20" width="180" height="100" rx="12" fill="url(#g-08-4a)"/>
+<text x="110" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">a</text>
+<text x="110" y="84" fill="#fff" font-size="15" text-anchor="middle">title: "A"</text>
+<rect x="20" y="140" width="180" height="100" rx="12" fill="url(#g-08-4b)"/>
+<text x="110" y="172" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">b</text>
+<text x="110" y="204" fill="#fff" font-size="15" text-anchor="middle">title: "B"</text>
+<rect x="290" y="70" width="230" height="110" rx="12" fill="url(#g-08-4c)"/>
+<text x="405" y="104" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">Item.prototype</text>
+<text x="405" y="136" fill="#fff" font-size="15" text-anchor="middle">hello()</text>
+<text x="405" y="160" fill="#fff" font-size="13" text-anchor="middle">全員で 1 つを共有</text>
+<rect x="610" y="70" width="190" height="110" rx="12" fill="url(#g-08-4d)"/>
+<text x="705" y="104" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">Object.prototype</text>
+<text x="705" y="136" fill="#fff" font-size="15" text-anchor="middle">toString()</text>
+<text x="705" y="160" fill="#fff" font-size="15" text-anchor="middle">hasOwnProperty() …</text>
+<text x="840" y="132" fill="#4a5568" font-size="16" font-weight="700" text-anchor="middle">null</text>
+<line x1="204" y1="70" x2="284" y2="110" stroke="#7a8699" stroke-width="3" marker-end="url(#m-08-4)"/>
+<line x1="204" y1="190" x2="284" y2="150" stroke="#7a8699" stroke-width="3" marker-end="url(#m-08-4)"/>
+<line x1="524" y1="125" x2="604" y2="125" stroke="#7a8699" stroke-width="3" marker-end="url(#m-08-4)"/>
+<line x1="804" y1="125" x2="822" y2="125" stroke="#7a8699" stroke-width="3" marker-end="url(#m-08-4)"/>
+<text x="560" y="230" fill="#4a5568" font-size="14" text-anchor="middle">a.hello() → a に無い → Item.prototype で見つかる。a.toString() → さらにその先で見つかる</text>
+</svg>
+<figcaption>無いものは矢印の先へ順に探す。この鎖をプロトタイプチェーンと呼ぶ</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Item {
+  constructor(title) {
+    this.title = title;
+  }
+  hello() {
+    return `${this.title}です`;
+  }
+}
+const a = new Item("A");
+const b = new Item("B");
+console.log(Object.keys(a));
+console.log(a.hello === b.hello);
+console.log(Object.getPrototypeOf(a) === Item.prototype);
+console.log(Object.getOwnPropertyNames(Item.prototype));
+console.log(typeof Item);</code></pre>
+<pre class="output"><code class="language-text">[ 'title' ]
+true
+true
+[ 'constructor', 'hello' ]
+function</code></pre>
+</div>
+<ul>
+<li><code>a</code> 自身が持っているのは <code>title</code> だけ。<code>hello</code> は <code>Item.prototype</code> にある</li>
+<li><code>a.hello</code> と <code>b.hello</code> は同じ 1 つの関数</li>
+<li><code>typeof Item</code> は <code>"function"</code>。クラスの正体は、<code>new</code> で呼ぶための関数</li>
+</ul>
+<p>どのオブジェクトも、たどっていくと最後は <code>Object.prototype</code> に行き着きます。<code>toString</code> などのメソッドを書いていないのに使えるのは、そこにあるからです。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const obj = { x: 1 };
+console.log(obj.toString());
+console.log(Object.getPrototypeOf(obj) === Object.prototype);
+console.log(Object.getPrototypeOf(Object.prototype));</code></pre>
+<pre class="output"><code class="language-text">[object Object]
+true
+null</code></pre>
+</div>
+<p>プロトタイプは共有されているので、あとからメソッドを足すと、<strong>すでに作ったインスタンスでも使えるように</strong>なります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Item {
+  constructor(title) {
+    this.title = title;
+  }
+}
+const a = new Item("A");
+Item.prototype.shout = function () {
+  return this.title + "!";
+};
+console.log(a.shout());</code></pre>
+<pre class="output"><code class="language-text">A!</code></pre>
+</div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> <code>Array.prototype</code> や <code>String.prototype</code> のような<strong>組み込みのプロトタイプには、メソッドを足さない</strong>でください。すべての配列や文字列に影響し、将来の JavaScript に同じ名前のメソッドが追加されたときに衝突します。</p>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>Java ・ C# のクラスとの違い</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>項目</th><th>Java ・ C#</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">オーバーロード</td><td>引数の違いで同名のメソッドを並べられる</td><td>できない。<code>constructor</code> も 1 つだけ</td></tr>
+<tr><td class="nowrap">interface</td><td>ある</td><td>無い。同じ名前のメソッドを持っていれば、同じように扱える</td></tr>
+<tr><td class="nowrap">自分のメンバー</td><td><code>this.</code> は省略できる</td><td>必ず <code>this.</code> を付ける</td></tr>
+<tr><td class="nowrap">メソッドの this</td><td>いつもそのインスタンス</td><td>呼び方で決まる。取り出して渡すと失う（07 章）</td></tr>
+<tr><td class="nowrap">アクセス修飾子</td><td><code>private</code> ・ <code>protected</code> ・ <code>public</code></td><td><code>#</code> で private にできるだけ。<code>protected</code> は無い</td></tr>
+</tbody>
+</table></div>
+<h2>interface が無くても困らない</h2>
+<p>JavaScript では、型を確かめずにメソッドを呼ぶので、同じ名前のメソッドさえあれば、どのクラスでも同じように扱えます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Square {
+  constructor(side) {
+    this.side = side;
+  }
+  area() {
+    return this.side ** 2;
+  }
+}
+class Circle {
+  constructor(r) {
+    this.r = r;
+  }
+  area() {
+    return Math.round(Math.PI * this.r ** 2);
+  }
+}
+for (const shape of [new Square(3), new Circle(2)]) {
+  console.log(shape.constructor.name, shape.area());
+}</code></pre>
+<pre class="output"><code class="language-text">Square 9
+Circle 13</code></pre>
+</div>
+<h2>メソッドを渡すと this を失う</h2>
+<p>07 章の落とし穴は、クラスでも同じです。<code>class</code> の中は strict モードなので、<code>this</code> は <code>undefined</code> になり、エラーで止まります。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class Button {
+  constructor(label) {
+    this.label = label;
+  }
+  click() {
+    return `${this.label} を押した`;
+  }
+}
+const ok = new Button("OK");
+console.log(ok.click());
+const handler = ok.click;
+console.log(handler());</code></pre>
+<pre class="output"><code class="language-text">OK を押した
+Uncaught TypeError: Cannot read properties of undefined (reading 'label')</code></pre>
+</div>
+<p>メソッドを外へ渡すときは、<code>() =&gt; ok.click()</code> か <code>ok.click.bind(ok)</code> にします。第2部のイベント処理で、よく出会う場面です。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="07-スコープとthis.html" aria-label="前へ" title="07. スコープ・this・グローバル" style="--accent:hsl(40,78%,25%);--accent2:hsl(40,58%,55%);--soft:hsl(40,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>
