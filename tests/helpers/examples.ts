@@ -13,8 +13,10 @@ export type Example = {
 	expected: string | null;
 };
 
+// コードの中の < は &lt; と書く決まり。生の < があると、タグの始まりと読まれて後ろが消えることがある
 export function unescapeHtml(s: string): string {
-	return s.replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
+	if (s.includes('<')) throw new Error(`コードや出力の中の < は &lt; と書いてください: ${s.slice(0, 60)}`);
+	return s.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&amp;/g, '&');
 }
 
 export function pages(docsDir: string): string[] {

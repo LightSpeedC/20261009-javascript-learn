@@ -10,7 +10,8 @@ import { examplesOf, pages } from './helpers/examples.ts';
 const root = join(import.meta.dirname, '..');
 const docsDir = join(root, 'docs');
 const harness = join(import.meta.dirname, 'helpers', 'node-harness.cjs');
-const fixture = join(import.meta.dirname, 'fixtures', 'node-examples');
+// 読者が使うサンプルのデータ（docs/samples）を、そのまま作業フォルダへ写して使う
+const fixture = join(docsDir, 'samples');
 const work = join(root, 'tmp', 'examples');
 
 function run(args: string[], cwd: string): string {
