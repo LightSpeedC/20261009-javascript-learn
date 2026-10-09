@@ -14,8 +14,10 @@ const harness = join(import.meta.dirname, 'helpers', 'node-harness.cjs');
 const fixture = join(docsDir, 'samples');
 const work = join(root, 'tmp', 'examples');
 
+// 資料の出力は Node.js のもの。テストを bun で流しても、例はいつも node で実行する
+// （process.execPath は bun で流すと bun になり、表示もエラーの文面も変わる）
 function run(args: string[], cwd: string): string {
-	const r = spawnSync(process.execPath, args, { cwd, encoding: 'utf8', timeout: 15000 });
+	const r = spawnSync('node', args, { cwd, encoding: 'utf8', timeout: 15000 });
 	if (r.error) throw r.error;
 	return (r.stdout + r.stderr).replace(/\n$/, '');
 }
