@@ -31,7 +31,8 @@ export function examplesOf(docsDir: string, page: string): Example[] {
 	let index = 0;
 	while ((m = re.exec(html)) !== null) {
 		const body = m[2];
-		const code = /<pre><code class="language-javascript">([\s\S]*?)<\/code><\/pre>/.exec(body);
+		// 置いておくだけのファイル（data-run="file"）には package.json などの JSON もある
+		const code = /<pre><code class="language-(?:javascript|json)">([\s\S]*?)<\/code><\/pre>/.exec(body);
 		const out = /<pre class="output"><code class="language-text">([\s\S]*?)<\/code><\/pre>/.exec(body);
 		const file = /<p class="filename">([\s\S]*?)<\/p>/.exec(body);
 		if (!code) throw new Error(`${page} の ${index + 1} 番目の例にコードがありません`);

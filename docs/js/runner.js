@@ -49,6 +49,7 @@
 
 	function setupExample(ex) {
 		const kind = ex.dataset.run;
+		if (kind !== 'worker' && kind !== 'node') return;
 		const codeEl = ex.querySelector('pre:not(.output) > code');
 		const outputPre = ex.querySelector('pre.output');
 		if (!codeEl) return;

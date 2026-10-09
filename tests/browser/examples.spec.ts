@@ -44,6 +44,8 @@ for (const page of pages(docsDir)) {
 		await p.goto(`${base}/docs/${encodeURIComponent(page)}`);
 		const blocks = p.locator('.example[data-run="worker"], .example[data-run="node"]');
 		await expect(blocks).toHaveCount(runnable.length);
+		// 置いておくだけのファイル（data-run="file"）には、実行ボタンを付けない
+		await expect(p.locator('.example[data-run="file"] .run-btn')).toHaveCount(0);
 		for (let i = 0; i < runnable.length; i++) {
 			const block = blocks.nth(i);
 			await block.locator('.b-run').click();
