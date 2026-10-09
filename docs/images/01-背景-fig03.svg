@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 330" width="900" height="330" role="img" aria-label="第1部の地図" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(261.3,78%,25%)"/><stop offset="1" stop-color="hsl(261.3,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(242.7,78%,25%)"/><stop offset="1" stop-color="hsl(242.7,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(224,78%,25%)"/><stop offset="1" stop-color="hsl(224,58%,55%)"/></linearGradient>
+<linearGradient id="i5" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(205.3,78%,25%)"/><stop offset="1" stop-color="hsl(205.3,58%,55%)"/></linearGradient>
+<linearGradient id="i6" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(186.7,78%,25%)"/><stop offset="1" stop-color="hsl(186.7,58%,55%)"/></linearGradient>
+<linearGradient id="i7" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(168,78%,25%)"/><stop offset="1" stop-color="hsl(168,58%,55%)"/></linearGradient>
+<linearGradient id="i8" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(149.3,78%,25%)"/><stop offset="1" stop-color="hsl(149.3,58%,55%)"/></linearGradient>
+<linearGradient id="i9" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(130.7,78%,25%)"/><stop offset="1" stop-color="hsl(130.7,58%,55%)"/></linearGradient>
+<linearGradient id="i10" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(112,78%,25%)"/><stop offset="1" stop-color="hsl(112,58%,55%)"/></linearGradient>
+<linearGradient id="i11" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(93.3,78%,25%)"/><stop offset="1" stop-color="hsl(93.3,58%,55%)"/></linearGradient>
+<linearGradient id="i12" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(74.7,78%,25%)"/><stop offset="1" stop-color="hsl(74.7,58%,55%)"/></linearGradient>
+<linearGradient id="i13" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(56,78%,25%)"/><stop offset="1" stop-color="hsl(56,58%,55%)"/></linearGradient>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="100" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">第1回</text>
+<text x="280" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">第2回</text>
+<text x="460" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">第3回</text>
+<text x="640" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">第4回</text>
+<text x="810" y="26" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">宿題</text>
+<rect x="20" y="40" width="160" height="40" rx="8" fill="url(#i1)"/><text x="100" y="66" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">01 背景</text>
+<rect x="20" y="86" width="160" height="40" rx="8" fill="url(#i2)"/><text x="100" y="112" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">02 実行環境</text>
+<rect x="20" y="132" width="160" height="40" rx="8" fill="url(#i3)"/><text x="100" y="158" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">03 値と変数</text>
+<rect x="20" y="178" width="160" height="40" rx="8" fill="url(#i4)"/><text x="100" y="204" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">★ 04 型変換</text>
+<rect x="20" y="224" width="160" height="40" rx="8" fill="url(#i5)"/><text x="100" y="250" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">05 オブジェクト</text>
+<rect x="20" y="270" width="160" height="40" rx="8" fill="url(#i6)"/><text x="100" y="296" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">06 関数</text>
+<rect x="200" y="40" width="160" height="40" rx="8" fill="url(#i7)"/><text x="280" y="66" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">★ 07 this</text>
+<rect x="200" y="86" width="160" height="40" rx="8" fill="url(#i8)"/><text x="280" y="112" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">08 クラス</text>
+<rect x="380" y="40" width="160" height="40" rx="8" fill="url(#i9)"/><text x="460" y="66" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">★ 09 クロージャ</text>
+<rect x="380" y="86" width="160" height="40" rx="8" fill="url(#i10)"/><text x="460" y="112" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">10 エラー処理</text>
+<rect x="560" y="40" width="160" height="40" rx="8" fill="url(#i11)"/><text x="640" y="66" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">★ 11 非同期</text>
+<rect x="560" y="86" width="160" height="40" rx="8" fill="url(#i12)"/><text x="640" y="112" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">12 CJS と ESM</text>
+<rect x="740" y="40" width="140" height="40" rx="8" fill="url(#i13)"/><text x="810" y="66" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">13 ハンズオン</text>
+<text x="370" y="200" fill="#b8620a" font-size="15" font-weight="700">★ 前半の山: 04 型変換 ・ 07 this とグローバル</text>
+<text x="370" y="228" fill="#a51f22" font-size="15" font-weight="700">★ 後半の山（最重要）: 09 クロージャ ・ 11 非同期</text>
+<text x="370" y="268" fill="#4a5568" font-size="14">第2部（ブラウザ編）は、第1部を終えてから進む</text>
+</svg>

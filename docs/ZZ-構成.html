@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ZZ. 資料の構成</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"ZZ." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"ZZ." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>ZZ. 資料の構成</h1>
+<p class="lead">対象読者・章立ての意図・勉強会の進め方・確かめた版・実行の仕組み</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">対象読者とゴール</a></li>
+<li class="ch02"><a href="#ch02">章立ての意図</a></li>
+<li class="ch03"><a href="#ch03">勉強会の進め方</a></li>
+<li class="ch04"><a href="#ch04">確かめた版</a></li>
+<li class="ch05"><a href="#ch05">実行の仕組みと資料の作り方</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>対象読者とゴール</h1>
+<ul>
+<li><strong>対象読者</strong>: Java ・ C# ・ VBA を少し触った初心者。変数・基本の文法・<code>if</code> ・ <code>for</code> ・ <code>while</code> ・ <code>switch</code> が分かる程度。関数・クラス・例外・非同期は知らない前提で書く</li>
+<li><strong>ゴール</strong>: Node.js で <code>.js</code> を書いてエラーを読んで直せる。型変換・<code>this</code> ・クロージャ・非同期の動きを自分のことばで説明できる</li>
+<li><strong>次の一歩</strong>: 型を書ける TypeScript へ進める</li>
+</ul>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>章立ての意図</h1>
+<ul>
+<li><strong>2 部構成</strong>: 第1部（01〜13）は Node.js で言語そのものを学ぶ。第2部（14〜）はブラウザで DOM ・イベントを学ぶ</li>
+<li><strong>山場は後半に 2 段で置く</strong>: 前半の山は 04（型変換）と 07（スコープ ・ <code>this</code> ・グローバル）。JavaScript らしい落とし穴を知る。後半の山は 09（クロージャ）と 11（非同期）。最も大事な仕組みで、ここを越えると実務のコードが読めるようになる</li>
+<li><strong>ハンズオンは各部の最後に宿題として置く</strong>: 勉強会の時間は読み合わせと短い演習に使い、まとまった作業は各自で行う</li>
+<li><strong>付録は順に読まない</strong>: A1 逆引き ・ A2 Java ・ C# ・ VBA との対応表 ・ A3 落とし穴カタログは、困ったときに引く</li>
+</ul>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>勉強会の進め方</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>回</th><th>範囲</th><th>ねらい</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">第1回</td><td class="nowrap">01〜06</td><td>環境を動かし、値・型変換・関数に慣れる。01〜03 は読み流し、04 に時間を寄せる</td></tr>
+<tr><td class="nowrap">第2回</td><td class="nowrap">07〜08</td><td><code>this</code> ・グローバル変数・プロトタイプ（前半の山）</td></tr>
+<tr><td class="nowrap">第3回</td><td class="nowrap">09〜10</td><td>クロージャ（後半の山）、エラー処理とモジュール</td></tr>
+<tr><td class="nowrap">第4回</td><td class="nowrap">11〜12</td><td>非同期（後半の山）、CommonJS と ES Modules</td></tr>
+<tr><td class="nowrap">宿題</td><td class="nowrap">13</td><td>ハンズオン。第2部の初回の冒頭で振り返る</td></tr>
+</tbody>
+</table></div>
+<p>1 回は 90 分。振り返りと質問 10 分 ／ 読み合わせ 50 分 ／ 演習 25 分 ／ 次回予告 5 分。</p>
+<p>参加者には、事前に Node.js を入れて <code>node --version</code> が表示される状態にしておいてもらう（02 章）。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>確かめた版</h1>
+<p>資料のコードと出力は、次の環境で実際に動かして確かめた。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>もの</th><th>版</th></tr></thead>
+<tbody>
+<tr><td>Node.js</td><td class="nowrap">v26.10.0</td></tr>
+<tr><td>ブラウザ（「▶ 実行」ボタン）</td><td>Chromium（Chrome ・ Edge と同じエンジン）</td></tr>
+</tbody>
+</table></div>
+<p>Node.js は v26 系の、資料を作る時点の最新版を使う。版を上げたら、この表を書き換え、テストを流し直す。</p>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>実行の仕組みと資料の作り方</h1>
+<h2>「▶ 実行」ボタン</h2>
+<ul>
+<li><code>js/runner.js</code> が、<code>&lt;div class="example" data-run="…"&gt;</code> で囲んだ例にボタンを付ける</li>
+<li><code>data-run="worker"</code> の例は、Web Worker（<code>js/worker.js</code>）の中で実行する。ページと別のスレッドなので、無限ループでも資料は固まらない。5 秒で打ち切る</li>
+<li>値の表示は <code>js/inspect.js</code> が作る。Node.js の <code>console.log</code> と同じ形になるように、Node の表示の決まりを写している</li>
+<li><code>data-run="node"</code> の例は、Node.js でしか動かないもの。Node.js で実行した結果を記録しておき、ボタンを押すと表示する</li>
+<li>例の中の <code>pre.output</code> が記録した出力。JavaScript が動かない環境（Markdown など）ではそのまま見える</li>
+<li>ブラウザで動かすため、この 3 つのファイルはビルドの要らない JavaScript で書いている</li>
+</ul>
+<h2>資料を書き換えたら</h2>
+<ol>
+<li><code>node tools/20_build/build-docs.ts</code> で、前後のナビ ・ 目次 ・ 章の色 ・ 資料一覧を書き込む</li>
+<li><code>tools/40_test/run-tests.cmd</code> でテストを流す。資料の例を Node.js で動かした結果と、ブラウザで「▶ 実行」を押した結果の両方を、載せた出力と比べる</li>
+<li><code>html2md --root . --dir docs --dir notes</code> で Markdown を作り直す</li>
+</ol>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>
