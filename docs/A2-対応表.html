@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A2. Java ・ C# ・ VBA との対応表</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"A2." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"A2." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>A2. Java ・ C# ・ VBA との対応表</h1>
+<p class="lead">知っている言語の書き方から、JavaScript の書き方を引く。対応は目安で、細かい動きは違うことがある</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">基本</a></li>
+<li class="ch02"><a href="#ch02">演算子と文字列</a></li>
+<li class="ch03"><a href="#ch03">制御構文</a></li>
+<li class="ch04"><a href="#ch04">コレクション</a></li>
+<li class="ch05"><a href="#ch05">関数とクラス</a></li>
+<li class="ch06"><a href="#ch06">エラー ・ 非同期 ・ モジュール</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>基本</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>Java</th><th>C#</th><th>VBA</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">変数</td><td><code>int n = 1;</code></td><td><code>var n = 1;</code></td><td><code>Dim n As Long</code></td><td><code>let n = 1;</code></td></tr>
+<tr><td class="nowrap">定数</td><td><code>final int MAX = 10;</code></td><td><code>const int Max = 10;</code></td><td><code>Const MAX As Long = 10</code></td><td><code>const MAX = 10;</code></td></tr>
+<tr><td class="nowrap">表示</td><td><code>System.out.println(x);</code></td><td><code>Console.WriteLine(x);</code></td><td><code>Debug.Print x</code></td><td><code>console.log(x);</code></td></tr>
+<tr><td class="nowrap">コメント</td><td><code>//</code> ・ <code>/* */</code></td><td><code>//</code> ・ <code>/* */</code></td><td><code>'</code></td><td><code>//</code> ・ <code>/* */</code></td></tr>
+<tr><td class="nowrap">空の値</td><td><code>null</code></td><td><code>null</code></td><td><code>Nothing</code> ・ <code>Empty</code></td><td><code>null</code> ・ <code>undefined</code></td></tr>
+<tr><td class="nowrap">型を調べる</td><td><code>x instanceof T</code></td><td><code>x is T</code></td><td><code>TypeName(x)</code></td><td><code>typeof x</code> ・ <code>x instanceof T</code></td></tr>
+<tr><td class="nowrap">プログラムの入口</td><td><code>main</code> メソッド</td><td><code>Main</code> メソッド</td><td>実行する <code>Sub</code></td><td>ファイルの先頭から順に実行</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>演算子と文字列</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>Java</th><th>C#</th><th>VBA</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">等しい</td><td><code>==</code>（文字列は <code>equals</code>）</td><td><code>==</code></td><td><code>=</code></td><td><code>===</code></td></tr>
+<tr><td class="nowrap">等しくない</td><td><code>!=</code></td><td><code>!=</code></td><td><code>&lt;&gt;</code></td><td><code>!==</code></td></tr>
+<tr><td class="nowrap">かつ ・ または ・ でない</td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td><td><code>And</code> <code>Or</code> <code>Not</code></td><td><code>&amp;&amp;</code> <code>||</code> <code>!</code></td></tr>
+<tr><td class="nowrap">割った余り</td><td><code>a % b</code></td><td><code>a % b</code></td><td><code>a Mod b</code></td><td><code>a % b</code></td></tr>
+<tr><td class="nowrap">整数の割り算</td><td><code>7 / 2</code> → 3</td><td><code>7 / 2</code> → 3</td><td><code>7 \ 2</code> → 3</td><td><code>Math.floor(7 / 2)</code> → 3（<code>7 / 2</code> は 3.5）</td></tr>
+<tr><td class="nowrap">文字列の連結</td><td><code>"a" + b</code></td><td><code>"a" + b</code></td><td><code>"a" &amp; b</code></td><td><code>"a" + b</code></td></tr>
+<tr><td class="nowrap">値の埋め込み</td><td><code>String.format("%s円", x)</code></td><td><code>$"{x}円"</code></td><td><code>x &amp; "円"</code></td><td><code>`${x}円`</code></td></tr>
+<tr><td class="nowrap">文字列 → 数値</td><td><code>Integer.parseInt(s)</code></td><td><code>int.Parse(s)</code></td><td><code>CLng(s)</code></td><td><code>Number(s)</code></td></tr>
+<tr><td class="nowrap">数値 → 文字列</td><td><code>String.valueOf(n)</code></td><td><code>n.ToString()</code></td><td><code>CStr(n)</code></td><td><code>String(n)</code></td></tr>
+<tr><td class="nowrap">文字数</td><td><code>s.length()</code></td><td><code>s.Length</code></td><td><code>Len(s)</code></td><td><code>s.length</code></td></tr>
+<tr><td class="nowrap">無ければ既定値</td><td>（<code>Objects.requireNonNullElse</code>）</td><td><code>x ?? d</code></td><td>—</td><td><code>x ?? d</code></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>制御構文</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>Java ・ C#</th><th>VBA</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">条件分岐</td><td><code>if (a) { } else if (b) { } else { }</code></td><td><code>If a Then … ElseIf b Then … Else … End If</code></td><td>Java ・ C# と同じ</td></tr>
+<tr><td class="nowrap">多分岐</td><td><code>switch (x) { case 1: … break; }</code></td><td><code>Select Case x … Case 1 … End Select</code></td><td><code>switch</code>。比べ方は <code>===</code>。<code>break</code> を忘れると次へ流れ込む</td></tr>
+<tr><td class="nowrap">回数のくり返し</td><td><code>for (int i = 0; i &lt; n; i++)</code></td><td><code>For i = 0 To n - 1 … Next</code></td><td><code>for (let i = 0; i &lt; n; i++)</code></td></tr>
+<tr><td class="nowrap">要素のくり返し</td><td>Java <code>for (var s : list)</code><br>C# <code>foreach (var s in list)</code></td><td><code>For Each s In col … Next</code></td><td><code>for (const s of list)</code></td></tr>
+<tr><td class="nowrap">条件のくり返し</td><td><code>while (cond) { }</code></td><td><code>Do While cond … Loop</code></td><td><code>while (cond) { }</code></td></tr>
+<tr><td class="nowrap">ぬける ・ 次へ</td><td><code>break</code> ・ <code>continue</code></td><td><code>Exit For</code> ・ （無い）</td><td><code>break</code> ・ <code>continue</code></td></tr>
+<tr><td class="nowrap">条件で値を選ぶ</td><td><code>a ? b : c</code></td><td><code>IIf(a, b, c)</code></td><td><code>a ? b : c</code></td></tr>
+</tbody>
+</table></div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> JavaScript には <code>for (const k in obj)</code> という形もありますが、これは<strong>キー</strong>を順に取り出すものです。配列の要素を取り出すときは <code>for … of</code> を使います。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>コレクション</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>Java</th><th>C#</th><th>VBA</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">伸び縮みする並び</td><td><code>new ArrayList&lt;&gt;()</code></td><td><code>new List&lt;T&gt;()</code></td><td><code>New Collection</code></td><td><code>[]</code></td></tr>
+<tr><td class="nowrap">足す</td><td><code>list.add(x)</code></td><td><code>list.Add(x)</code></td><td><code>col.Add x</code></td><td><code>list.push(x)</code></td></tr>
+<tr><td class="nowrap">数</td><td><code>list.size()</code></td><td><code>list.Count</code></td><td><code>col.Count</code></td><td><code>list.length</code></td></tr>
+<tr><td class="nowrap">n 番目</td><td><code>list.get(0)</code></td><td><code>list[0]</code></td><td><code>col(1)</code>（1 から）</td><td><code>list[0]</code></td></tr>
+<tr><td class="nowrap">含むか</td><td><code>list.contains(x)</code></td><td><code>list.Contains(x)</code></td><td>（自分で探す）</td><td><code>list.includes(x)</code></td></tr>
+<tr><td class="nowrap">変換 ・ 絞り込み</td><td><code>stream().map(…)</code> ・ <code>filter(…)</code></td><td>LINQ の <code>Select</code> ・ <code>Where</code></td><td>（ループで書く）</td><td><code>map(…)</code> ・ <code>filter(…)</code></td></tr>
+<tr><td class="nowrap">キーと値の組</td><td><code>new HashMap&lt;&gt;()</code></td><td><code>new Dictionary&lt;K, V&gt;()</code></td><td><code>CreateObject("Scripting.Dictionary")</code></td><td><code>{}</code> ・ <code>new Map()</code></td></tr>
+<tr><td class="nowrap">組を読む ・ 書く</td><td><code>map.get(k)</code> ・ <code>map.put(k, v)</code></td><td><code>d[k]</code> ・ <code>d[k] = v</code></td><td><code>d(k)</code> ・ <code>d(k) = v</code></td><td><code>o[k]</code> ・ <code>o[k] = v</code></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>関数とクラス</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>Java</th><th>C#</th><th>VBA</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">関数</td><td><code>static int add(int a, int b) { return a + b; }</code></td><td><code>static int Add(int a, int b) =&gt; a + b;</code></td><td><code>Function Add(a, b) … Add = a + b … End Function</code></td><td><code>function add(a, b) { return a + b; }</code></td></tr>
+<tr><td class="nowrap">ラムダ式</td><td><code>(a, b) -&gt; a + b</code></td><td><code>(a, b) =&gt; a + b</code></td><td>—</td><td><code>(a, b) =&gt; a + b</code></td></tr>
+<tr><td class="nowrap">引数の既定値</td><td>（オーバーロードで代用）</td><td><code>int x = 0</code></td><td><code>Optional x As Long = 0</code></td><td><code>x = 0</code></td></tr>
+<tr><td class="nowrap">クラス</td><td><code>class P { }</code></td><td><code>class P { }</code></td><td>クラスモジュール</td><td><code>class P { }</code></td></tr>
+<tr><td class="nowrap">コンストラクタ</td><td>クラスと同じ名前</td><td>クラスと同じ名前</td><td><code>Class_Initialize</code></td><td><code>constructor() { }</code></td></tr>
+<tr><td class="nowrap">継承</td><td><code>extends</code></td><td><code>: Base</code></td><td>（無い）</td><td><code>extends</code></td></tr>
+<tr><td class="nowrap">親を呼ぶ</td><td><code>super.m()</code></td><td><code>base.M()</code></td><td>—</td><td><code>super.m()</code></td></tr>
+<tr><td class="nowrap">private</td><td><code>private int n;</code></td><td><code>private int n;</code></td><td><code>Private n As Long</code></td><td><code>#n;</code></td></tr>
+<tr><td class="nowrap">自分のメンバー</td><td><code>n</code>（<code>this.</code> は省略可）</td><td><code>n</code>（<code>this.</code> は省略可）</td><td><code>n</code> ・ <code>Me.n</code></td><td><code>this.n</code>（省略できない）</td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>エラー ・ 非同期 ・ モジュール</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>すること</th><th>Java</th><th>C#</th><th>VBA</th><th>JavaScript</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">例外を受ける</td><td><code>try { } catch (IOException e) { }</code></td><td><code>try { } catch (IOException e) { }</code></td><td><code>On Error GoTo 名前</code></td><td><code>try { } catch (e) { }</code>（型で分けない）</td></tr>
+<tr><td class="nowrap">例外を投げる</td><td><code>throw new IllegalArgumentException("…")</code></td><td><code>throw new ArgumentException("…")</code></td><td><code>Err.Raise 番号, , "…"</code></td><td><code>throw new Error("…")</code></td></tr>
+<tr><td class="nowrap">後片付け</td><td><code>finally</code></td><td><code>finally</code></td><td>—</td><td><code>finally</code></td></tr>
+<tr><td class="nowrap">非同期の結果</td><td><code>CompletableFuture&lt;T&gt;</code></td><td><code>Task&lt;T&gt;</code></td><td>—</td><td><code>Promise</code></td></tr>
+<tr><td class="nowrap">待つ</td><td><code>future.get()</code>（止まる）</td><td><code>await t</code></td><td>—</td><td><code>await p</code></td></tr>
+<tr><td class="nowrap">ほかのファイルを使う</td><td><code>import pkg.Class;</code></td><td><code>using Namespace;</code></td><td>参照設定 ・ 標準モジュール</td><td><code>import { f } from "./x.mjs";</code></td></tr>
+<tr><td class="nowrap">外に見せる</td><td><code>public</code></td><td><code>public</code></td><td><code>Public</code></td><td><code>export</code></td></tr>
+</tbody>
+</table></div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

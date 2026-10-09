@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A1. 逆引き</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"A1." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"A1." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>A1. 逆引き</h1>
+<p class="lead">「〜したい」から書き方を引く。詳しい説明は、右の列の章へ</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">値と文字列</a></li>
+<li class="ch02"><a href="#ch02">比較と条件</a></li>
+<li class="ch03"><a href="#ch03">配列</a></li>
+<li class="ch04"><a href="#ch04">オブジェクトと JSON</a></li>
+<li class="ch05"><a href="#ch05">関数とクラス</a></li>
+<li class="ch06"><a href="#ch06">エラー ・ 非同期 ・ ファイル</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>値と文字列</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>変数を作る</td><td><code>const x = 1;</code>（入れ直すなら <code>let</code>）</td><td class="nowrap"><a href="03-値と変数.html#ch01">03</a></td></tr>
+<tr><td>値の型を調べる</td><td><code>typeof x</code> ・ 配列は <code>Array.isArray(x)</code> ・ null は <code>x === null</code></td><td class="nowrap"><a href="03-値と変数.html#ch02">03</a></td></tr>
+<tr><td>文字列に値を埋め込む</td><td><code>`${name}さん`</code></td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+<tr><td>含まれているか調べる</td><td><code>s.includes("abc")</code></td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+<tr><td>一部を取り出す</td><td><code>s.slice(開始, 終了)</code></td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+<tr><td>区切りで分ける</td><td><code>s.split(",")</code> ・ 改行は <code>s.split(/\r?\n/)</code></td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+<tr><td>置き換える</td><td><code>s.replace("a", "b")</code>（全部なら <code>replaceAll</code>）</td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+<tr><td>前後の空白を除く</td><td><code>s.trim()</code></td><td class="nowrap"><a href="13-ハンズオン.html#ch02">13</a></td></tr>
+<tr><td>見た目の文字数を数える</td><td><code>[...s].length</code></td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+<tr><td>文字列を数値にする</td><td><code>Number(s)</code> ・ 先頭だけなら <code>parseInt(s, 10)</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch05">04</a></td></tr>
+<tr><td>数値でないか調べる</td><td><code>Number.isNaN(n)</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch05">04</a></td></tr>
+<tr><td>3 桁区切り ・ 小数の桁をそろえる</td><td><code>n.toLocaleString()</code> ・ <code>n.toFixed(2)</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch05">04</a></td></tr>
+<tr><td>切り捨て ・ 四捨五入</td><td><code>Math.floor(n)</code> ・ <code>Math.round(n)</code></td><td class="nowrap"><a href="03-値と変数.html#ch03">03</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>比較と条件</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>等しいか比べる</td><td><code>a === b</code> ・ 違うか <code>a !== b</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch03">04</a></td></tr>
+<tr><td>無いときに既定値を使う</td><td><code>x ?? 既定値</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch06">04</a></td></tr>
+<tr><td>無いかもしれない先を読む</td><td><code>obj.shop?.address</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch06">04</a></td></tr>
+<tr><td>条件で値を選ぶ</td><td><code>条件 ? A : B</code></td><td class="nowrap"><a href="04-演算子と型変換.html#ch04">04</a></td></tr>
+<tr><td>値が渡されたか調べる</td><td><code>x === undefined</code>（<code>if (x)</code> は 0 や "" も偽になる）</td><td class="nowrap"><a href="04-演算子と型変換.html#ch04">04</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>配列</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>末尾に足す ・ 取り出す</td><td><code>arr.push(x)</code> ・ <code>arr.pop()</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch02">05</a></td></tr>
+<tr><td>含まれているか</td><td><code>arr.includes(x)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch02">05</a></td></tr>
+<tr><td>1 つずつ処理する</td><td><code>for (const x of arr) { … }</code> ・ 番号も要るなら <code>arr.forEach((x, i) =&gt; …)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch02">05</a></td></tr>
+<tr><td>各要素を変えた配列を作る</td><td><code>arr.map((x) =&gt; x * 2)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td>条件に合うものだけ選ぶ</td><td><code>arr.filter((x) =&gt; x &gt; 0)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td>条件に合う最初の 1 つ</td><td><code>arr.find((x) =&gt; x.id === id)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td>合計する</td><td><code>arr.reduce((sum, x) =&gt; sum + x, 0)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td>数値を小さい順に並べる</td><td><code>[...arr].sort((a, b) =&gt; a - b)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td>コピーする ・ つなげる</td><td><code>[...arr]</code> ・ <code>[...a, ...b]</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch04">05</a></td></tr>
+<tr><td>重なりを除く</td><td><code>[...new Set(arr)]</code>（<code>Set</code> は同じ値を 1 つしか持たない入れ物）</td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch04">05</a></td></tr>
+<tr><td>文字列につなぐ</td><td><code>arr.join(", ")</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch02">05</a></td></tr>
+<tr><td>配列の配列を 1 段にする</td><td><code>arr.flat()</code></td><td class="nowrap"><a href="13-ハンズオン.html#ch05">13</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>オブジェクトと JSON</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>作る ・ 読む</td><td><code>const o = { a: 1 };</code> ・ <code>o.a</code> ・ <code>o[key]</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch01">05</a></td></tr>
+<tr><td>キーがあるか</td><td><code>"a" in o</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch01">05</a></td></tr>
+<tr><td>キー ・ 値を全部取り出す</td><td><code>Object.keys(o)</code> ・ <code>Object.values(o)</code> ・ <code>Object.entries(o)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch01">05</a></td></tr>
+<tr><td>中身を取り出して変数にする</td><td><code>const { a, b } = o;</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch04">05</a></td></tr>
+<tr><td>コピーして一部を変える</td><td><code>{ ...o, a: 2 }</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch04">05</a></td></tr>
+<tr><td>入れ子まで全部コピーする</td><td><code>structuredClone(o)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch03">05</a></td></tr>
+<tr><td>JSON の文字列にする ・ 戻す</td><td><code>JSON.stringify(o, null, 2)</code> ・ <code>JSON.parse(text)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch06">05</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>関数とクラス</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>短い関数を書く</td><td><code>const f = (x) =&gt; x * 2;</code></td><td class="nowrap"><a href="06-関数.html#ch02">06</a></td></tr>
+<tr><td>引数の既定値</td><td><code>function f(x = 0) { … }</code></td><td class="nowrap"><a href="06-関数.html#ch03">06</a></td></tr>
+<tr><td>いくつでも引数を受け取る</td><td><code>function f(...args) { … }</code></td><td class="nowrap"><a href="06-関数.html#ch03">06</a></td></tr>
+<tr><td>名前付きの引数のように渡す</td><td><code>function f({ id, role = "guest" }) { … }</code></td><td class="nowrap"><a href="06-関数.html#ch03">06</a></td></tr>
+<tr><td>値を複数返す</td><td><code>return { min, max };</code> → <code>const { min, max } = f();</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch04">05</a></td></tr>
+<tr><td>状態を持つ関数を作る</td><td>関数を返す関数（クロージャ）</td><td class="nowrap"><a href="09-クロージャ.html#ch01">09</a></td></tr>
+<tr><td>クラスを作る ・ 継承する</td><td><code>class A { constructor() {} }</code> ・ <code>class B extends A {}</code></td><td class="nowrap"><a href="08-クラスとプロトタイプ.html#ch01">08</a></td></tr>
+<tr><td>外から触れないフィールド</td><td><code>#count = 0;</code></td><td class="nowrap"><a href="08-クラスとプロトタイプ.html#ch02">08</a></td></tr>
+<tr><td>メソッドをコールバックに渡す</td><td><code>() =&gt; obj.method()</code> ・ <code>obj.method.bind(obj)</code></td><td class="nowrap"><a href="07-スコープとthis.html#ch05">07</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>エラー ・ 非同期 ・ ファイル</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>エラーを起こす</td><td><code>throw new Error("説明");</code></td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch01">10</a></td></tr>
+<tr><td>エラーを受け取る</td><td><code>try { … } catch (e) { e.message } finally { … }</code></td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch01">10</a></td></tr>
+<tr><td>自分のエラーを作る</td><td><code>class MyError extends Error { … }</code> ・ <code>e instanceof MyError</code></td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch02">10</a></td></tr>
+<tr><td>少し待ってから実行する</td><td><code>setTimeout(() =&gt; { … }, ミリ秒)</code></td><td class="nowrap"><a href="11-非同期.html#ch01">11</a></td></tr>
+<tr><td>くり返し実行する ・ 止める</td><td><code>const id = setInterval(f, ミリ秒)</code> ・ <code>clearInterval(id)</code></td><td class="nowrap"><a href="09-クロージャ.html#ch05">09</a></td></tr>
+<tr><td>await で待てるようにする</td><td><code>new Promise((resolve) =&gt; setTimeout(resolve, ミリ秒))</code></td><td class="nowrap"><a href="11-非同期.html#ch04">11</a></td></tr>
+<tr><td>結果を待つ</td><td><code>const x = await f();</code>（<code>async</code> 関数の中か <code>.mjs</code> の一番外側）</td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
+<tr><td>複数を同時に待つ</td><td><code>await Promise.all([f(), g()])</code></td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
+<tr><td>ファイルを読む ・ 書く</td><td><code>await readFile(path, "utf8")</code> ・ <code>await writeFile(path, text)</code></td><td class="nowrap"><a href="11-非同期.html#ch07">11</a></td></tr>
+<tr><td>フォルダの一覧</td><td><code>await readdir(path)</code></td><td class="nowrap"><a href="11-非同期.html#ch07">11</a></td></tr>
+<tr><td>別のファイルの関数を使う</td><td><code>export function f() {}</code> ・ <code>import { f } from "./x.mjs";</code></td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch04">10</a></td></tr>
+<tr><td>スクリプトの隣のファイルを指す</td><td><code>join(import.meta.dirname, "x.txt")</code></td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch05">12</a></td></tr>
+<tr><td>コマンドラインの引数を受け取る</td><td><code>process.argv.slice(2)</code></td><td class="nowrap"><a href="13-ハンズオン.html#ch05">13</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

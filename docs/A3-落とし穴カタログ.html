@@ -1,0 +1,143 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A3. 落とし穴カタログ</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"A3." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"A3." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>A3. 落とし穴カタログ</h1>
+<p class="lead">「おかしい」と思ったときに、症状から原因と直し方を引く。エラーの文面は Chrome ・ Edge ・ Node.js のもの</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">計算と比較がおかしい</a></li>
+<li class="ch02"><a href="#ch02">値が無い</a></li>
+<li class="ch03"><a href="#ch03">名前 ・ スコープ ・ this</a></li>
+<li class="ch04"><a href="#ch04">配列とオブジェクト</a></li>
+<li class="ch05"><a href="#ch05">非同期</a></li>
+<li class="ch06"><a href="#ch06">ファイルとモジュール</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>計算と比較がおかしい</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td><code>"1" + 2</code> が <code>"12"</code> になる</td><td><code>+</code> は、どちらかが文字列なら連結する</td><td>外から来た値は <code>Number()</code> で数値にしてから計算する</td><td class="nowrap"><a href="04-演算子と型変換.html#ch02">04</a></td></tr>
+<tr><td>結果が <code>NaN</code> になる</td><td><code>undefined</code> や数値でない文字列を計算に使った</td><td>入口で <code>Number.isNaN</code> を調べ、おかしければ <code>throw</code> する</td><td class="nowrap"><a href="04-演算子と型変換.html#ch05">04</a></td></tr>
+<tr><td>引数を渡し忘れても何も言われず <code>NaN</code></td><td>足りない引数は <code>undefined</code> になる</td><td>既定値を書く ・ 中で確かめる</td><td class="nowrap"><a href="06-関数.html#ch01">06</a></td></tr>
+<tr><td>違う値どうしが等しいと判定される</td><td><code>==</code> が型を変換してから比べた</td><td>いつも <code>===</code> を使う</td><td class="nowrap"><a href="04-演算子と型変換.html#ch03">04</a></td></tr>
+<tr><td><code>0.1 + 0.2</code> が <code>0.3</code> にならない</td><td>小数は 2 進数で近似される</td><td>お金は円単位の整数で計算する ・ 表示で <code>toFixed</code></td><td class="nowrap"><a href="03-値と変数.html#ch03">03</a></td></tr>
+<tr><td><code>7 / 2</code> が <code>3.5</code> になる</td><td>数値は小数を含む 1 種類だけ</td><td>整数にしたいときは <code>Math.floor</code></td><td class="nowrap"><a href="03-値と変数.html#ch03">03</a></td></tr>
+<tr><td>文字数が見た目より多い</td><td><code>length</code> は UTF-16 の単位の数。絵文字は 2</td><td><code>[...s].length</code></td><td class="nowrap"><a href="03-値と変数.html#ch04">03</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>値が無い</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td><code>TypeError: Cannot read properties of undefined (reading 'x')</code></td><td>途中のプロパティが <code>undefined</code> だった</td><td>どこが <code>undefined</code> かを調べる。無いことがあるなら <code>?.</code></td><td class="nowrap"><a href="03-値と変数.html#ch05">03</a></td></tr>
+<tr><td><code>if (count)</code> で 0 が「無い」扱いになる</td><td><code>0</code> ・ <code>""</code> も falsy</td><td><code>count === undefined</code> のように、何を調べたいかを書く</td><td class="nowrap"><a href="04-演算子と型変換.html#ch04">04</a></td></tr>
+<tr><td>既定値を入れたら 0 や <code>""</code> が消えた</td><td><code>||</code> は falsy をすべて置き換える</td><td><code>??</code> を使う</td><td class="nowrap"><a href="04-演算子と型変換.html#ch06">04</a></td></tr>
+<tr><td>配列の範囲外を読んでもエラーにならない</td><td>無い番号は <code>undefined</code> を返す</td><td><code>length</code> で範囲を確かめる</td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch02">05</a></td></tr>
+<tr><td>関数の結果が <code>undefined</code></td><td><code>return</code> を書き忘れた ・ アロー関数で <code>{ }</code> を付けた</td><td><code>return</code> を書く ・ 式 1 つなら <code>{ }</code> を外す</td><td class="nowrap"><a href="06-関数.html#ch02">06</a></td></tr>
+<tr><td>関数そのものが表示される（<code>[Function: f]</code>）</td><td><code>()</code> を付けずに関数を渡した</td><td>呼ぶなら <code>f()</code></td><td class="nowrap"><a href="06-関数.html#ch04">06</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>名前 ・ スコープ ・ this</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td><code>ReferenceError: x is not defined</code></td><td>名前の書き間違い ・ 大文字と小文字の違い ・ スコープの外</td><td>綴りと、どの <code>{ }</code> の中で作ったかを確かめる</td><td class="nowrap"><a href="07-スコープとthis.html#ch01">07</a></td></tr>
+<tr><td><code>ReferenceError: Cannot access 'x' before initialization</code></td><td><code>let</code> ・ <code>const</code> を、宣言の行より前で使った</td><td>宣言を上に移す</td><td class="nowrap"><a href="07-スコープとthis.html#ch02">07</a></td></tr>
+<tr><td><code>TypeError: Assignment to constant variable.</code></td><td><code>const</code> の変数に入れ直した</td><td>入れ直すなら <code>let</code></td><td class="nowrap"><a href="03-値と変数.html#ch01">03</a></td></tr>
+<tr><td>関数の中の変数が、外から見えてしまう</td><td><code>let</code> ・ <code>const</code> を付け忘れ、グローバルにできた</td><td>宣言を付ける。モジュールか strict モードにすると、エラーで気づける</td><td class="nowrap"><a href="07-スコープとthis.html#ch03">07</a></td></tr>
+<tr><td><code>this.x</code> が <code>undefined</code> ・ <code>NaN</code></td><td>メソッドを取り出して（コールバックとして）呼んだ</td><td><code>() =&gt; obj.m()</code> ・ <code>obj.m.bind(obj)</code></td><td class="nowrap"><a href="07-スコープとthis.html#ch05">07</a></td></tr>
+<tr><td><code>TypeError: Cannot read properties of undefined (reading 'x')</code>（クラスの中で）</td><td>同上。クラスは strict なので <code>this</code> が <code>undefined</code></td><td>同上</td><td class="nowrap"><a href="08-クラスとプロトタイプ.html#ch05">08</a></td></tr>
+<tr><td>ループで作った関数が、全部同じ値を見る</td><td><code>var</code> のループ変数は 1 つしかない</td><td><code>let</code> にする</td><td class="nowrap"><a href="09-クロージャ.html#ch04">09</a></td></tr>
+<tr><td><code>ReferenceError: Must call super constructor …</code></td><td>子クラスの <code>constructor</code> で <code>super()</code> より前に <code>this</code> を使った</td><td>先頭で <code>super(…)</code> を呼ぶ</td><td class="nowrap"><a href="08-クラスとプロトタイプ.html#ch03">08</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>配列とオブジェクト</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>コピーを変えたら、元も変わった</td><td>代入は参照を写すだけ</td><td><code>{ ...o }</code> ・ <code>[...arr]</code> でコピーする</td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch03">05</a></td></tr>
+<tr><td>コピーしたのに、中の配列が元と一緒に変わる</td><td><code>...</code> のコピーは 1 段目だけ</td><td><code>structuredClone(o)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch03">05</a></td></tr>
+<tr><td>同じ中身なのに <code>===</code> が <code>false</code></td><td>オブジェクトの <code>===</code> は「同じものか」を比べる</td><td>中身を 1 つずつ比べる</td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch03">05</a></td></tr>
+<tr><td><code>[10, 9, 1].sort()</code> が <code>[1, 10, 9]</code></td><td>引数なしの <code>sort</code> は文字列として並べる</td><td><code>sort((a, b) =&gt; a - b)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td>並べ替えたら元の配列まで変わった</td><td><code>sort</code> は元の配列を並べ替える</td><td><code>[...arr].sort(…)</code></td><td class="nowrap"><a href="05-オブジェクトと配列.html#ch05">05</a></td></tr>
+<tr><td><code>SyntaxError</code>（<code>JSON.parse</code> で）</td><td>JSON の書式が正しくない。キーが <code>"</code> で囲まれていない、など</td><td>中身を表示して形を確かめる。<code>try</code> ・ <code>catch</code> で受ける</td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch02">10</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>非同期</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>結果が出る前に次の行が動く ・ 表示の順番が違う</td><td>非同期の処理を待っていない</td><td><code>await</code> で待つ ・ 続きを <code>then</code> の中に書く</td><td class="nowrap"><a href="11-非同期.html#ch01">11</a></td></tr>
+<tr><td>値ではなく Promise が返ってくる</td><td><code>async</code> 関数はいつも Promise を返す</td><td>呼ぶ側で <code>await</code> する</td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
+<tr><td><code>SyntaxError: await is only valid in async functions and the top level bodies of modules</code></td><td><code>async</code> の付いていない関数の中で <code>await</code> を使った</td><td>関数に <code>async</code> を付ける ・ 一番外側なら <code>.mjs</code> にする</td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
+<tr><td><code>Uncaught (in promise) Error: …</code></td><td>失敗した Promise を誰も受けていない</td><td><code>await</code> して <code>try</code> ・ <code>catch</code> ・ <code>.catch(…)</code> を付ける</td><td class="nowrap"><a href="11-非同期.html#ch06">11</a></td></tr>
+<tr><td><code>try</code> で囲んだのにエラーが捕まらない</td><td>エラーが起きたのは、<code>try</code> を抜けた後で動いた処理の中</td><td>Promise にして <code>await</code> する</td><td class="nowrap"><a href="11-非同期.html#ch06">11</a></td></tr>
+<tr><td>タイマーが時刻どおりに呼ばれない</td><td>重い処理が流れを止めている</td><td>重い処理を分ける ・ 短くする</td><td class="nowrap"><a href="11-非同期.html#ch01">11</a></td></tr>
+<tr><td>2 つの待ちに、合計の時間がかかる</td><td><code>await</code> を 1 つずつ順に書いた</td><td>関係が無ければ <code>Promise.all</code></td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>ファイルとモジュール</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td><code>ReferenceError: require is not defined in ES module scope, you can use import instead</code></td><td>ES Modules のファイルで <code>require</code> を使った</td><td><code>import</code> に書き換える</td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch02">12</a></td></tr>
+<tr><td><code>SyntaxError: Cannot use import statement outside a module</code></td><td>CommonJS として読まれるファイルで <code>import</code> を使った</td><td>拡張子を <code>.mjs</code> にする ・ <code>package.json</code> に <code>"type": "module"</code></td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch03">12</a></td></tr>
+<tr><td>警告 <code>MODULE_TYPELESS_PACKAGE_JSON</code></td><td><code>"type"</code> の無い <code>package.json</code> の下で、<code>.js</code> に <code>import</code> を書いた</td><td><code>package.json</code> に <code>"type": "module"</code></td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch03">12</a></td></tr>
+<tr><td>CommonJS から名前付きで <code>import</code> できない</td><td>Node.js が名前を見つけられない書き方だった</td><td>既定の export として受けてから分ける</td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch04">12</a></td></tr>
+<tr><td>あるはずのファイルが <code>ENOENT</code> で見つからない</td><td>パスはカレントフォルダから数えられる</td><td><code>join(import.meta.dirname, …)</code> でスクリプトの場所から組み立てる</td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch05">12</a></td></tr>
+<tr><td>読んだ行の末尾に見えない文字が付く</td><td>Windows の改行 <code>\r\n</code> の <code>\r</code> が残った</td><td><code>split(/\r?\n/)</code> で分ける</td><td class="nowrap"><a href="11-非同期.html#ch07">11</a></td></tr>
+<tr><td><code>import</code> で見つからない（拡張子なし）</td><td>ES Modules は拡張子を省略できない</td><td><code>"./math.mjs"</code> と拡張子まで書く</td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch04">10</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>
