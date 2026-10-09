@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>10. エラー処理とモジュール</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"10." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"10." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>10. エラー処理とモジュール</h1>
+<p class="lead">try ・ catch ・ throw でエラーを扱う。ファイルを分けて import ・ export でつなぐ。npm の最小限</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="09-クロージャ.html" aria-label="前へ" title="09. クロージャ" style="--accent:hsl(31.1,78%,25%);--accent2:hsl(31.1,58%,55%);--soft:hsl(31.1,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">try ・ catch ・ finally</a></li>
+<li class="ch02"><a href="#ch02">エラーの種類</a></li>
+<li class="ch03"><a href="#ch03">エラーの扱い方の方針</a></li>
+<li class="ch04"><a href="#ch04">モジュール</a></li>
+<li class="ch05"><a href="#ch05">npm の最小限</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>try ・ catch ・ finally</h1>
+<p>エラーが起きると、処理はその場で止まります。<code>try</code> で囲んでおくと、止まる代わりに <code>catch</code> へ飛び、エラーを受け取って続きを決められます。<code>finally</code> は、エラーがあってもなくても最後に必ず実行されます。書き方は Java ・ C# と同じです。</p>
+<figure>
+<svg viewBox="0 0 880 220" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="try catch finally の流れ">
+<defs>
+<linearGradient id="g-10-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<marker id="m-10-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+<marker id="m-10-1r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#a51f22"/></marker>
+</defs>
+<rect x="20" y="20" width="220" height="120" rx="14" fill="url(#g-10-1a)"/>
+<text x="130" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">try</text>
+<text x="130" y="80" fill="#fff" font-size="14" text-anchor="middle">parsePrice("120") ✔</text>
+<text x="130" y="106" fill="#fff" font-size="14" text-anchor="middle">parsePrice("百円") ✖</text>
+<text x="130" y="130" fill="#fff" font-size="13" text-anchor="middle">この先は飛ばされる</text>
+<rect x="320" y="20" width="220" height="120" rx="14" fill="url(#g-10-1b)"/>
+<text x="430" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">catch (e)</text>
+<text x="430" y="82" fill="#fff" font-size="14" text-anchor="middle">e にエラーが入る</text>
+<text x="430" y="108" fill="#fff" font-size="14" text-anchor="middle">どうするか決める</text>
+<rect x="620" y="20" width="240" height="120" rx="14" fill="url(#g-10-1c)"/>
+<text x="740" y="50" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">finally</text>
+<text x="740" y="82" fill="#fff" font-size="14" text-anchor="middle">必ず実行される</text>
+<text x="740" y="108" fill="#fff" font-size="14" text-anchor="middle">後片付け</text>
+<rect x="320" y="170" width="300" height="40" rx="10" fill="url(#g-10-1d)"/>
+<text x="470" y="196" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">止まらずに次の処理へ</text>
+<line x1="244" y1="100" x2="314" y2="100" stroke="#a51f22" stroke-width="3" marker-end="url(#m-10-1r)"/>
+<text x="279" y="90" fill="#a51f22" font-size="13" font-weight="700" text-anchor="middle">エラー</text>
+<line x1="544" y1="80" x2="614" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-10-1)"/>
+<line x1="740" y1="144" x2="626" y2="186" stroke="#7a8699" stroke-width="3" marker-end="url(#m-10-1)"/>
+</svg>
+<figcaption>エラーが起きた行から catch へ飛び、finally を通って次へ進む</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function parsePrice(text) {
+  const n = Number(text);
+  if (Number.isNaN(n)) {
+    throw new Error(`数値ではありません: ${text}`);
+  }
+  return n;
+}
+try {
+  console.log(parsePrice("120"));
+  console.log(parsePrice("百円"));
+  console.log("ここは実行されない");
+} catch (e) {
+  console.log("捕まえた:", e.message);
+} finally {
+  console.log("後片付け");
+}
+console.log("処理は続く");</code></pre>
+<pre class="output"><code class="language-text">120
+捕まえた: 数値ではありません: 百円
+後片付け
+処理は続く</code></pre>
+</div>
+<ul>
+<li><code>throw</code> でエラーを起こす。投げるのは <code>new Error(説明)</code> にする</li>
+<li><code>catch (e)</code> の <code>e</code> に、投げられたものが入る。<code>e.message</code> が説明、<code>e.name</code> がエラーの種類</li>
+<li><code>try</code> の中でエラーが起きた行より後は、実行されない</li>
+</ul>
+<p>どこでも捕まえられなかったエラーは、処理を止めて「<code>Uncaught</code>（捕まえられなかった）」と表示されます。01 章から見てきた表示です。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>エラーの種類</h1>
+<p>JavaScript が自分で起こすエラーには、種類ごとの名前があります。どれも <code>Error</code> の仲間（子クラス）です。</p>
+<figure>
+<svg viewBox="0 0 880 200" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="エラーの種類">
+<defs>
+<linearGradient id="g-10-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<linearGradient id="g-10-2b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-2c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-2d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-2e" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(40,78%,25%)"/><stop offset="1" stop-color="hsl(40,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-2f" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+</defs>
+<rect x="340" y="10" width="200" height="50" rx="10" fill="url(#g-10-2a)"/>
+<text x="440" y="42" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Error</text>
+<g stroke="#9aa6b8" stroke-width="3">
+<line x1="440" y1="60" x2="440" y2="90"/><line x1="95" y1="90" x2="785" y2="90"/>
+<line x1="95" y1="90" x2="95" y2="112"/><line x1="268" y1="90" x2="268" y2="112"/><line x1="440" y1="90" x2="440" y2="112"/><line x1="612" y1="90" x2="612" y2="112"/><line x1="785" y1="90" x2="785" y2="112"/>
+</g>
+<rect x="15" y="112" width="160" height="76" rx="10" fill="url(#g-10-2b)"/><text x="95" y="142" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">TypeError</text><text x="95" y="168" fill="#fff" font-size="13" text-anchor="middle">型が合わない操作</text>
+<rect x="188" y="112" width="160" height="76" rx="10" fill="url(#g-10-2c)"/><text x="268" y="142" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">ReferenceError</text><text x="268" y="168" fill="#fff" font-size="13" text-anchor="middle">無い名前を使った</text>
+<rect x="360" y="112" width="160" height="76" rx="10" fill="url(#g-10-2d)"/><text x="440" y="142" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">SyntaxError</text><text x="440" y="168" fill="#fff" font-size="13" text-anchor="middle">書き方の誤り</text>
+<rect x="532" y="112" width="160" height="76" rx="10" fill="url(#g-10-2e)"/><text x="612" y="142" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">RangeError</text><text x="612" y="168" fill="#fff" font-size="13" text-anchor="middle">範囲の外の値</text>
+<rect x="705" y="112" width="160" height="76" rx="10" fill="url(#g-10-2f)"/><text x="785" y="142" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">自作のエラー</text><text x="785" y="168" fill="#fff" font-size="13" text-anchor="middle">extends Error</text>
+</svg>
+<figcaption>よく見るエラーと、自分で作るエラー</figcaption>
+</figure>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const samples = [
+  () => null.length,
+  () => undefinedName,
+  () => JSON.parse("{壊れた JSON}"),
+  () => new Array(-1),
+];
+for (const run of samples) {
+  try {
+    run();
+  } catch (e) {
+    console.log(`${e.name}: ${e.message}`);
+  }
+}</code></pre>
+<pre class="output"><code class="language-text">TypeError: Cannot read properties of null (reading 'length')
+ReferenceError: undefinedName is not defined
+SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+RangeError: Invalid array length</code></pre>
+</div>
+<div class="tablewrap"><table>
+<thead><tr><th>メッセージ</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td><code>Cannot read properties of null (reading 'length')</code></td><td><code>null</code> のプロパティは読めない（<code>length</code> を読もうとした）</td></tr>
+<tr><td><code>undefinedName is not defined</code></td><td><code>undefinedName</code> は定義されていない</td></tr>
+<tr><td><code>Expected property name or '}' in JSON at position 1</code></td><td>JSON の 1 文字目の位置に、プロパティ名か <code>}</code> があるはずだった</td></tr>
+<tr><td><code>Invalid array length</code></td><td>配列の長さとして正しくない</td></tr>
+</tbody>
+</table></div>
+<h2>自分のエラーを作る</h2>
+<p><code>Error</code> を継承すると、自分用のエラーを作れます。<code>instanceof</code> で種類を見分けて、扱えるものだけを扱い、それ以外は <code>throw e</code> で外へ投げ直します。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">class ValidationError extends Error {
+  constructor(field, message) {
+    super(message);
+    this.name = "ValidationError";
+    this.field = field;
+  }
+}
+function checkAge(age) {
+  if (!Number.isInteger(age) || age &lt; 0) {
+    throw new ValidationError("age", `年齢が正しくありません: ${age}`);
+  }
+  return age;
+}
+for (const input of [20, -3, "abc"]) {
+  try {
+    console.log("OK:", checkAge(input));
+  } catch (e) {
+    if (e instanceof ValidationError) {
+      console.log(`${e.field} の入力エラー → ${e.message}`);
+    } else {
+      throw e;
+    }
+  }
+}</code></pre>
+<pre class="output"><code class="language-text">OK: 20
+age の入力エラー → 年齢が正しくありません: -3
+age の入力エラー → 年齢が正しくありません: abc</code></pre>
+</div>
+<div class="callout callout-important">
+<p><span class="label">Java ・ C# から来た人へ:</span> <code>catch</code> に型を書いて分けることはできません（<code>catch (TypeError e)</code> とは書けない）。1 つの <code>catch</code> で受けて、中で <code>instanceof</code> を使って分けます。また、メソッドが投げる例外を宣言する仕組み（Java の <code>throws</code>）もありません。</p>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>エラーの扱い方の方針</h1>
+<ul>
+<li><strong>握りつぶさない</strong>。<code>catch (e) {}</code> と空にすると、エラーが起きたことすら分からなくなる。扱えないなら捕まえない、捕まえたなら記録するか投げ直す</li>
+<li><strong>投げるのは <code>Error</code> の仲間</strong>。<code>throw "失敗"</code> のように文字列を投げると、<code>e.message</code> も、どこで起きたかの情報（スタックトレース）も無くなる</li>
+<li><strong>入口で確かめる</strong>。外から来た値（入力 ・ ファイル ・ 通信）は、使う前に形を確かめ、おかしければその場で <code>throw</code> する。04 章のように黙って <code>NaN</code> が広がるより、早く止まるほうが原因を見つけやすい</li>
+<li><strong>後片付けは <code>finally</code></strong>。ファイルを閉じる ・ 処理中の表示を消す、などは成功しても失敗しても必要</li>
+</ul>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> <code>try</code> ・ <code>catch</code> で捕まえられるのは、<code>try</code> の中で<strong>その場で</strong>起きたエラーだけです。<code>setTimeout</code> などで後から動く処理の中のエラーは、外側の <code>try</code> では捕まりません。後から動く処理のエラーの扱い方は 11 章で見ます。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>モジュール</h1>
+<p>プログラムが大きくなったら、ファイルを分けます。分けたファイルを<strong>モジュール</strong>と呼び、<code>export</code> で外に出したものだけを、別のファイルから <code>import</code> で使えます。この形式を <strong>ES Modules（ESM）</strong>と呼びます。Node.js では、拡張子を <code>.mjs</code> にするとこの形式になります（拡張子の決まりは 12 章）。</p>
+<figure>
+<svg viewBox="0 0 880 230" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="export と import">
+<defs>
+<linearGradient id="g-10-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-10-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<marker id="m-10-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="20" width="360" height="190" rx="16" fill="url(#g-10-4a)"/>
+<text x="200" y="52" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">math.mjs</text>
+<text x="44" y="90" fill="#fff" font-size="15">export const TAX_RATE</text>
+<text x="44" y="120" fill="#fff" font-size="15">export function withTax</text>
+<text x="44" y="150" fill="#fff" font-size="15">export default formatYen</text>
+<text x="44" y="186" fill="#fff" font-size="13">export を付けないものは、外から見えない</text>
+<rect x="500" y="20" width="360" height="190" rx="16" fill="url(#g-10-4b)"/>
+<text x="680" y="52" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">main.mjs</text>
+<text x="524" y="90" fill="#fff" font-size="15">import formatYen,</text>
+<text x="524" y="120" fill="#fff" font-size="15">  { TAX_RATE, withTax }</text>
+<text x="524" y="150" fill="#fff" font-size="15">  from "./math.mjs";</text>
+<text x="524" y="186" fill="#fff" font-size="13">使う名前を選んで取り込む</text>
+<line x1="384" y1="115" x2="494" y2="115" stroke="#7a8699" stroke-width="4" marker-end="url(#m-10-4)"/>
+</svg>
+<figcaption>モジュールはファイルごとに中身が閉じていて、export したものだけが行き来する</figcaption>
+</figure>
+<p>次の 2 つのファイルを同じフォルダに置き、<code>node main.mjs</code> で実行します。</p>
+<div class="example" data-run="file">
+<p class="filename">math.mjs</p>
+<pre><code class="language-javascript">export const TAX_RATE = 0.1;
+
+export function withTax(price) {
+  return Math.floor(price * (1 + TAX_RATE));
+}
+
+export default function formatYen(n) {
+  return `${n.toLocaleString()} 円`;
+}</code></pre>
+</div>
+<div class="example" data-run="node">
+<p class="filename">main.mjs</p>
+<pre><code class="language-javascript">import formatYen, { TAX_RATE, withTax } from "./math.mjs";
+
+console.log(TAX_RATE);
+console.log(withTax(1000));
+console.log(formatYen(withTax(12000)));</code></pre>
+<pre class="output"><code class="language-text">0.1
+1100
+13,200 円</code></pre>
+</div>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>export const X = …</code></td><td>名前付き export。いくつでも書ける</td></tr>
+<tr><td class="nowrap"><code>export default …</code></td><td>既定の export。1 つのファイルに 1 つだけ</td></tr>
+<tr><td class="nowrap"><code>import { X, Y } from "…"</code></td><td>名前付き export を名前で取り込む</td></tr>
+<tr><td class="nowrap"><code>import 好きな名前 from "…"</code></td><td>既定の export を取り込む。名前は取り込む側が決める</td></tr>
+<tr><td class="nowrap"><code>import * as m from "…"</code></td><td>全部をまとめて 1 つのオブジェクトとして取り込む</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="node">
+<p class="filename">all.mjs</p>
+<pre><code class="language-javascript">import * as math from "./math.mjs";
+
+console.log(Object.keys(math));
+console.log(math.default(500));</code></pre>
+<pre class="output"><code class="language-text">[ 'TAX_RATE', 'default', 'withTax' ]
+500 円</code></pre>
+</div>
+<p><code>from</code> の後ろのパスは、<code>./</code> で始まる相対パスで書き、拡張子も省略しません。</p>
+<h2>モジュールの中は、ファイルごとに閉じている</h2>
+<p>モジュールの一番外側で作った変数は、<code>var</code> であってもグローバルにはなりません。07 章で見た「名前のぶつかり」が起きなくなります。また、モジュールの中は自動で strict モードです。</p>
+<div class="example" data-run="node">
+<p class="filename">scope.mjs</p>
+<pre><code class="language-javascript">var secret = "モジュールの中";
+console.log(globalThis.secret);
+console.log(typeof secret);
+
+function setTotal() {
+  total = 10;
+}
+try {
+  setTotal();
+} catch (e) {
+  console.log(`${e.name}: ${e.message}`);
+}</code></pre>
+<pre class="output"><code class="language-text">undefined
+string
+ReferenceError: total is not defined</code></pre>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>npm の最小限</h1>
+<p>ほかの人が作ったモジュールは、<strong>npm</strong> というしくみで取ってこられます。npm は Node.js と一緒に入っています。</p>
+<pre><code class="language-shell">npm init -y
+npm install パッケージ名</code></pre>
+<ul>
+<li><code>npm init -y</code>: そのフォルダに <code>package.json</code>（プロジェクトの設定ファイル）を作る</li>
+<li><code>npm install パッケージ名</code>: パッケージを <code>node_modules</code> フォルダに取ってきて、<code>package.json</code> の <code>dependencies</code> に名前と版を書き込む</li>
+<li><code>package-lock.json</code>: 実際に入れた版を正確に記録するファイル。<code>package.json</code> と一緒に保存しておく</li>
+</ul>
+<p>入れたパッケージは、<code>./</code> を付けずに名前だけで取り込みます。</p>
+<pre><code class="language-javascript">import something from "パッケージ名";</code></pre>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> <code>node_modules</code> は大きくなりやすく、<code>npm install</code> でいつでも作り直せるので、Git などで管理するときは対象から外します。共有するのは <code>package.json</code> と <code>package-lock.json</code> です。</p>
+</div>
+<p><code>package.json</code> には <code>"type"</code> という項目があり、<code>.js</code> のファイルをどちらの形式として読むかを決めます。もう 1 つの形式（CommonJS）と合わせて、12 章で扱います。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="09-クロージャ.html" aria-label="前へ" title="09. クロージャ" style="--accent:hsl(31.1,78%,25%);--accent2:hsl(31.1,58%,55%);--soft:hsl(31.1,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

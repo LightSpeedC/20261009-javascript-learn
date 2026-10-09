@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 270" width="880" height="270" role="img" aria-label="クロージャの仕組み" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(150,78%,25%)"/><stop offset="1" stop-color="hsl(150,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b8620a"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="160" y="24" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">① makeCounter() を呼ぶ</text>
+<rect x="20" y="40" width="280" height="150" rx="14" fill="url(#i1)"/>
+<text x="160" y="70" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">makeCounter の実行</text>
+<rect x="45" y="88" width="230" height="44" rx="10" fill="url(#i2)"/>
+<text x="160" y="116" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">変数の箱 count: 0</text>
+<text x="160" y="164" fill="#fff" font-size="14" text-anchor="middle">アロー関数を作って返す</text>
+<line x1="304" y1="115" x2="380" y2="115" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<text x="625" y="24" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">② makeCounter は終わった。でも…</text>
+<rect x="390" y="40" width="470" height="210" rx="14" fill="#f4f6fa" stroke="#c9d1dc" stroke-width="2" stroke-dasharray="8 6"/>
+<rect x="420" y="70" width="200" height="80" rx="12" fill="url(#i3)"/>
+<text x="520" y="104" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">counter</text>
+<text x="520" y="130" fill="#fff" font-size="14" text-anchor="middle">返されたアロー関数</text>
+<rect x="660" y="80" width="180" height="60" rx="10" fill="url(#i2)"/>
+<text x="750" y="117" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">count: 3</text>
+<line x1="624" y1="110" x2="654" y2="110" stroke="#b8620a" stroke-width="4" marker-end="url(#i5)"/>
+<text x="625" y="190" fill="#1c2330" font-size="15" text-anchor="middle">関数が箱への道を持っているので、箱は消えずに残る</text>
+<text x="625" y="218" fill="#1c2330" font-size="15" text-anchor="middle">counter() を呼ぶたびに、同じ箱の count を増やす</text>
+</svg>

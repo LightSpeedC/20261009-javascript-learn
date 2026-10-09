@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 230" width="880" height="230" role="img" aria-label="var と let のループ変数の違い" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<text x="215" y="24" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">var: 箱は 1 つだけ（みんなで共有）</text>
+<rect x="30" y="40" width="110" height="40" rx="8" fill="url(#i3)"/><text x="85" y="66" fill="#fff" font-size="15" text-anchor="middle">関数 1</text>
+<rect x="30" y="100" width="110" height="40" rx="8" fill="url(#i3)"/><text x="85" y="126" fill="#fff" font-size="15" text-anchor="middle">関数 2</text>
+<rect x="30" y="160" width="110" height="40" rx="8" fill="url(#i3)"/><text x="85" y="186" fill="#fff" font-size="15" text-anchor="middle">関数 3</text>
+<rect x="250" y="90" width="160" height="60" rx="10" fill="url(#i1)"/><text x="330" y="126" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">i: 3</text>
+<line x1="144" y1="60" x2="244" y2="108" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="144" y1="120" x2="244" y2="120" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="144" y1="180" x2="244" y2="134" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="440" y1="20" x2="440" y2="210" stroke="#d9dfe8" stroke-width="2"/>
+<text x="660" y="24" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">let: 1 周ごとに新しい箱</text>
+<rect x="480" y="40" width="110" height="40" rx="8" fill="url(#i3)"/><text x="535" y="66" fill="#fff" font-size="15" text-anchor="middle">関数 1</text>
+<rect x="480" y="100" width="110" height="40" rx="8" fill="url(#i3)"/><text x="535" y="126" fill="#fff" font-size="15" text-anchor="middle">関数 2</text>
+<rect x="480" y="160" width="110" height="40" rx="8" fill="url(#i3)"/><text x="535" y="186" fill="#fff" font-size="15" text-anchor="middle">関数 3</text>
+<rect x="700" y="40" width="140" height="40" rx="8" fill="url(#i2)"/><text x="770" y="66" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">j: 0</text>
+<rect x="700" y="100" width="140" height="40" rx="8" fill="url(#i2)"/><text x="770" y="126" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">j: 1</text>
+<rect x="700" y="160" width="140" height="40" rx="8" fill="url(#i2)"/><text x="770" y="186" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">j: 2</text>
+<line x1="594" y1="60" x2="694" y2="60" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="594" y1="120" x2="694" y2="120" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="594" y1="180" x2="694" y2="180" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+</svg>

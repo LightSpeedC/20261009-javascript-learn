@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 220" width="880" height="220" role="img" aria-label="クロージャで状態を隠す" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="70" width="170" height="70" rx="12" fill="#e3e7ee"/>
+<text x="105" y="102" fill="#1c2330" font-size="16" font-weight="700" text-anchor="middle">外のコード</text>
+<text x="105" y="126" fill="#1c2330" font-size="14" text-anchor="middle">account.deposit(500)</text>
+<rect x="260" y="20" width="600" height="180" rx="16" fill="url(#i1)"/>
+<text x="560" y="48" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">createAccount が返したオブジェクト</text>
+<rect x="290" y="66" width="160" height="40" rx="8" fill="rgba(255,255,255,0.22)"/><text x="370" y="92" fill="#fff" font-size="15" text-anchor="middle">deposit()</text>
+<rect x="290" y="114" width="160" height="40" rx="8" fill="rgba(255,255,255,0.22)"/><text x="370" y="140" fill="#fff" font-size="15" text-anchor="middle">withdraw()</text>
+<rect x="290" y="162" width="160" height="30" rx="8" fill="rgba(255,255,255,0.22)"/><text x="370" y="183" fill="#fff" font-size="14" text-anchor="middle">get balance</text>
+<rect x="580" y="90" width="250" height="70" rx="12" fill="url(#i3)"/>
+<text x="705" y="122" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">balance: 1200</text>
+<text x="705" y="146" fill="#fff" font-size="13" text-anchor="middle">外からは直接触れない</text>
+<line x1="194" y1="105" x2="284" y2="88" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="454" y1="86" x2="574" y2="112" stroke="#fff" stroke-width="3"/>
+<line x1="454" y1="134" x2="574" y2="126" stroke="#fff" stroke-width="3"/>
+<line x1="454" y1="177" x2="574" y2="142" stroke="#fff" stroke-width="3"/>
+</svg>
