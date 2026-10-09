@@ -107,4 +107,11 @@ jsprimer は、GitBook のプラグイン js-console（codemirror-console）を�
 
 なし。
 
+### 実施結果
+
+- **第1部**: 01〜13 ・ 付録 A1〜A3 ・ 資料一覧 ・ ZZ 資料の構成を作成した（2026-10-09）。章立ては計画どおり
+- **例の検証**: 資料の例を Node.js で実行した結果と、ブラウザ（Chromium）で「▶ 実行」を押した結果の両方を、載せた出力と比べるテストを置いた（`tools/40_test/run-tests.cmd`）
+- **計画に無かった追加**: 例の種類は 3 つ（`data-run="worker"` はブラウザで実行、`"node"` は Node.js の記録を表示、`"file"` は置いておくだけのファイル）。前後のナビ ・ 目次 ・ 章の色は `tools/20_build/build-docs.ts` で書き込む
+- **第2部**: 未着手
+
 [^^](../../README.md)
