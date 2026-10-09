@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript 入門 学習資料の計画</title>
+<style>
+:root{
+	--navy1:#12224d; --navy2:#2f5fbf; --ink:#1c2330; --ink-soft:#4a5568; --line:#d9dfe8; --code-bg:#f4f6fa; --link:#1a4fa0;
+	--accent:var(--navy1); --accent2:var(--navy2); --soft:#f2f5fb;
+}
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(186.7,78%,25%);--accent2:hsl(186.7,58%,55%);--soft:hsl(186.7,28%,95%);}
+.ch03{--accent:hsl(93.3,78%,25%);--accent2:hsl(93.3,58%,55%);--soft:hsl(93.3,28%,95%);}
+.ch04{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+body{margin:0;background:#ffffff;color:var(--ink,#1c2330);font-family:"Segoe UI","Yu Gothic UI","Meiryo",sans-serif;font-size:15.5px;line-height:1.85;}
+.titlebar{background:linear-gradient(135deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;padding:34px 30px 30px;}
+.titlebar .inner{max-width:1600px;margin:0 auto;padding:0 30px;}
+.titlebar h1{font-size:1.9em;margin:0 0 6px;color:#fff;}
+.titlebar .lead,.titlebar .date{color:#e6ecf8;background:transparent;margin:4px 0;font-size:0.92em;}
+.wrap{max-width:1600px;margin:0 auto;padding:0 30px;}
+a{color:var(--link,#1a4fa0);background:transparent;}
+.wrap > .back-home{margin-top:18px;}
+.back-home{display:inline-block;padding:2px 12px;border-radius:6px;background:linear-gradient(100deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;text-decoration:none;font-weight:700;}
+.toc ol{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;counter-reset:tocnum;}
+.toc ol li{counter-increment:tocnum;}
+.toc ol a{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis;white-space:normal;width:310px;max-width:100%;padding:6px 12px;border-radius:6px;font-weight:700;text-decoration:none;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;}
+.toc ol a::before{content:counter(tocnum) ". ";}
+section{margin:34px 0;padding:4px 26px 26px;border-radius:10px;background:linear-gradient(180deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
+section h1{font-size:1.45em;margin:26px 0 20px;padding:14px 20px;border-radius:8px;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.18);}
+h2{font-size:1.15em;margin:30px 0 12px;padding:6px 12px;border-left:6px solid var(--accent,#12224d);background:linear-gradient(90deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
+code{background:var(--code-bg,#f4f6fa);border:1px solid var(--line,#d9dfe8);color:#17335f;padding:0 4px;border-radius:4px;font-size:0.92em;}
+.tablewrap{overflow-x:auto;}
+table{border-collapse:collapse;border-radius:8px;overflow:hidden;box-shadow:0 2px 6px rgba(0,0,0,0.08);margin:10px 0;}
+th{background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;padding:9px 12px;text-align:left;font-size:0.95em;}
+td{padding:9px 12px;border-bottom:1px solid var(--line,#d9dfe8);vertical-align:top;background:#ffffff;color:var(--ink,#1c2330);}
+tr:nth-child(even) td{background:#fafbfe;}
+td.nowrap{white-space:nowrap;}
+.badge{display:inline-block;padding:0 8px;border-radius:6px;font-size:0.85em;font-weight:700;white-space:nowrap;color:#fff;}
+.b-warn{background:linear-gradient(100deg,#b8620a,#f0a548);color:#fff;}
+.b-none{background:linear-gradient(100deg,#5a6472,#97a1ae);color:#fff;}
+.callout{border-left:6px solid var(--accent,#12224d);background:linear-gradient(180deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);border-radius:0 8px 8px 0;padding:8px 16px;margin:14px 0;}
+.callout strong{color:var(--accent,#12224d);background:transparent;}
+footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-soft,#4a5568);background:#ffffff;}
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>JavaScript 入門 学習資料の計画</h1>
+<p class="lead">ほかの言語を少し触った人向けの JavaScript 学習資料・勉強会資料の計画</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+</div></div>
+
+<div class="wrap">
+<a class="back-home" href="../../README.html" title="README">⌂</a>
+
+<nav class="toc">
+<ol>
+<li class="ch01"><a href="#ch01">目的と全体像</a></li>
+<li class="ch02"><a href="#ch02">第1部 言語編</a></li>
+<li class="ch03"><a href="#ch03">第2部 ブラウザ編</a></li>
+<li class="ch04"><a href="#ch04">作り方と未決事項</a></li>
+</ol>
+</nav>
+
+<section class="ch01" id="ch01">
+<h1>目的と全体像</h1>
+<h2>対象読者とゴール</h2>
+<ul>
+<li><strong>読者</strong>: Java ・ C# ・ VBA を少し触った初心者。変数・基本の文法・<code>if</code> ・ <code>for</code> ・ <code>while</code> ・ <code>switch</code> が分かる程度。関数・クラス・例外・非同期は知らない前提で書く</li>
+<li><strong>ゴール</strong>: Node.js で <code>.js</code> を書いてエラーを読んで直せる。型変換・<code>this</code> ・クロージャ・非同期の動きを説明できる。ブラウザで DOM とイベントを使った小さな画面を作れる</li>
+<li>読み終えたら、公開済みの TypeScript 学習資料へ進める</li>
+</ul>
+<h2>構成</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>部</th><th>実行環境</th><th>章</th><th>勉強会（各 90 分）</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">第1部 言語編</td><td>Node.js</td><td>01〜13 ＋付録 A1〜A3</td><td>第1〜4回</td></tr>
+<tr><td class="nowrap">第2部 ブラウザ編</td><td>ブラウザ</td><td>14〜23</td><td>第5〜6回</td></tr>
+</tbody>
+</table></div>
+<p>各部の最後の章はハンズオンで、宿題にする。1 回の時間配分は、振り返りと質問 10 分 ／ 読み合わせ 50 分 ／ 演習 25 分 ／ 次回予告 5 分。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>第1部 言語編</h1>
+<p>山場は後半に 2 段で置く。前半の山は型変換・<code>this</code> ・グローバル（04 ・ 07）、後半の山は最重要のクロージャ・非同期（09 ・ 11）。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>回</th><th>章</th><th>タイトル</th><th>主な内容</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">第1回</td><td class="nowrap">01</td><td class="nowrap">背景</td><td>JavaScript と ECMAScript、ブラウザと Node.js、Java とは別の言語</td></tr>
+<tr><td class="nowrap">第1回</td><td class="nowrap">02</td><td class="nowrap">実行環境</td><td>Node.js の導入、REPL、<code>node file.js</code>、<code>console.log</code></td></tr>
+<tr><td class="nowrap">第1回</td><td class="nowrap">03</td><td class="nowrap">値と変数</td><td><code>let</code> ・ <code>const</code> ・ <code>var</code>、プリミティブ型、数値は double だけ、テンプレート文字列、<code>null</code> と <code>undefined</code></td></tr>
+<tr><td class="nowrap">第1回</td><td class="nowrap">04</td><td class="nowrap">演算子と型変換 <span class="badge b-warn">山</span></td><td><code>==</code> と <code>===</code>、truthy ・ falsy、<code>NaN</code>、暗黙の変換、<code>??</code> と <code>?.</code></td></tr>
+<tr><td class="nowrap">第1回</td><td class="nowrap">05</td><td class="nowrap">オブジェクトと配列</td><td>参照とコピー、分割代入、スプレッド、配列のメソッド、JSON</td></tr>
+<tr><td class="nowrap">第1回</td><td class="nowrap">06</td><td class="nowrap">関数</td><td>宣言・式・アロー関数、既定値・残余引数、コールバック</td></tr>
+<tr><td class="nowrap">第2回</td><td class="nowrap">07</td><td class="nowrap">スコープ・this・グローバル <span class="badge b-warn">山</span></td><td>ブロックスコープ、巻き上げ、グローバル変数の事故、<code>globalThis</code>、<code>this</code> の決まり方、strict モード</td></tr>
+<tr><td class="nowrap">第2回</td><td class="nowrap">08</td><td class="nowrap">クラスとプロトタイプ</td><td><code>class</code>、継承、裏にあるプロトタイプ</td></tr>
+<tr><td class="nowrap">第3回</td><td class="nowrap">09</td><td class="nowrap">クロージャ <span class="badge b-warn">山</span></td><td>外側の変数を覚える仕組み、カウンタ、ループ内の関数</td></tr>
+<tr><td class="nowrap">第3回</td><td class="nowrap">10</td><td class="nowrap">エラー処理とモジュール</td><td><code>try</code> ・ <code>catch</code> ・ <code>throw</code>、<code>import</code> ・ <code>export</code>、npm の最小限</td></tr>
+<tr><td class="nowrap">第4回</td><td class="nowrap">11</td><td class="nowrap">非同期 <span class="badge b-warn">山</span></td><td>イベントループ、Promise、<code>async</code> ・ <code>await</code>、非同期のエラー</td></tr>
+<tr><td class="nowrap">第4回</td><td class="nowrap">12</td><td class="nowrap">CommonJS と ES Modules</td><td><code>require</code> と <code>import</code>、<code>.cjs</code> ・ <code>.mjs</code> ・ <code>.js</code> の決まり方（<code>package.json</code> の <code>"type"</code>）、<code>__dirname</code> と <code>import.meta</code>、古いコードの見分け方</td></tr>
+<tr><td class="nowrap">宿題</td><td class="nowrap">13</td><td class="nowrap">ハンズオン</td><td>小さな CLI ツールを作る（読み込み → 集計 → 非同期化）。第5回の冒頭で振り返る</td></tr>
+</tbody>
+</table></div>
+<p><strong>付録</strong>: A1 逆引き ／ A2 Java ・ C# ・ VBA との対応表 ／ A3 落とし穴カタログ（症状から原因を引く）</p>
+<div class="callout"><strong>第1回は 6 章ある。</strong>01〜03 は読み流し（環境は事前に用意してもらう）、04 に時間を寄せる。収まらなければ 06 を第2回へ回す。</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>第2部 ブラウザ編</h1>
+<p>20〜22 は「Web でできること」の紹介。短い例を動かして見せるだけで、詳しくは説明しない。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>回</th><th>章</th><th>タイトル</th><th>主な内容</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">第5回</td><td class="nowrap">14</td><td class="nowrap">ブラウザで動かす</td><td><code>&lt;script type="module"&gt;</code>、開発者ツール、ローカルサーバー</td></tr>
+<tr><td class="nowrap">第5回</td><td class="nowrap">15</td><td class="nowrap">DOM</td><td>要素の取得・作成・書き換え、<code>textContent</code> と <code>innerHTML</code></td></tr>
+<tr><td class="nowrap">第5回</td><td class="nowrap">16</td><td class="nowrap">イベント</td><td><code>addEventListener</code>、伝播と委譲、イベントの中の <code>this</code></td></tr>
+<tr><td class="nowrap">第5回</td><td class="nowrap">17</td><td class="nowrap">フォーム</td><td>入力値の取得、検証、送信を止める</td></tr>
+<tr><td class="nowrap">第6回</td><td class="nowrap">18</td><td class="nowrap">通信</td><td><code>fetch</code>、JSON、CORS の入口</td></tr>
+<tr><td class="nowrap">第6回</td><td class="nowrap">19</td><td class="nowrap">ブラウザの機能</td><td>保存の方法の比較（cookie ・ <code>localStorage</code> ・ <code>sessionStorage</code> ・ IndexedDB の使いどころだけ）、タイマー、履歴、クリップボード</td></tr>
+<tr><td class="nowrap">第6回</td><td class="nowrap">20</td><td class="nowrap">紹介: 描画とメディア</td><td>Canvas、SVG、3D（three.js など）、動画、マイク・カメラ、音声合成、音の生成（Web Audio）</td></tr>
+<tr><td class="nowrap">第6回</td><td class="nowrap">21</td><td class="nowrap">紹介: リアルタイム通信</td><td>WebSocket、Server-Sent Events、WebRTC、チャット</td></tr>
+<tr><td class="nowrap">第6回</td><td class="nowrap">22</td><td class="nowrap">紹介: ライブラリを埋め込む</td><td>CDN で React、UMD を <code>&lt;script&gt;</code> で読み込む、Mermaid でシーケンス図など</td></tr>
+<tr><td class="nowrap">宿題</td><td class="nowrap">23</td><td class="nowrap">ハンズオン</td><td>ToDo などの小さな画面を作る</td></tr>
+</tbody>
+</table></div>
+<div class="callout"><strong>第6回は内容が多い。</strong>18〜19 に 45 分、20〜22 に 30 分を目安にする。収まらなければ第7回を足す。</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>作り方と未決事項</h1>
+<h2>作り方</h2>
+<ul>
+<li>資料は <code>docs/</code> に HTML で置く（<code>01-背景.html</code> など）。共通 CSS は <code>docs/css/style.css</code>、サンプルは <code>docs/samples/</code></li>
+<li>カラフルな SVG 図を多用する。各章に 1 点以上、山場の章は複数</li>
+<li>「Java ・ C# ・ VBA から来た人へ」の枠で、読者の知っている言語との違いを補う</li>
+<li>コードは実際に動かしてから載せ、出力は実行結果を貼る。エラーは英語のまま載せて訳を添える</li>
+<li>サンプルコードは jsprimer（<a href="https://jsprimer.net/">https://jsprimer.net/</a>）のように、資料のページ上で実行できるようにする（下の「サンプルコードの実行」）</li>
+<li>Node.js は v26 系の、資料を作る時点の最新版を使う。確かめた版は <code>node --version</code> の実測値を <code>docs/ZZ-構成.html</code> の 1 か所にだけ書く</li>
+</ul>
+<h2>サンプルコードの実行</h2>
+<p>jsprimer は、GitBook のプラグイン js-console（codemirror-console）を使っている。コードの横のボタンを押すと、編集できるエディタ（CodeMirror）とコンソール風の出力欄が開き、ブラウザの中でコードを評価して <code>console.log</code> の出力とエラーを表示する。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>コードの種類</th><th>ボタンを押したとき</th></tr></thead>
+<tbody>
+<tr><td>ブラウザで動くもの（値・関数・クラス・クロージャ等）</td><td>その場で実行し、出力とエラーを表示する。コードは書き換えて再実行できる</td></tr>
+<tr><td>タイマー・Promise ・ <code>async</code> ・ <code>await</code></td><td>同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする）</td></tr>
+<tr><td>Node.js でしか動かないもの（ファイルの読み書き・ディレクトリ一覧・<code>require</code> 等）</td><td>実行はせず、Node.js で実際に動かしたときの出力を、あらかじめ記録したものとして表示する。「Node.js での実行結果」と明示し、書き換えはできない</td></tr>
+</tbody>
+</table></div>
+<p>仕組みは自前で書き、<code>docs/js/</code> に置く。CDN は使わない。実行する場所は部で分ける。</p>
+<ul>
+<li><strong>第1部: Web Worker</strong>。ページと別のスレッドで動くので、無限ループでも資料が固まらず、時間で打ち切れる。<code>console</code> を差し替えて出力を <code>postMessage</code> でページへ送る</li>
+<li><strong>第2部の DOM の例: iframe</strong>。Worker には DOM が無いため</li>
+<li>Worker のグローバルは <code>window</code> ではなく <code>self</code>。07 章の例は実際に動かし、ブラウザ本体と結果が違えば本文で説明する</li>
+<li><code>file://</code> で直接開いたときに Worker が動くかは未確認。動かなければ、ローカルサーバーで開くよう案内する</li>
+</ul>
+<p>記録する出力は、<code>docs/samples/</code> のコードを実際に Node.js で動かして得る。</p>
+<h2>未決事項</h2>
+<p>なし。</p>
+</section>
+
+</div>
+<footer><a class="back-home" href="../../README.html" title="README">⌂</a></footer>
+</body>
+</html>
