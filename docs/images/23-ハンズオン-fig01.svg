@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 250" width="880" height="250" role="img" aria-label="ToDo アプリの組み立て" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(290,78%,25%)"/><stop offset="1" stop-color="hsl(290,58%,55%)"/></linearGradient>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="80" width="200" height="90" rx="14" fill="url(#i1)"/>
+<text x="120" y="116" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">データ todos</text>
+<text x="120" y="144" fill="#fff" font-size="13" text-anchor="middle">{ id, title, done } の配列</text>
+<rect x="340" y="10" width="200" height="80" rx="14" fill="url(#i2)"/>
+<text x="440" y="44" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">render()</text>
+<text x="440" y="70" fill="#fff" font-size="13" text-anchor="middle">データから画面を作り直す</text>
+<rect x="660" y="80" width="200" height="90" rx="14" fill="url(#i3)"/>
+<text x="760" y="116" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">画面</text>
+<text x="760" y="144" fill="#fff" font-size="13" text-anchor="middle">押す ・ 入れる</text>
+<rect x="340" y="160" width="200" height="80" rx="14" fill="url(#i4)"/>
+<text x="440" y="194" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">update(change)</text>
+<text x="440" y="220" fill="#fff" font-size="13" text-anchor="middle">データを変え → 保存 → render</text>
+<line x1="224" y1="100" x2="336" y2="60" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="544" y1="60" x2="656" y2="100" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="656" y1="155" x2="544" y2="195" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<line x1="336" y1="195" x2="224" y2="155" stroke="#7a8699" stroke-width="3" marker-end="url(#i5)"/>
+<text x="618" y="210" fill="#4a5568" font-size="13">イベント（16 章）</text>
+<text x="180" y="210" fill="#4a5568" font-size="13" text-anchor="middle">localStorage（19 章）</text>
+</svg>

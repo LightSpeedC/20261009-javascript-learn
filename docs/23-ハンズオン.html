@@ -1,0 +1,322 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>23. ハンズオン</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
+.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
+.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
+.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
+.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"23." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"23." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>23. ハンズオン</h1>
+<p class="lead">宿題。やることリスト（ToDo）の画面を 4 つの手順で作る。データから画面を作り、操作でデータを変え、ブラウザに保存する</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="22-ライブラリを埋め込む.html" aria-label="前へ" title="22. 紹介: ライブラリを埋め込む" style="--accent:hsl(44.8,78%,25%);--accent2:hsl(44.8,58%,55%);--soft:hsl(44.8,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">作るもの</a></li>
+<li class="ch02"><a href="#ch02">手順 1: データから一覧を作る</a></li>
+<li class="ch03"><a href="#ch03">手順 2: 追加する</a></li>
+<li class="ch04"><a href="#ch04">手順 3: 完了と削除</a></li>
+<li class="ch05"><a href="#ch05">手順 4: 保存する（完成）</a></li>
+<li class="ch06"><a href="#ch06">振り返りと発展課題</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>作るもの</h1>
+<p>やることを足し、済んだら印を付け、要らなくなったら消せるリストを作ります。ページを閉じても中身が残るようにします。第2部で学んだ DOM ・ イベント ・ フォーム ・ 保存を、すべて使います。</p>
+<p>組み立ての考え方は 1 つだけです。<strong>データ（配列 <code>todos</code>）が主役で、画面はそれを映したもの</strong>。操作されたらデータを変え、保存して、画面を作り直します。画面の部品を直接いじって状態を持たせないのがこつです。</p>
+<figure>
+<svg viewBox="0 0 880 250" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="ToDo アプリの組み立て">
+<defs>
+<linearGradient id="g-23-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="g-23-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-23-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-23-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(290,78%,25%)"/><stop offset="1" stop-color="hsl(290,58%,55%)"/></linearGradient>
+<marker id="m-23-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="80" width="200" height="90" rx="14" fill="url(#g-23-1a)"/>
+<text x="120" y="116" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">データ todos</text>
+<text x="120" y="144" fill="#fff" font-size="13" text-anchor="middle">{ id, title, done } の配列</text>
+<rect x="340" y="10" width="200" height="80" rx="14" fill="url(#g-23-1b)"/>
+<text x="440" y="44" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">render()</text>
+<text x="440" y="70" fill="#fff" font-size="13" text-anchor="middle">データから画面を作り直す</text>
+<rect x="660" y="80" width="200" height="90" rx="14" fill="url(#g-23-1c)"/>
+<text x="760" y="116" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">画面</text>
+<text x="760" y="144" fill="#fff" font-size="13" text-anchor="middle">押す ・ 入れる</text>
+<rect x="340" y="160" width="200" height="80" rx="14" fill="url(#g-23-1d)"/>
+<text x="440" y="194" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">update(change)</text>
+<text x="440" y="220" fill="#fff" font-size="13" text-anchor="middle">データを変え → 保存 → render</text>
+<line x1="224" y1="100" x2="336" y2="60" stroke="#7a8699" stroke-width="3" marker-end="url(#m-23-1)"/>
+<line x1="544" y1="60" x2="656" y2="100" stroke="#7a8699" stroke-width="3" marker-end="url(#m-23-1)"/>
+<line x1="656" y1="155" x2="544" y2="195" stroke="#7a8699" stroke-width="3" marker-end="url(#m-23-1)"/>
+<line x1="336" y1="195" x2="224" y2="155" stroke="#7a8699" stroke-width="3" marker-end="url(#m-23-1)"/>
+<text x="618" y="210" fill="#4a5568" font-size="13">イベント（16 章）</text>
+<text x="180" y="210" fill="#4a5568" font-size="13" text-anchor="middle">localStorage（19 章）</text>
+</svg>
+<figcaption>データ → 画面 → 操作 → データ、の輪を回す</figcaption>
+</figure>
+<p>手順 1 と 4 は「▶ 実行」で動かせます。手順 2 と 3 は、足すコードだけを載せています。自分の手元では、14 章のように <code>index.html</code> と <code>main.js</code> を作り、ローカルサーバーで開いて進めてください。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>手順 1: データから一覧を作る</h1>
+<p>まず画面の骨組みを HTML で書き、データの配列から一覧を作る <code>render</code> 関数を書きます（15 章）。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;h2&gt;やること&lt;/h2&gt;
+&lt;ul id="list"&gt;&lt;/ul&gt;
+&lt;p id="summary"&gt;&lt;/p&gt;</code></pre>
+<p class="filename">CSS</p>
+<pre><code class="language-css">#list { list-style: none; padding: 0; }
+#list li { display: flex; gap: 8px; align-items: center; padding: 4px 0; }
+#list li.done span { text-decoration: line-through; color: #6b7280; }</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const todos = [
+  { id: 1, title: "牛乳を買う", done: false },
+  { id: 2, title: "資料を読む", done: true },
+];
+
+function render() {
+  const list = document.querySelector("#list");
+  list.textContent = ""; // いったん空にして、作り直す
+  for (const todo of todos) {
+    const li = document.createElement("li");
+    li.dataset.id = todo.id;
+    li.classList.toggle("done", todo.done);
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.checked = todo.done;
+    const span = document.createElement("span");
+    span.textContent = todo.title;
+    li.append(check, span);
+    list.append(li);
+  }
+  const rest = todos.filter((t) => !t.done).length;
+  document.querySelector("#summary").textContent = `残り ${rest} 件 / 全 ${todos.length} 件`;
+}
+
+render();
+console.log(document.querySelector("#summary").textContent);</code></pre>
+<pre class="output"><code class="language-text">残り 1 件 / 全 2 件</code></pre>
+</div>
+<ul>
+<li><code>classList.toggle("done", 真偽値)</code> は、2 つ目が真なら付け、偽なら外す</li>
+<li>画面の文字は <code>textContent</code> で入れる。入力された文字を表示するので、<code>innerHTML</code> は使わない（15 章の XSS）</li>
+<li>この段階では、チェックを押しても、データが変わらないので何も起きない</li>
+</ul>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>手順 2: 追加する</h1>
+<p>入力欄とボタンをフォームにまとめ、<code>submit</code> を受けて、データに足してから <code>render()</code> を呼びます（17 章）。Enter キーでも追加できます。</p>
+<pre><code class="language-html">&lt;form id="form"&gt;
+  &lt;input id="title" placeholder="やることを入れる" autocomplete="off"&gt;
+  &lt;button&gt;追加&lt;/button&gt;
+&lt;/form&gt;</code></pre>
+<pre><code class="language-javascript">let nextId = 3;
+document.querySelector("#form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = document.querySelector("#title");
+  const title = input.value.trim();
+  if (title === "") return; // 空なら足さない
+  todos.push({ id: nextId++, title, done: false });
+  input.value = "";
+  render();
+});</code></pre>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> <code>{ id: nextId++, title, done: false }</code> の <code>title</code> は、<code>title: title</code> を短く書いたものです（05 章）。<code>nextId++</code> は、いまの値を使ってから 1 増やします。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>手順 3: 完了と削除</h1>
+<p>各行に「削除」ボタンを足し、チェックとボタンのクリックを<strong>リストに 1 つだけ登録したハンドラ</strong>で受けます（16 章のイベントの委譲）。押された行は <code>closest("li")</code> で、その <code>data-id</code> からデータを探します。</p>
+<pre><code class="language-javascript">// render() の中で、行に削除ボタンも足す
+const del = document.createElement("button");
+del.className = "delete";
+del.textContent = "削除";
+li.append(check, span, del);</code></pre>
+<pre><code class="language-javascript">document.querySelector("#list").addEventListener("click", (event) => {
+  const li = event.target.closest("li");
+  if (!li) return;
+  const id = Number(li.dataset.id); // data-* は文字列なので数値に
+  if (event.target.matches("input[type=checkbox]")) {
+    const todo = todos.find((t) => t.id === id);
+    todo.done = !todo.done;
+  } else if (event.target.matches("button.delete")) {
+    todos = todos.filter((t) => t.id !== id); // todos は let にしておく
+  }
+  render();
+});</code></pre>
+<p><code>el.matches(セレクタ)</code> は、要素がセレクタに当てはまるかを返します。<code>todos</code> を <code>filter</code> で作り直すので、宣言を <code>const</code> から <code>let</code> に変えます（03 章）。</p>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>手順 4: 保存する（完成）</h1>
+<p>最後に <code>localStorage</code> へ保存し、開き直したときに読み込みます（19 章）。データを変える場所が 3 か所に増えたので、「変える → 保存する → 作り直す」を <code>update</code> という関数にまとめます。変える中身は、関数として渡します（06 章のコールバック）。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;h2&gt;やること&lt;/h2&gt;
+&lt;form id="form"&gt;
+  &lt;input id="title" placeholder="やることを入れる" autocomplete="off"&gt;
+  &lt;button&gt;追加&lt;/button&gt;
+&lt;/form&gt;
+&lt;ul id="list"&gt;&lt;/ul&gt;
+&lt;p id="summary"&gt;&lt;/p&gt;
+&lt;button id="clear"&gt;済んだものを消す&lt;/button&gt;
+&lt;button id="reset"&gt;最初の状態に戻す&lt;/button&gt;</code></pre>
+<p class="filename">CSS</p>
+<pre><code class="language-css">#list { list-style: none; padding: 0; }
+#list li { display: flex; gap: 8px; align-items: center; padding: 4px 0; }
+#list li.done span { text-decoration: line-through; color: #6b7280; }</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const KEY = "jsl-todos";
+const form = document.querySelector("#form");
+const input = document.querySelector("#title");
+const list = document.querySelector("#list");
+const summary = document.querySelector("#summary");
+
+function load() {
+  const saved = localStorage.getItem(KEY);
+  if (saved === null) {
+    return [
+      { id: 1, title: "牛乳を買う", done: false },
+      { id: 2, title: "資料を読む", done: true },
+    ];
+  }
+  return JSON.parse(saved);
+}
+let todos = load();
+let nextId = Math.max(0, ...todos.map((t) => t.id)) + 1;
+
+function save() {
+  localStorage.setItem(KEY, JSON.stringify(todos));
+}
+
+function render() {
+  list.textContent = "";
+  for (const todo of todos) {
+    const li = document.createElement("li");
+    li.dataset.id = todo.id;
+    li.classList.toggle("done", todo.done);
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.checked = todo.done;
+    const span = document.createElement("span");
+    span.textContent = todo.title;
+    const del = document.createElement("button");
+    del.className = "delete";
+    del.textContent = "削除";
+    li.append(check, span, del);
+    list.append(li);
+  }
+  const rest = todos.filter((t) => !t.done).length;
+  summary.textContent = `残り ${rest} 件 / 全 ${todos.length} 件`;
+}
+
+// データを変える → 保存する → 作り直す、をいつも同じ順で行う
+function update(change) {
+  change();
+  save();
+  render();
+}
+
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const title = input.value.trim();
+  if (title === "") return;
+  update(() => todos.push({ id: nextId++, title, done: false }));
+  input.value = "";
+});
+
+list.addEventListener("click", (event) => {
+  const li = event.target.closest("li");
+  if (!li) return;
+  const id = Number(li.dataset.id);
+  if (event.target.matches("input[type=checkbox]")) {
+    update(() => {
+      const todo = todos.find((t) => t.id === id);
+      todo.done = !todo.done;
+    });
+  } else if (event.target.matches("button.delete")) {
+    update(() => {
+      todos = todos.filter((t) => t.id !== id);
+    });
+  }
+});
+
+document.querySelector("#clear").addEventListener("click", () => {
+  update(() => {
+    todos = todos.filter((t) => !t.done);
+  });
+});
+document.querySelector("#reset").addEventListener("click", () => {
+  update(() => {
+    localStorage.removeItem(KEY);
+    todos = load();
+  });
+});
+
+render();
+console.log(summary.textContent);</code></pre>
+<pre class="output"><code class="language-text">残り 1 件 / 全 2 件</code></pre>
+</div>
+<p>足したり消したりしてから、もう一度「▶ 実行」を押してみてください。前の状態から始まります。上の出力は、何も保存されていない状態で初めて実行したときのものです。</p>
+<div class="callout callout-important">
+<p><span class="label">ここが大事:</span> データを変える場所は、すべて <code>update</code> を通しています。こうしておくと、「保存し忘れ」「画面の作り直し忘れ」が起きません。データの変え方が増えても、<code>update(() =&gt; { … })</code> の中身を書くだけで済みます。</p>
+</div>
+</section>
+
+<section class="ch06" id="ch06">
+<h1>振り返りと発展課題</h1>
+<h2>使ったもの</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>使ったもの</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>要素を探す ・ 作る ・ 足す ・ <code>textContent</code> ・ <code>classList</code> ・ <code>dataset</code></td><td class="nowrap">15</td></tr>
+<tr><td><code>addEventListener</code> ・ イベントの委譲 ・ <code>closest</code> ・ <code>matches</code></td><td class="nowrap">16</td></tr>
+<tr><td><code>submit</code> ・ <code>preventDefault</code> ・ 入力の確かめ</td><td class="nowrap">17</td></tr>
+<tr><td><code>localStorage</code> ・ <code>JSON.stringify</code> ・ <code>JSON.parse</code></td><td class="nowrap">19 ・ 05</td></tr>
+<tr><td>配列のメソッド ・ アロー関数 ・ コールバック ・ クロージャ</td><td class="nowrap">05 ・ 06 ・ 09</td></tr>
+</tbody>
+</table></div>
+<h2>発展課題</h2>
+<p>余裕があれば、次のどれかに挑戦してください。答えは載せていません。勉強会の最後に見せ合いましょう。</p>
+<ol>
+<li><strong>絞り込み</strong>: 「すべて ・ 未 ・ 済」の 3 つのボタンで、表示する行を切り替える。表示の条件もデータとして持ち、<code>render</code> の中で <code>filter</code> する</li>
+<li><strong>書き換え</strong>: 行の文字をダブルクリック（<code>dblclick</code>）すると入力欄になり、Enter で確定する</li>
+<li><strong>期限</strong>: <code>&lt;input type="date"&gt;</code> で期限を付け、期限の近い順に並べる（05 章の <code>sort</code>）</li>
+<li><strong>サーバーから読み込む</strong>: 初めて開いたときの中身を、<code>fetch</code> で JSON から読み込む（18 章）</li>
+<li><strong>タブ間で同期する</strong>: 2 つのタブで開いたとき、片方の変更をもう片方にも映す（21 章の <code>BroadcastChannel</code>、または <code>storage</code> イベント）</li>
+</ol>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> 課題 5 は、<code>window.addEventListener("storage", …)</code> を使うと、別のタブで <code>localStorage</code> が変わったときに知らせを受け取れます。受け取ったら <code>todos = load()</code> にして <code>render()</code> を呼ぶだけです。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="22-ライブラリを埋め込む.html" aria-label="前へ" title="22. 紹介: ライブラリを埋め込む" style="--accent:hsl(44.8,78%,25%);--accent2:hsl(44.8,58%,55%);--soft:hsl(44.8,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

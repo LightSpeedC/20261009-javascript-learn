@@ -25,7 +25,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <div class="titlebar"><div class="inner">
 <h1>ZZ. 資料の構成</h1>
 <p class="lead">対象読者・章立ての意図・勉強会の進め方・確かめた版・実行の仕組み</p>
-<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-10</p>
 </div></div>
 
 <div class="wrap">
@@ -44,7 +44,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <h1>対象読者とゴール</h1>
 <ul>
 <li><strong>対象読者</strong>: Java ・ C# ・ VBA を少し触った初心者。変数・基本の文法・<code>if</code> ・ <code>for</code> ・ <code>while</code> ・ <code>switch</code> が分かる程度。関数・クラス・例外・非同期は知らない前提で書く</li>
-<li><strong>ゴール</strong>: Node.js で <code>.js</code> を書いてエラーを読んで直せる。型変換・<code>this</code> ・クロージャ・非同期の動きを自分のことばで説明できる</li>
+<li><strong>ゴール</strong>: Node.js で <code>.js</code> を書いてエラーを読んで直せる。型変換・<code>this</code> ・クロージャ・非同期の動きを自分のことばで説明できる。ブラウザで DOM とイベントを使った小さな画面を作れる</li>
 <li><strong>次の一歩</strong>: 型を書ける TypeScript へ進める</li>
 </ul>
 </section>
@@ -52,7 +52,8 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <section class="ch02" id="ch02">
 <h1>章立ての意図</h1>
 <ul>
-<li><strong>2 部構成</strong>: 第1部（01〜13）は Node.js で言語そのものを学ぶ。第2部（14〜）はブラウザで DOM ・イベントを学ぶ</li>
+<li><strong>2 部構成</strong>: 第1部（01〜13）は Node.js で言語そのものを学ぶ。第2部（14〜23）はブラウザで DOM ・イベント ・ フォーム ・ 通信 ・ 保存を学ぶ</li>
+<li><strong>Web でできることは紹介に留める</strong>: 20 〜 22 章は、描画 ・ メディア ・ リアルタイム通信 ・ ライブラリの埋め込みを、短い例で見せるだけにする。詳しく説明すると入門の範囲を超えるため</li>
 <li><strong>山場は後半に 2 段で置く</strong>: 前半の山は 04（型変換）と 07（スコープ ・ <code>this</code> ・グローバル）。JavaScript らしい落とし穴を知る。後半の山は 09（クロージャ）と 11（非同期）。最も大事な仕組みで、ここを越えると実務のコードが読めるようになる</li>
 <li><strong>ハンズオンは各部の最後に宿題として置く</strong>: 勉強会の時間は読み合わせと短い演習に使い、まとまった作業は各自で行う</li>
 <li><strong>付録は順に読まない</strong>: A1 逆引き ・ A2 Java ・ C# ・ VBA との対応表 ・ A3 落とし穴カタログは、困ったときに引く</li>
@@ -68,11 +69,14 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <tr><td class="nowrap">第2回</td><td class="nowrap">07〜08</td><td><code>this</code> ・グローバル変数・プロトタイプ（前半の山）</td></tr>
 <tr><td class="nowrap">第3回</td><td class="nowrap">09〜10</td><td>クロージャ（後半の山）、エラー処理とモジュール</td></tr>
 <tr><td class="nowrap">第4回</td><td class="nowrap">11〜12</td><td>非同期（後半の山）、CommonJS と ES Modules</td></tr>
-<tr><td class="nowrap">宿題</td><td class="nowrap">13</td><td>ハンズオン。第2部の初回の冒頭で振り返る</td></tr>
+<tr><td class="nowrap">宿題</td><td class="nowrap">13</td><td>ハンズオン。第5回の冒頭で振り返る</td></tr>
+<tr><td class="nowrap">第5回</td><td class="nowrap">14〜17</td><td>第1部の宿題の振り返り。ブラウザで動かし、DOM ・ イベント ・ フォームで画面を動かす</td></tr>
+<tr><td class="nowrap">第6回</td><td class="nowrap">18〜22</td><td>通信 ・ 保存（18 〜 19 に 45 分）、Web でできることの紹介（20 〜 22 に 30 分。例を動かして見せるだけ）</td></tr>
+<tr><td class="nowrap">宿題</td><td class="nowrap">23</td><td>ハンズオン（ToDo）。勉強会の最後に見せ合う</td></tr>
 </tbody>
 </table></div>
-<p>1 回は 90 分。振り返りと質問 10 分 ／ 読み合わせ 50 分 ／ 演習 25 分 ／ 次回予告 5 分。</p>
-<p>参加者には、事前に Node.js を入れて <code>node --version</code> が表示される状態にしておいてもらう（02 章）。</p>
+<p>1 回は 90 分。振り返りと質問 10 分 ／ 読み合わせ 50 分 ／ 演習 25 分 ／ 次回予告 5 分。第6回は内容が多いので、収まらなければ第7回を足す。</p>
+<p>参加者には、事前に Node.js を入れて <code>node --version</code> が表示される状態にしておいてもらう（02 章）。第2部は Chrome か Edge を使う。20 〜 22 章の一部の例は、CDN から読み込むのでネットワークが必要。</p>
 </section>
 
 <section class="ch04" id="ch04">
@@ -95,14 +99,17 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <li><code>js/runner.js</code> が、<code>&lt;div class="example" data-run="…"&gt;</code> で囲んだ例にボタンを付ける</li>
 <li><code>data-run="worker"</code> の例は、Web Worker（<code>js/worker.js</code>）の中で実行する。ページと別のスレッドなので、無限ループでも資料は固まらない。5 秒で打ち切る</li>
 <li>値の表示は <code>js/inspect.js</code> が作る。Node.js の <code>console.log</code> と同じ形になるように、Node の表示の決まりを写している</li>
+<li><code>data-run="dom"</code> の例（第2部）は、HTML ・ CSS ・ スクリプトの組を iframe の中に置いて動かし、画面と console を見せる。console の受け渡しは <code>js/frame.js</code> が行う。ページと同じ流れで動くので、時間で打ち切れない</li>
 <li><code>data-run="node"</code> の例は、Node.js でしか動かないもの。Node.js で実行した結果を記録しておき、ボタンを押すと表示する</li>
+<li><code>data-run="file"</code> は、置いておくだけのファイル（読み込まれる側のモジュールや <code>package.json</code>）。ボタンは付けない</li>
+<li><code>data-net="cdn"</code> を付けた例は、CDN からライブラリを読み込む。テストを <code>JSL_NET=0</code> で流すと、これらを飛ばす</li>
 <li>例の中の <code>pre.output</code> が記録した出力。JavaScript が動かない環境（Markdown など）ではそのまま見える</li>
-<li>ブラウザで動かすため、この 3 つのファイルはビルドの要らない JavaScript で書いている</li>
+<li>ブラウザで動かすため、<code>js/</code> のファイルはビルドの要らない JavaScript で書いている</li>
 </ul>
 <h2>資料を書き換えたら</h2>
 <ol>
 <li><code>node tools/20_build/build-docs.ts</code> で、前後のナビ ・ 目次 ・ 章の色 ・ 資料一覧を書き込む</li>
-<li><code>tools/40_test/run-tests.cmd</code> でテストを流す。資料の例を Node.js で動かした結果と、ブラウザで「▶ 実行」を押した結果の両方を、載せた出力と比べる</li>
+<li><code>tools/40_test/run-tests.cmd</code> でテストを流す。資料の例を Node.js で動かした結果と、ブラウザで「▶ 実行」を押した結果の両方を、載せた出力と比べる。<code>docs/samples</code> のファイルが資料と一致しているか、23 章の完成形が操作どおりに動くかも確かめる</li>
 <li><code>html2md --root . --dir docs --dir notes</code> で Markdown を作り直す</li>
 </ol>
 </section>
