@@ -69,7 +69,11 @@ Node.js で、言語そのものを学ぶ（勉強会 第1〜4回。13 は宿題
 
 - [JavaScript 入門 状態](notes/30_status/status.md)
 
-## 3. ルール
+## 3. 課題
+
+- [JavaScript 入門 課題](notes/40_issues/issues.md)
+
+## 4. ルール
 
 - [JavaScript 入門 ローカルルール](notes/90_rules/local-rules.md)
 

@@ -1,0 +1,100 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JavaScript 入門 課題</title>
+<style>
+:root{--navy1:#12224d;--navy2:#2f5fbf;--ink:#1c2330;--ink-soft:#4a5568;--line:#d9dfe8;--link:#1a4fa0;--code-bg:#f4f6fa;--accent:var(--navy1);--accent2:var(--navy2);--soft:#f2f5fb;}
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch03{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+body{margin:0;background:#ffffff;color:var(--ink,#1c2330);font-family:"Segoe UI","Yu Gothic UI","Meiryo",sans-serif;font-size:15.5px;line-height:1.85;}
+.titlebar{background:linear-gradient(135deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;padding:34px 30px 30px;}
+.titlebar .inner{max-width:1600px;margin:0 auto;padding:0 30px;}
+.titlebar h1{font-size:1.9em;margin:0 0 6px;color:#fff;}
+.titlebar .date{color:#e6ecf8;background:transparent;margin:4px 0;font-size:0.92em;}
+.wrap{max-width:1600px;margin:0 auto;padding:0 30px;}
+a{color:var(--link,#1a4fa0);background:transparent;}
+.wrap > .back-home{margin-top:18px;}
+.back-home svg{width:16px;height:16px;vertical-align:-3px;}
+.back-home{display:inline-block;padding:2px 12px;border-radius:6px;background:linear-gradient(100deg,var(--navy1,#12224d),var(--navy2,#2f5fbf));color:#fff;text-decoration:none;font-weight:700;}
+.toc ol{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:20px 0;counter-reset:tocnum;}
+.toc ol li{counter-increment:tocnum;}
+.toc ol a{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;width:310px;max-width:100%;padding:6px 12px;border-radius:6px;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;text-decoration:none;font-weight:700;}
+.toc ol a::before{content:counter(tocnum) ". ";}
+section{margin:34px 0;padding:4px 26px 26px;border-radius:10px;background:linear-gradient(180deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
+section h1{font-size:1.45em;margin:26px 0 20px;padding:14px 20px;border-radius:8px;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;}
+details{margin:12px 0;padding:8px 14px;border-left:5px solid var(--accent2,#2f5fbf);border-radius:0 8px 8px 0;background:#ffffff;color:var(--ink,#1c2330);}
+summary{cursor:pointer;font-weight:700;}
+summary .no{font-family:Consolas,monospace;margin-right:6px;}
+code{background:var(--code-bg,#f4f6fa);border:1px solid var(--line,#d9dfe8);color:#17335f;padding:0 4px;border-radius:4px;}
+.badge{display:inline-block;padding:0 8px;border-radius:6px;font-size:0.85em;font-weight:700;white-space:nowrap;color:#fff;margin-right:6px;}
+.b-ok{background:linear-gradient(100deg,#1d7a3c,#45b56c);color:#fff;}
+.b-warn{background:linear-gradient(100deg,#b8620a,#f0a548);color:#fff;}
+.b-none{background:linear-gradient(100deg,#5a6472,#97a1ae);color:#fff;}
+footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;color:var(--ink-soft,#4a5568);}
+</style>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>JavaScript 入門 課題</h1>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<a class="back-home" href="../../README.html" aria-label="戻る" title="README"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>
+
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">実行の仕組み（2 件）</a></li>
+<li class="ch02"><a href="#ch02">資料とテスト（2 件）</a></li>
+<li class="ch03"><a href="#ch03">運用（3 件）</a></li>
+</ol></nav>
+
+<section class="ch01" id="ch01">
+<h1>実行の仕組み（2 件）</h1>
+<details open><summary><span class="no">i261010-01</span><span class="badge b-none">未</span>無限ループでページが固まる</summary>
+<p>第2部の例（iframe）と、<code>file://</code> で開いたときの第1部の例は、ページと同じ流れで動くため、時間で打ち切れない。無限ループを書くとタブごと固まる。ZZ の「実行の制約」に書いてある。</p>
+<ul><li><span class="badge b-none">未</span>直すか（ループの検出・別の打ち切り方）、制約のまま残すかを決める</li></ul>
+</details>
+<details open><summary><span class="no">i261010-02</span><span class="badge b-none">未</span>値の表示が Node.js と同じにならないものがある</summary>
+<p><code>docs/js/inspect.js</code> は、Promise の状態（<code>&lt;pending&gt;</code> など）とエラーのスタックを Node.js と同じには出せない。ZZ の「実行の制約」に書いてある。</p>
+<ul><li><span class="badge b-none">未</span>そうした値を出す例を、記録の表示（<code>data-run="node"</code>）にするか、表示を足すかを決める</li></ul>
+</details>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>資料とテスト（2 件）</h1>
+<details open><summary><span class="no">i261010-03</span><span class="badge b-none">未</span>Firefox でテストするか</summary>
+<p>ブラウザのテストは Chromium だけで流している。PlayWright の共有環境は Firefox も持つので、流すことはできるはず（未実測）。エラーの文面は V8 のものを載せているため、エラーを出す例は Firefox では食い違う見込み。</p>
+<ul>
+<li><span class="badge b-none">未</span>Firefox で流して、食い違う例の件数を数える</li>
+<li><span class="badge b-none">未</span>食い違う例を Firefox では飛ばすか、対象外とするかを決める</li>
+</ul>
+</details>
+<details open><summary><span class="no">i261010-04</span><span class="badge b-none">未</span>付録が第1部の内容だけ</summary>
+<p>A1 逆引き ・ A2 対応表 ・ A3 落とし穴カタログは、第1部の言語の内容だけを扱う。第2部（DOM ・ イベント ・ 通信 ・ 保存）の項目が無い。</p>
+<ul><li><span class="badge b-none">未</span>第2部の項目を足すか、付録を第1部向けと明記するかを決める</li></ul>
+</details>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>運用（3 件）</h1>
+<details open><summary><span class="no">i261010-05</span><span class="badge b-none">未</span>check-public が runner.js の正規表現の行を誤検知する</summary>
+<p><code>docs/js/runner.js</code> の正規表現の行が、毎回指摘に出る。中身に問題は無い。</p>
+<ul><li><span class="badge b-none">未</span>書き方を変えるか、check-public 側に除外を頼むかを決める</li></ul>
+</details>
+<details open><summary><span class="no">i261010-06</span><span class="badge b-none">未</span>html2md の更新日の警告が 16 件出続ける</summary>
+<p>以前、生成スクリプトが中身の変わらないファイルの更新時刻を進めたため、更新日の警告が 16 件残っている。生成スクリプトは直した（中身が変わらないファイルは書かない）。</p>
+<ul><li><span class="badge b-none">未</span>警告を消す方法（更新日を書き換えるか、警告の条件を確かめるか）を決める</li></ul>
+</details>
+<details open><summary><span class="no">i261010-07</span><span class="badge b-none">未</span>最近の push が公開ページに反映されたかを確かめていない</summary>
+<p><code>74e237c</code> 以降の push（資料一覧の移動、<code>docs/README.html</code> の削除を含む）について、Pages の作り直しと公開 URL での反映を確かめていない。</p>
+<ul><li><span class="badge b-none">未</span>Pages の作り直しの状態と、公開 URL で変えたファイルを確かめる</li></ul>
+</details>
+</section>
+
+</div>
+<footer><a class="back-home" href="../../README.html" aria-label="戻る" title="README"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></footer>
+</body>
+</html>
