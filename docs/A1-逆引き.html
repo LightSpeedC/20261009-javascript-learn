@@ -12,11 +12,14 @@
 <style>
 /* AUTO:style */
 .ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
-.ch02{--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);}
-.ch03{--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);}
-.ch04{--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);}
-.ch05{--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);}
-.ch06{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.ch02{--accent:hsl(245,78%,25%);--accent2:hsl(245,58%,55%);--soft:hsl(245,28%,95%);}
+.ch03{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch04{--accent:hsl(175,78%,25%);--accent2:hsl(175,58%,55%);--soft:hsl(175,28%,95%);}
+.ch05{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch06{--accent:hsl(105,78%,25%);--accent2:hsl(105,58%,55%);--soft:hsl(105,28%,95%);}
+.ch07{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch08{--accent:hsl(35,78%,25%);--accent2:hsl(35,58%,55%);--soft:hsl(35,28%,95%);}
+.ch09{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
 .toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"A1." counter(tocnum) " ";}
 body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"A1." counter(secnum) " ";}
 /* /AUTO:style */
@@ -26,7 +29,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <div class="titlebar"><div class="inner">
 <h1>A1. 逆引き</h1>
 <p class="lead">「〜したい」から書き方を引く。詳しい説明は、右の列の章へ</p>
-<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-10</p>
 </div></div>
 
 <div class="wrap">
@@ -39,6 +42,9 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <li class="ch04"><a href="#ch04">オブジェクトと JSON</a></li>
 <li class="ch05"><a href="#ch05">関数とクラス</a></li>
 <li class="ch06"><a href="#ch06">エラー ・ 非同期 ・ ファイル</a></li>
+<li class="ch07"><a href="#ch07">画面（DOM）</a></li>
+<li class="ch08"><a href="#ch08">イベントとフォーム</a></li>
+<li class="ch09"><a href="#ch09">通信と保存</a></li>
 </ol></nav>
 <!-- /AUTO:toc -->
 
@@ -151,6 +157,62 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <tr><td>別のファイルの関数を使う</td><td><code>export function f() {}</code> ・ <code>import { f } from "./x.mjs";</code></td><td class="nowrap"><a href="10-エラー処理とモジュール.html#ch04">10</a></td></tr>
 <tr><td>スクリプトの隣のファイルを指す</td><td><code>join(import.meta.dirname, "x.txt")</code></td><td class="nowrap"><a href="12-CommonJSとESModules.html#ch05">12</a></td></tr>
 <tr><td>コマンドラインの引数を受け取る</td><td><code>process.argv.slice(2)</code></td><td class="nowrap"><a href="13-ハンズオン.html#ch05">13</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch07" id="ch07">
+<h1>画面（DOM）</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>HTML からスクリプトを読み込む</td><td><code>&lt;script type="module" src="main.js"&gt;&lt;/script&gt;</code></td><td class="nowrap"><a href="14-ブラウザで動かす.html#ch02">14</a></td></tr>
+<tr><td>手元のページをブラウザで開く</td><td>ローカルサーバーを立てて <code>http://localhost:…</code> で開く（ダブルクリックの <code>file://</code> では module が動かない）</td><td class="nowrap"><a href="14-ブラウザで動かす.html#ch04">14</a></td></tr>
+<tr><td>要素を 1 つ探す</td><td><code>document.querySelector("#title")</code>（無ければ <code>null</code>）</td><td class="nowrap"><a href="15-DOM.html#ch02">15</a></td></tr>
+<tr><td>要素をまとめて探す</td><td><code>document.querySelectorAll(".item")</code></td><td class="nowrap"><a href="15-DOM.html#ch02">15</a></td></tr>
+<tr><td>文字を入れる</td><td><code>el.textContent = text;</code>（外から来た文字を <code>innerHTML</code> に入れない）</td><td class="nowrap"><a href="15-DOM.html#ch03">15</a></td></tr>
+<tr><td>クラスを付ける ・ 付いているか調べる</td><td><code>el.classList.add("done")</code> ・ <code>el.classList.contains("done")</code></td><td class="nowrap"><a href="15-DOM.html#ch03">15</a></td></tr>
+<tr><td>クラスを付けたり外したりする</td><td><code>el.classList.toggle("done")</code></td><td class="nowrap"><a href="16-イベント.html#ch03">16</a></td></tr>
+<tr><td>要素を作って足す</td><td><code>const li = document.createElement("li");</code> ・ <code>list.append(li);</code></td><td class="nowrap"><a href="15-DOM.html#ch04">15</a></td></tr>
+<tr><td>要素を消す</td><td><code>el.remove()</code></td><td class="nowrap"><a href="15-DOM.html#ch04">15</a></td></tr>
+<tr><td>近くの親を探す</td><td><code>el.closest("li")</code></td><td class="nowrap"><a href="15-DOM.html#ch05">15</a></td></tr>
+<tr><td>要素に持たせた値を読む</td><td><code>&lt;li data-id="3"&gt;</code> → <code>li.dataset.id</code>（文字列）</td><td class="nowrap"><a href="15-DOM.html#ch05">15</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch08" id="ch08">
+<h1>イベントとフォーム</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>クリックに反応する</td><td><code>button.addEventListener("click", () =&gt; { … });</code></td><td class="nowrap"><a href="16-イベント.html#ch01">16</a></td></tr>
+<tr><td>操作された要素を知る</td><td><code>event.target</code> ・ 登録した要素は <code>event.currentTarget</code></td><td class="nowrap"><a href="16-イベント.html#ch02">16</a></td></tr>
+<tr><td>たくさんの子の操作を親でまとめて受ける</td><td><code>list.addEventListener("click", (e) =&gt; { const li = e.target.closest("li"); … });</code></td><td class="nowrap"><a href="16-イベント.html#ch03">16</a></td></tr>
+<tr><td>既定の動き（ページの移動など）を止める</td><td><code>event.preventDefault()</code></td><td class="nowrap"><a href="16-イベント.html#ch04">16</a></td></tr>
+<tr><td>1 回だけ反応する ・ 登録を外す</td><td><code>{ once: true }</code> ・ <code>removeEventListener("click", onClick)</code>（登録したのと同じ関数を渡す）</td><td class="nowrap"><a href="16-イベント.html#ch04">16</a></td></tr>
+<tr><td>入力欄の値を数で使う</td><td><code>Number(input.value)</code>（<code>value</code> はいつも文字列）</td><td class="nowrap"><a href="17-フォーム.html#ch01">17</a></td></tr>
+<tr><td>チェックされているか</td><td><code>box.checked</code></td><td class="nowrap"><a href="17-フォーム.html#ch01">17</a></td></tr>
+<tr><td>フォームの送信を JavaScript で受け取る</td><td><code>form.addEventListener("submit", (e) =&gt; { e.preventDefault(); const data = new FormData(form); … });</code></td><td class="nowrap"><a href="17-フォーム.html#ch02">17</a></td></tr>
+<tr><td>入力のたびに表示を変える</td><td><code>input.addEventListener("input", …)</code> ・ 選択が変わったら <code>"change"</code></td><td class="nowrap"><a href="17-フォーム.html#ch04">17</a></td></tr>
+</tbody>
+</table></div>
+</section>
+
+<section class="ch09" id="ch09">
+<h1>通信と保存</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>したいこと</th><th>書き方</th><th>章</th></tr></thead>
+<tbody>
+<tr><td>サーバーから JSON を受け取る</td><td><code>const res = await fetch(url);</code> ・ <code>const data = await res.json();</code></td><td class="nowrap"><a href="18-通信.html#ch02">18</a></td></tr>
+<tr><td>サーバーが失敗を返したか調べる</td><td><code>if (!res.ok) throw new Error(`失敗: ${res.status}`);</code></td><td class="nowrap"><a href="18-通信.html#ch03">18</a></td></tr>
+<tr><td>JSON を送る</td><td><code>fetch(url, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(o) })</code></td><td class="nowrap"><a href="18-通信.html#ch04">18</a></td></tr>
+<tr><td>ブラウザにデータを残す</td><td><code>localStorage.setItem(key, JSON.stringify(o))</code> ・ <code>JSON.parse(localStorage.getItem(key))</code></td><td class="nowrap"><a href="19-ブラウザの機能.html#ch02">19</a></td></tr>
+<tr><td>タブを閉じるまでだけ残す</td><td><code>sessionStorage.setItem(key, value)</code></td><td class="nowrap"><a href="19-ブラウザの機能.html#ch02">19</a></td></tr>
+<tr><td>どの保存先を使うか選ぶ</td><td>cookie ・ localStorage ・ sessionStorage ・ IndexedDB の比較</td><td class="nowrap"><a href="19-ブラウザの機能.html#ch01">19</a></td></tr>
+<tr><td>日時を日本時間で表示する</td><td><code>d.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" })</code></td><td class="nowrap"><a href="19-ブラウザの機能.html#ch04">19</a></td></tr>
+<tr><td>URL の <code>?</code> の後ろを読む</td><td><code>new URL(s).searchParams.get("q")</code></td><td class="nowrap"><a href="19-ブラウザの機能.html#ch05">19</a></td></tr>
+<tr><td>クリップボードにコピーする</td><td><code>await navigator.clipboard.writeText(text)</code></td><td class="nowrap"><a href="19-ブラウザの機能.html#ch05">19</a></td></tr>
 </tbody>
 </table></div>
 </section>

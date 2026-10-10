@@ -53,28 +53,28 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 
 <section class="ch01" id="ch01">
 <h1>実行の仕組み（2 件）</h1>
-<details open><summary><span class="no">i261010-01</span><span class="badge b-none">未</span>無限ループでページが固まる</summary>
+<details><summary><span class="no">i261010-01</span><span class="badge b-ok">済</span>無限ループでページが固まる</summary>
 <p>第2部の例（iframe）と、<code>file://</code> で開いたときの第1部の例は、ページと同じ流れで動くため、時間で打ち切れない。無限ループを書くとタブごと固まる。ZZ の「実行の制約」に書いてある。</p>
-<ul><li><span class="badge b-none">未</span>直すか（ループの検出・別の打ち切り方）、制約のまま残すかを決める</li></ul>
+<ul><li><span class="badge b-ok">済</span>制約として閉じた。DOM を使う例は Worker に移せず、ループの検出は大がかりで確実でもないため</li></ul>
 </details>
-<details open><summary><span class="no">i261010-02</span><span class="badge b-none">未</span>値の表示が Node.js と同じにならないものがある</summary>
+<details><summary><span class="no">i261010-02</span><span class="badge b-ok">済</span>値の表示が Node.js と同じにならないものがある</summary>
 <p><code>docs/js/inspect.js</code> は、Promise の状態（<code>&lt;pending&gt;</code> など）とエラーのスタックを Node.js と同じには出せない。ZZ の「実行の制約」に書いてある。</p>
-<ul><li><span class="badge b-none">未</span>そうした値を出す例を、記録の表示（<code>data-run="node"</code>）にするか、表示を足すかを決める</li></ul>
+<ul><li><span class="badge b-ok">済</span>制約として閉じた。この差で出力が食い違う例はいまは無い</li></ul>
 </details>
 </section>
 
 <section class="ch02" id="ch02">
 <h1>資料とテスト（2 件）</h1>
-<details open><summary><span class="no">i261010-03</span><span class="badge b-none">未</span>Firefox でテストするか</summary>
+<details open><summary><span class="no">i261010-03</span><span class="badge b-warn">着手</span>Firefox でテストするか</summary>
 <p>ブラウザのテストは Chromium だけで流している。PlayWright の共有環境は Firefox も持つので、流すことはできるはず（未実測）。エラーの文面は V8 のものを載せているため、エラーを出す例は Firefox では食い違う見込み。</p>
 <ul>
-<li><span class="badge b-none">未</span>Firefox で流して、食い違う例の件数を数える</li>
-<li><span class="badge b-none">未</span>食い違う例を Firefox では飛ばすか、対象外とするかを決める</li>
+<li><span class="badge b-ok">済</span>Firefox で流した。39 件中 27 件が成功、12 件が失敗。失敗は 03 ・ 05 ・ 06 ・ 07 ・ 08 ・ 10 章の 11 例（通常のページと file:// の両方）で、すべてエラーの文面の違いだけ（例: <code>Assignment to constant variable.</code> が <code>invalid assignment to const …</code> になる）。値の表示や、第2部の例の食い違いは無い</li>
+<li><span class="badge b-none">未</span>Chromium だけを対象として閉じるか、エラーの例だけを Firefox で飛ばしてテストに加えるかを決める</li>
 </ul>
 </details>
-<details open><summary><span class="no">i261010-04</span><span class="badge b-none">未</span>付録が第1部の内容だけ</summary>
+<details><summary><span class="no">i261010-04</span><span class="badge b-ok">済</span>付録が第1部の内容だけ</summary>
 <p>A1 逆引き ・ A2 対応表 ・ A3 落とし穴カタログは、第1部の言語の内容だけを扱う。第2部（DOM ・ イベント ・ 通信 ・ 保存）の項目が無い。</p>
-<ul><li><span class="badge b-none">未</span>第2部の項目を足すか、付録を第1部向けと明記するかを決める</li></ul>
+<ul><li><span class="badge b-ok">済</span>A1 逆引きに 3 章（画面 ・ イベントとフォーム ・ 通信と保存）、A3 落とし穴カタログに 2 章（画面とイベント ・ 通信と保存）を足した。A2 対応表は、Java ・ C# ・ VBA に当たるものが少ないので第1部向けのまま</li></ul>
 </details>
 </section>
 
@@ -88,9 +88,9 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 <p>第1部の 01〜13 と付録 A1〜A3 は、生成スクリプトがナビを書き換えたため、ファイルの更新時刻がヘッダの更新日より新しい。体裁だけの変更なので、更新日は変えないのが正しい。</p>
 <ul><li><span class="badge b-ok">済</span>対応不要として閉じた。本文を書き換えて更新日を進めるまで、警告は出続ける</li></ul>
 </details>
-<details open><summary><span class="no">i261010-07</span><span class="badge b-none">未</span>最近の push が公開ページに反映されたかを確かめていない</summary>
+<details><summary><span class="no">i261010-07</span><span class="badge b-ok">済</span>最近の push が公開ページに反映されたかを確かめていない</summary>
 <p><code>74e237c</code> 以降の push（資料一覧の移動、<code>docs/README.html</code> の削除を含む）について、Pages の作り直しと公開 URL での反映を確かめていない。</p>
-<ul><li><span class="badge b-none">未</span>Pages の作り直しの状態と、公開 URL で変えたファイルを確かめる</li></ul>
+<ul><li><span class="badge b-ok">済</span>Pages の作り直しは <code>038b58f</code> で built。公開 URL で README の課題の章 ・ ZZ の実行の制約 ・ 01 章の戻り先 ・ runner.js の変数名を確かめ、<code>docs/README.html</code> が 404 になることも確かめた</li></ul>
 </details>
 </section>
 
