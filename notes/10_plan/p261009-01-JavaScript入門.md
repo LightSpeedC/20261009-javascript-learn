@@ -35,17 +35,17 @@
 | 回 | 章 | タイトル | 主な内容 |
 |---|---|---|---|
 | 第1回 | 01 | 背景 | JavaScript と ECMAScript、ブラウザと Node.js、Java とは別の言語 |
-| 第1回 | 02 | 実行環境 | Node.js の導入、REPL、`node file.js`、`console.log` |
-| 第1回 | 03 | 値と変数 | `let` ・ `const` ・ `var`、プリミティブ型、数値は double だけ、テンプレート文字列、`null` と `undefined` |
-| 第1回 | 04 | 演算子と型変換 ⚠️ **山** | `==` と `===`、truthy ・ falsy、`NaN`、暗黙の変換、`??` と `?.` |
-| 第1回 | 05 | オブジェクトと配列 | 参照とコピー、分割代入、スプレッド、配列のメソッド、JSON |
-| 第1回 | 06 | 関数 | 宣言・式・アロー関数、既定値・残余引数、コールバック |
+|  | 02 | 実行環境 | Node.js の導入、REPL、`node file.js`、`console.log` |
+|  | 03 | 値と変数 | `let` ・ `const` ・ `var`、プリミティブ型、数値は double だけ、テンプレート文字列、`null` と `undefined` |
+|  | 04 | 演算子と型変換 ⚠️ **山** | `==` と `===`、truthy ・ falsy、`NaN`、暗黙の変換、`??` と `?.` |
+|  | 05 | オブジェクトと配列 | 参照とコピー、分割代入、スプレッド、配列のメソッド、JSON |
+|  | 06 | 関数 | 宣言・式・アロー関数、既定値・残余引数、コールバック |
 | 第2回 | 07 | スコープ・this・グローバル ⚠️ **山** | ブロックスコープ、巻き上げ、グローバル変数の事故、`globalThis`、`this` の決まり方、strict モード |
-| 第2回 | 08 | クラスとプロトタイプ | `class`、継承、裏にあるプロトタイプ |
+|  | 08 | クラスとプロトタイプ | `class`、継承、裏にあるプロトタイプ |
 | 第3回 | 09 | クロージャ ⚠️ **山** | 外側の変数を覚える仕組み、カウンタ、ループ内の関数 |
-| 第3回 | 10 | エラー処理とモジュール | `try` ・ `catch` ・ `throw`、`import` ・ `export`、npm の最小限 |
+|  | 10 | エラー処理とモジュール | `try` ・ `catch` ・ `throw`、`import` ・ `export`、npm の最小限 |
 | 第4回 | 11 | 非同期 ⚠️ **山** | イベントループ、Promise、`async` ・ `await`、非同期のエラー |
-| 第4回 | 12 | CommonJS と ES Modules | `require` と `import`、`.cjs` ・ `.mjs` ・ `.js` の決まり方（`package.json` の `"type"`）、`__dirname` と `import.meta`、古いコードの見分け方 |
+|  | 12 | CommonJS と ES Modules | `require` と `import`、`.cjs` ・ `.mjs` ・ `.js` の決まり方（`package.json` の `"type"`）、`__dirname` と `import.meta`、古いコードの見分け方 |
 | 宿題 | 13 | ハンズオン | 小さな CLI ツールを作る（読み込み → 集計 → 非同期化）。第5回の冒頭で振り返る |
 
 **付録**: A1 逆引き ／ A2 Java ・ C# ・ VBA との対応表 ／ A3 落とし穴カタログ（症状から原因を引く）
@@ -60,14 +60,14 @@
 | 回 | 章 | タイトル | 主な内容 |
 |---|---|---|---|
 | 第5回 | 14 | ブラウザで動かす | `<script type="module">`、開発者ツール、ローカルサーバー |
-| 第5回 | 15 | DOM | 要素の取得・作成・書き換え、`textContent` と `innerHTML` |
-| 第5回 | 16 | イベント | `addEventListener`、伝播と委譲、イベントの中の `this` |
-| 第5回 | 17 | フォーム | 入力値の取得、検証、送信を止める |
+|  | 15 | DOM | 要素の取得・作成・書き換え、`textContent` と `innerHTML` |
+|  | 16 | イベント | `addEventListener`、伝播と委譲、イベントの中の `this` |
+|  | 17 | フォーム | 入力値の取得、検証、送信を止める |
 | 第6回 | 18 | 通信 | `fetch`、JSON、CORS の入口 |
-| 第6回 | 19 | ブラウザの機能 | 保存の方法の比較（cookie ・ `localStorage` ・ `sessionStorage` ・ IndexedDB の使いどころだけ）、タイマー、履歴、クリップボード |
-| 第6回 | 20 | 紹介: 描画とメディア | Canvas、SVG、3D（three.js など）、動画、マイク・カメラ、音声合成、音の生成（Web Audio） |
-| 第6回 | 21 | 紹介: リアルタイム通信 | WebSocket、Server-Sent Events、WebRTC、チャット |
-| 第6回 | 22 | 紹介: ライブラリを埋め込む | CDN で React、UMD を `<script>` で読み込む、Mermaid でシーケンス図など |
+|  | 19 | ブラウザの機能 | 保存の方法の比較（cookie ・ `localStorage` ・ `sessionStorage` ・ IndexedDB の使いどころだけ）、タイマー、履歴、クリップボード |
+|  | 20 | 紹介: 描画とメディア | Canvas、SVG、3D（three.js など）、動画、マイク・カメラ、音声合成、音の生成（Web Audio） |
+|  | 21 | 紹介: リアルタイム通信 | WebSocket、Server-Sent Events、WebRTC、チャット |
+|  | 22 | 紹介: ライブラリを埋め込む | CDN で React、UMD を `<script>` で読み込む、Mermaid でシーケンス図など |
 | 宿題 | 23 | ハンズオン | ToDo などの小さな画面を作る |
 
 > [!NOTE]
