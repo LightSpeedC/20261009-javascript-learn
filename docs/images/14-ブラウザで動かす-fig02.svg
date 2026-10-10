@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 230" width="880" height="230" role="img" aria-label="開発者ツールのよく使うタブ" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(270,78%,25%)"/><stop offset="1" stop-color="hsl(270,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(195,78%,25%)"/><stop offset="1" stop-color="hsl(195,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="20" width="200" height="190" rx="14" fill="url(#i1)"/>
+<text x="120" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Console</text>
+<text x="120" y="96" fill="#fff" font-size="14" text-anchor="middle">console.log の出力</text>
+<text x="120" y="122" fill="#fff" font-size="14" text-anchor="middle">エラーの表示</text>
+<text x="120" y="148" fill="#fff" font-size="14" text-anchor="middle">式をその場で試す</text>
+<rect x="240" y="20" width="200" height="190" rx="14" fill="url(#i2)"/>
+<text x="340" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Elements</text>
+<text x="340" y="96" fill="#fff" font-size="14" text-anchor="middle">いまの HTML の形</text>
+<text x="340" y="122" fill="#fff" font-size="14" text-anchor="middle">JavaScript で変えた</text>
+<text x="340" y="148" fill="#fff" font-size="14" text-anchor="middle">結果も見える</text>
+<rect x="460" y="20" width="200" height="190" rx="14" fill="url(#i3)"/>
+<text x="560" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Network</text>
+<text x="560" y="96" fill="#fff" font-size="14" text-anchor="middle">読み込んだファイル</text>
+<text x="560" y="122" fill="#fff" font-size="14" text-anchor="middle">通信の中身と結果</text>
+<text x="560" y="148" fill="#fff" font-size="14" text-anchor="middle">（18 章）</text>
+<rect x="680" y="20" width="180" height="190" rx="14" fill="url(#i4)"/>
+<text x="770" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Sources</text>
+<text x="770" y="96" fill="#fff" font-size="14" text-anchor="middle">止める場所を置く</text>
+<text x="770" y="122" fill="#fff" font-size="14" text-anchor="middle">1 行ずつ進める</text>
+<text x="770" y="148" fill="#fff" font-size="14" text-anchor="middle">変数の中身を見る</text>
+</svg>

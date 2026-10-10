@@ -1,0 +1,252 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>14. ブラウザで動かす</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(186.7,78%,25%);--accent2:hsl(186.7,58%,55%);--soft:hsl(186.7,28%,95%);}
+.ch03{--accent:hsl(93.3,78%,25%);--accent2:hsl(93.3,58%,55%);--soft:hsl(93.3,28%,95%);}
+.ch04{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"14." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"14." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>14. ブラウザで動かす</h1>
+<p class="lead">第2部の始まり。HTML から JavaScript を読み込む方法、開発者ツール、手元でページを開くためのローカルサーバー</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="13-ハンズオン.html" aria-label="前へ" title="13. ハンズオン" style="--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">ページを作る 3 つの言語</a></li>
+<li class="ch02"><a href="#ch02">HTML から JavaScript を読み込む</a></li>
+<li class="ch03"><a href="#ch03">開発者ツール</a></li>
+<li class="ch04"><a href="#ch04">ローカルサーバーで開く</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>ページを作る 3 つの言語</h1>
+<p>第1部では Node.js で、言語そのものを学びました。第2部では、JavaScript が生まれた場所であるブラウザで、<strong>画面を動かす</strong>書き方を学びます。Web ページは、役割の違う 3 つの言語でできています。</p>
+<figure>
+<svg viewBox="0 0 880 220" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="HTML と CSS と JavaScript の役割">
+<defs>
+<linearGradient id="g-14-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(15,78%,25%)"/><stop offset="1" stop-color="hsl(15,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(215,78%,25%)"/><stop offset="1" stop-color="hsl(215,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(50,78%,25%)"/><stop offset="1" stop-color="hsl(50,58%,55%)"/></linearGradient>
+</defs>
+<rect x="20" y="20" width="260" height="180" rx="16" fill="url(#g-14-1a)"/>
+<text x="150" y="60" fill="#fff" font-size="22" font-weight="700" text-anchor="middle">HTML</text>
+<text x="150" y="96" fill="#fff" font-size="16" text-anchor="middle">骨組み</text>
+<text x="150" y="134" fill="#fff" font-size="14" text-anchor="middle">見出し ・ 段落 ・ ボタン</text>
+<text x="150" y="160" fill="#fff" font-size="14" text-anchor="middle">何がどこにあるか</text>
+<rect x="310" y="20" width="260" height="180" rx="16" fill="url(#g-14-1b)"/>
+<text x="440" y="60" fill="#fff" font-size="22" font-weight="700" text-anchor="middle">CSS</text>
+<text x="440" y="96" fill="#fff" font-size="16" text-anchor="middle">見た目</text>
+<text x="440" y="134" fill="#fff" font-size="14" text-anchor="middle">色 ・ 大きさ ・ 並べ方</text>
+<text x="440" y="160" fill="#fff" font-size="14" text-anchor="middle">どう見せるか</text>
+<rect x="600" y="20" width="260" height="180" rx="16" fill="url(#g-14-1c)"/>
+<text x="730" y="60" fill="#fff" font-size="22" font-weight="700" text-anchor="middle">JavaScript</text>
+<text x="730" y="96" fill="#fff" font-size="16" text-anchor="middle">動き</text>
+<text x="730" y="134" fill="#fff" font-size="14" text-anchor="middle">押したら変える ・ 通信する</text>
+<text x="730" y="160" fill="#fff" font-size="14" text-anchor="middle">いつ何をするか</text>
+</svg>
+<figcaption>HTML が骨組み、CSS が見た目、JavaScript が動きを受け持つ</figcaption>
+</figure>
+<p>言語の部分（変数 ・ 関数 ・ クラス ・ Promise など）は、第1部とまったく同じです。違うのは、使える道具です。ファイルの読み書きの代わりに、<strong>画面の部品を読み書きする道具（DOM）</strong>と、<strong>操作に反応する道具（イベント）</strong>を使います。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>HTML から JavaScript を読み込む</h1>
+<p>HTML の中に <code>&lt;script type="module" src="ファイル名"&gt;</code> と書くと、そのファイルの JavaScript が実行されます。次の 2 つのファイルを同じフォルダに置きます。</p>
+<div class="example" data-run="file">
+<p class="filename">index.html</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang="ja"&gt;
+&lt;head&gt;
+&lt;meta charset="utf-8"&gt;
+&lt;title&gt;はじめてのページ&lt;/title&gt;
+&lt;script type="module" src="main.js"&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1 id="title"&gt;こんにちは&lt;/h1&gt;
+&lt;p&gt;ボタンを押すと、見出しが変わります。&lt;/p&gt;
+&lt;button id="change"&gt;変える&lt;/button&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p class="filename">main.js</p>
+<pre><code class="language-javascript">const title = document.querySelector("#title");
+const button = document.querySelector("#change");
+button.addEventListener("click", () => {
+  title.textContent = "JavaScript から書き換えました";
+});
+console.log("準備ができました");</code></pre>
+</div>
+<p>このページの中でも動かせます。「▶ 実行」を押すと、上に画面、下に console の出力が出ます。画面のボタンを押してみてください。第2部の例は、このように <strong>HTML（<code>body</code> の中身）と JavaScript の組</strong>で載せます。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;h1 id="title"&gt;こんにちは&lt;/h1&gt;
+&lt;p&gt;ボタンを押すと、見出しが変わります。&lt;/p&gt;
+&lt;button id="change"&gt;変える&lt;/button&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const title = document.querySelector("#title");
+const button = document.querySelector("#change");
+button.addEventListener("click", () => {
+  title.textContent = "JavaScript から書き換えました";
+});
+console.log("準備ができました");</code></pre>
+<pre class="output"><code class="language-text">準備ができました</code></pre>
+</div>
+<p><code>document.querySelector</code> で画面の部品を探し、<code>addEventListener</code> で「押されたら」の処理を登録しています。どちらも次の章から詳しく見ます。</p>
+<h2>type="module" を付ける</h2>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>いつ実行されるか</th><th>中身</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>&lt;script type="module"&gt;</code></td><td>HTML を最後まで読んだ後</td><td>ES Modules。<code>import</code> が使え、strict モードで、変数はファイルの中に閉じる</td></tr>
+<tr><td class="nowrap"><code>&lt;script&gt;</code></td><td>その場所に来たとき。読み込みが終わるまで、HTML の続きの表示が止まる</td><td>古い形。変数がグローバルに出る（07 章）</td></tr>
+</tbody>
+</table></div>
+<p>この資料では、いつも <code>type="module"</code> を付けます。HTML を読み終えてから実行されるので、<code>head</code> に書いても、<code>body</code> の中の部品を見つけられます。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>開発者ツール</h1>
+<p>ブラウザには、ページを調べるための<strong>開発者ツール</strong>が入っています。Chrome ・ Edge では <kbd>F12</kbd> キー（または <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd>）で開きます。</p>
+<figure>
+<svg viewBox="0 0 880 230" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="開発者ツールのよく使うタブ">
+<defs>
+<linearGradient id="g-14-3a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(270,78%,25%)"/><stop offset="1" stop-color="hsl(270,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-3b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(195,78%,25%)"/><stop offset="1" stop-color="hsl(195,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-3c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-3d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+</defs>
+<rect x="20" y="20" width="200" height="190" rx="14" fill="url(#g-14-3a)"/>
+<text x="120" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Console</text>
+<text x="120" y="96" fill="#fff" font-size="14" text-anchor="middle">console.log の出力</text>
+<text x="120" y="122" fill="#fff" font-size="14" text-anchor="middle">エラーの表示</text>
+<text x="120" y="148" fill="#fff" font-size="14" text-anchor="middle">式をその場で試す</text>
+<rect x="240" y="20" width="200" height="190" rx="14" fill="url(#g-14-3b)"/>
+<text x="340" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Elements</text>
+<text x="340" y="96" fill="#fff" font-size="14" text-anchor="middle">いまの HTML の形</text>
+<text x="340" y="122" fill="#fff" font-size="14" text-anchor="middle">JavaScript で変えた</text>
+<text x="340" y="148" fill="#fff" font-size="14" text-anchor="middle">結果も見える</text>
+<rect x="460" y="20" width="200" height="190" rx="14" fill="url(#g-14-3c)"/>
+<text x="560" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Network</text>
+<text x="560" y="96" fill="#fff" font-size="14" text-anchor="middle">読み込んだファイル</text>
+<text x="560" y="122" fill="#fff" font-size="14" text-anchor="middle">通信の中身と結果</text>
+<text x="560" y="148" fill="#fff" font-size="14" text-anchor="middle">（18 章）</text>
+<rect x="680" y="20" width="180" height="190" rx="14" fill="url(#g-14-3d)"/>
+<text x="770" y="56" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">Sources</text>
+<text x="770" y="96" fill="#fff" font-size="14" text-anchor="middle">止める場所を置く</text>
+<text x="770" y="122" fill="#fff" font-size="14" text-anchor="middle">1 行ずつ進める</text>
+<text x="770" y="148" fill="#fff" font-size="14" text-anchor="middle">変数の中身を見る</text>
+</svg>
+<figcaption>よく使う 4 つのタブ</figcaption>
+</figure>
+<ul>
+<li><strong>Console</strong>: 第1部の <code>console.log</code> の出力は、ブラウザではここに出る。エラーも赤字でここに出るので、<strong>動かないときは、まずここを見る</strong></li>
+<li><strong>Elements</strong>: JavaScript で書き換えた後の HTML も、ここで確かめられる</li>
+<li><strong>Sources</strong>: 行番号をクリックすると、その行で実行が止まる（ブレークポイント）。コードに <code>debugger;</code> と書いても止まる</li>
+</ul>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> Elements タブで部品を選んでから Console で <code>$0</code> と打つと、選んだ部品を JavaScript から触れます。部品の探し方を試すのに便利です。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>ローカルサーバーで開く</h1>
+<p>作った <code>index.html</code> をダブルクリックで開くと、<code>file:///…</code> という場所で開かれます。この開き方では、<code>type="module"</code> のスクリプトが読み込まれず、Console に次のようなエラーが出ます。</p>
+<pre><code class="language-text">Access to script at 'file:///…/main.js' from origin 'null' has been blocked by CORS policy</code></pre>
+<p>「<code>main.js</code> の読み込みは、安全のための決まり（CORS）で止められた」という意味です（CORS は 18 章）。ブラウザは、<code>file://</code> で開いたページからほかのファイルを読み込むことを、強く制限しています。</p>
+<figure>
+<svg viewBox="0 0 880 200" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="file と http の違い">
+<defs>
+<linearGradient id="g-14-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-14-4c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="var(--accent)"/><stop offset="1" stop-color="var(--accent2)"/></linearGradient>
+<marker id="m-14-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="20" width="400" height="70" rx="12" fill="url(#g-14-4a)"/>
+<text x="220" y="50" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">ダブルクリックで開く</text>
+<text x="220" y="76" fill="#fff" font-size="14" text-anchor="middle">file:///…/index.html → module が読めない</text>
+<rect x="20" y="110" width="400" height="70" rx="12" fill="url(#g-14-4b)"/>
+<text x="220" y="140" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">ローカルサーバーから開く</text>
+<text x="220" y="166" fill="#fff" font-size="14" text-anchor="middle">http://localhost:8080/ → 読める</text>
+<rect x="560" y="110" width="300" height="70" rx="12" fill="url(#g-14-4c)"/>
+<text x="710" y="140" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">node serve.mjs</text>
+<text x="710" y="166" fill="#fff" font-size="14" text-anchor="middle">フォルダの中身を返すだけ</text>
+<line x1="556" y1="145" x2="426" y2="145" stroke="#7a8699" stroke-width="3" marker-end="url(#m-14-4)"/>
+</svg>
+<figcaption>ページはローカルサーバー経由で開く</figcaption>
+</figure>
+<p>そこで、手元のパソコンで小さな Web サーバーを動かし、<code>http://localhost:…</code> から開きます。サーバーは、第1部の知識で書けます。<code>index.html</code> と同じフォルダに次の <code>serve.mjs</code> を置き、<code>node serve.mjs</code> で起動します。</p>
+<div class="example" data-run="file">
+<p class="filename">serve.mjs</p>
+<pre><code class="language-javascript">// 静的なファイルを返すだけの小さな Web サーバー。node serve.mjs で起動する
+import { createServer } from "node:http";
+import { readFile } from "node:fs/promises";
+import { extname, join, normalize } from "node:path";
+
+const root = import.meta.dirname;
+const port = Number(process.env.PORT ?? 8080);
+const types = {
+  ".html": "text/html; charset=utf-8",
+  ".js": "text/javascript; charset=utf-8",
+  ".css": "text/css; charset=utf-8",
+  ".json": "application/json; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+};
+
+const server = createServer(async (req, res) => {
+  const url = new URL(req.url, "http://localhost");
+  let path = normalize(join(root, decodeURIComponent(url.pathname)));
+  if (!path.startsWith(root)) {
+    res.writeHead(403).end("Forbidden");
+    return;
+  }
+  if (url.pathname.endsWith("/")) path = join(path, "index.html");
+  try {
+    const body = await readFile(path);
+    res.writeHead(200, { "content-type": types[extname(path)] ?? "application/octet-stream" });
+    res.end(body);
+  } catch {
+    res.writeHead(404, { "content-type": "text/plain; charset=utf-8" }).end("見つかりません");
+  }
+});
+
+server.listen(port, () => {
+  console.log(`http://localhost:${server.address().port}/ で待っています（Ctrl+C で止める）`);
+});</code></pre>
+</div>
+<pre><code class="language-shell">node serve.mjs</code></pre>
+<pre class="output"><code class="language-text">http://localhost:8080/ で待っています（Ctrl+C で止める）</code></pre>
+<p>表示された <code>http://localhost:8080/</code> をブラウザで開くと、<code>index.html</code> が表示され、ボタンが動きます。この 3 つのファイルは <a href="https://github.com/LightSpeedC/20261009-javascript-learn/tree/develop/docs/samples/web">docs/samples/web</a> にあります。</p>
+<ul>
+<li>URL のパスに対応するファイルを読み、拡張子から種類（<code>content-type</code>）を決めて返している</li>
+<li>フォルダの外（<code>../</code> で上へ出る）を指定されたら、返さない</li>
+<li>止めるときは、ターミナルで <kbd>Ctrl</kbd>+<kbd>C</kbd></li>
+</ul>
+<div class="callout">
+<p><span class="label">メモ:</span> VS Code の拡張機能（Live Server など）でも、同じことができます。この資料の「▶ 実行」ボタンは、資料のページの中に小さな画面（iframe）を作って動かしているので、サーバーを用意しなくても試せます。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="13-ハンズオン.html" aria-label="前へ" title="13. ハンズオン" style="--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>
