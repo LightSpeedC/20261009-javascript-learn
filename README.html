@@ -22,6 +22,12 @@ a{color:var(--link,#1a4fa0);background:transparent;}
 section{margin:34px 0;padding:4px 26px 26px;border-radius:10px;background:linear-gradient(180deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
 section h1{font-size:1.45em;margin:26px 0 20px;padding:14px 20px;border-radius:8px;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;box-shadow:0 3px 10px rgba(0,0,0,0.18);}
 code{background:var(--code-bg,#f4f6fa);border:1px solid var(--line,#d9dfe8);color:#17335f;padding:0 4px;border-radius:4px;font-size:0.92em;}
+h2{font-size:1.18em;margin:30px 0 12px;padding:6px 12px;border-left:6px solid var(--accent,#12224d);background:linear-gradient(90deg,var(--soft,#f2f5fb),#ffffff);color:var(--ink,#1c2330);}
+ul.chapters{list-style:none;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:12px;}
+ul.chapters a{display:block;height:100%;box-sizing:border-box;padding:12px 16px;border-radius:8px;text-decoration:none;background:linear-gradient(100deg,var(--accent,#12224d),var(--accent2,#2f5fbf));color:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+ul.chapters .part{display:block;font-size:0.8em;opacity:0.9;color:#fff;background:transparent;}
+ul.chapters .ttl{display:block;font-weight:700;font-size:1.08em;color:#fff;background:transparent;}
+ul.chapters .desc{display:block;font-size:0.86em;color:#fff;background:transparent;}
 footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;color:var(--ink-soft,#4a5568);}
 </style>
 </head>
@@ -29,14 +35,36 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 <div class="titlebar"><div class="inner">
 <h1>JavaScript 入門 学習資料</h1>
 <p class="lead">Java ・ C# ・ VBA を少し触った人のための JavaScript 学習資料・勉強会資料。Node.js の言語編とブラウザ編、ページ上で実行できるサンプル付き</p>
-<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-10</p>
 </div></div>
 
 <div class="wrap">
 <a class="back-home" href="../" aria-label="戻る" title="lightspeedc.com"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a>
 
 <p>JavaScript の言語の仕組み（型変換・<code>this</code> ・クロージャ・非同期）と、ブラウザでの DOM ・イベントを学ぶ資料です。勉強会で 1 回ずつ読み合わせる形を想定しています。</p>
-<p>資料の本体は <a href="docs/README.html">JavaScript 入門 資料一覧</a> から読めます。</p>
+<h2>資料一覧</h2>
+<p>本編は 01 から順に読みます。付録は、困ったときに引きます。各資料のコードは、横の「▶ 実行」ボタンでその場で動かせます。</p>
+<!-- AUTO:list -->
+<ul class="chapters" data-columns="部,タイトル,内容">
+<li><a href="docs/01-背景.html" style="--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">01. 背景</span><span class="desc">JavaScript がどこで生まれ、どこで動くのか。Java ・ C# ・ VBA と何が違うのかを、ざっと掴む</span></a></li>
+<li><a href="docs/02-実行環境.html" style="--accent:hsl(261.3,78%,25%);--accent2:hsl(261.3,58%,55%);--soft:hsl(261.3,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">02. 実行環境</span><span class="desc">Node.js を入れて、1 行ずつ試す方法と、ファイルに書いて実行する方法を身につける</span></a></li>
+<li><a href="docs/03-値と変数.html" style="--accent:hsl(242.7,78%,25%);--accent2:hsl(242.7,58%,55%);--soft:hsl(242.7,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">03. 値と変数</span><span class="desc">const と let の使い分け、7 種類のプリミティブ型、数値と文字列の性質、null と undefined</span></a></li>
+<li><a href="docs/04-演算子と型変換.html" style="--accent:hsl(224,78%,25%);--accent2:hsl(224,58%,55%);--soft:hsl(224,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">04. 演算子と型変換</span><span class="desc">★ 前半の山。値が知らないうちに別の型へ変わる「暗黙の型変換」と、その落とし穴を避ける書き方</span></a></li>
+<li><a href="docs/05-オブジェクトと配列.html" style="--accent:hsl(205.3,78%,25%);--accent2:hsl(205.3,58%,55%);--soft:hsl(205.3,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">05. オブジェクトと配列</span><span class="desc">データをまとめて持つ 2 つの入れ物。参照とコピーの違い、分割代入、配列のメソッド、JSON</span></a></li>
+<li><a href="docs/06-関数.html" style="--accent:hsl(186.7,78%,25%);--accent2:hsl(186.7,58%,55%);--soft:hsl(186.7,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">06. 関数</span><span class="desc">関数の 3 つの書き方、引数の既定値と残余引数、そして「関数は値である」ことを使ったコールバック</span></a></li>
+<li><a href="docs/07-スコープとthis.html" style="--accent:hsl(168,78%,25%);--accent2:hsl(168,58%,55%);--soft:hsl(168,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">07. スコープ・this・グローバル</span><span class="desc">★ 前半の山。変数が見える範囲、var の巻き上げ、グローバル変数の事故、呼び方で変わる this</span></a></li>
+<li><a href="docs/08-クラスとプロトタイプ.html" style="--accent:hsl(149.3,78%,25%);--accent2:hsl(149.3,58%,55%);--soft:hsl(149.3,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">08. クラスとプロトタイプ</span><span class="desc">class 構文の書き方と継承。その裏で動いているプロトタイプの仕組み。Java ・ C# のクラスとの違い</span></a></li>
+<li><a href="docs/09-クロージャ.html" style="--accent:hsl(130.7,78%,25%);--accent2:hsl(130.7,58%,55%);--soft:hsl(130.7,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">09. クロージャ</span><span class="desc">★ 後半の山（最重要）。関数が、生まれた場所の変数を覚え続ける仕組み。状態を隠す ・ 関数を作る関数 ・ ループの落とし穴</span></a></li>
+<li><a href="docs/10-エラー処理とモジュール.html" style="--accent:hsl(112,78%,25%);--accent2:hsl(112,58%,55%);--soft:hsl(112,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">10. エラー処理とモジュール</span><span class="desc">try ・ catch ・ throw でエラーを扱う。ファイルを分けて import ・ export でつなぐ。npm の最小限</span></a></li>
+<li><a href="docs/11-非同期.html" style="--accent:hsl(93.3,78%,25%);--accent2:hsl(93.3,58%,55%);--soft:hsl(93.3,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">11. 非同期</span><span class="desc">★ 後半の山（最重要）。待たずに先へ進む仕組み、イベントループ、Promise と async ・ await、ファイルの読み書き</span></a></li>
+<li><a href="docs/12-CommonJSとESModules.html" style="--accent:hsl(74.7,78%,25%);--accent2:hsl(74.7,58%,55%);--soft:hsl(74.7,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">12. CommonJS と ES Modules</span><span class="desc">Node.js にある 2 つのモジュール形式。require と import、拡張子 .cjs ・ .mjs ・ .js と package.json の "type"、古いコードの見分け方</span></a></li>
+<li><a href="docs/13-ハンズオン.html" style="--accent:hsl(56,78%,25%);--accent2:hsl(56,58%,55%);--soft:hsl(56,28%,95%);"><span class="part">第1部 言語編</span><span class="ttl">13. ハンズオン</span><span class="desc">宿題。家計簿の CSV を集計するコマンドラインのツールを、4 つの手順で作る。第1部で学んだことを 1 つにつなげる</span></a></li>
+<li><a href="docs/A1-逆引き.html" style="--accent:hsl(37.3,78%,25%);--accent2:hsl(37.3,58%,55%);--soft:hsl(37.3,28%,95%);"><span class="part">付録</span><span class="ttl">A1. 逆引き</span><span class="desc">「〜したい」から書き方を引く。詳しい説明は、右の列の章へ</span></a></li>
+<li><a href="docs/A2-対応表.html" style="--accent:hsl(18.7,78%,25%);--accent2:hsl(18.7,58%,55%);--soft:hsl(18.7,28%,95%);"><span class="part">付録</span><span class="ttl">A2. Java ・ C# ・ VBA との対応表</span><span class="desc">知っている言語の書き方から、JavaScript の書き方を引く。対応は目安で、細かい動きは違うことがある</span></a></li>
+<li><a href="docs/A3-落とし穴カタログ.html" style="--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);"><span class="part">付録</span><span class="ttl">A3. 落とし穴カタログ</span><span class="desc">「おかしい」と思ったときに、症状から原因と直し方を引く。エラーの文面は Chrome ・ Edge ・ Node.js のもの</span></a></li>
+</ul>
+<!-- /AUTO:list -->
+<p>勉強会の進め方と、確かめた Node.js の版は <a href="docs/ZZ-構成.html">ZZ. 資料の構成</a> にあります。</p>
 
 <section class="ch01" id="ch01">
 <h1>計画</h1>

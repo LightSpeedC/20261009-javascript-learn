@@ -57,6 +57,10 @@ function replaceBlock(html: string, start: string, end: string, body: string, fi
 	}
 	return html.replace(re, () => start + body + end);
 }
+// 中身が変わらないときは書かない。更新時刻だけが進むと、html2md が更新日の警告を出すため
+function writeIfChanged(path: string, html: string): void {
+	if (readFileSync(path, 'utf8') !== html) writeFileSync(path, html);
+}
 function escapeRe(s: string): string {
 	return s.replace(/[.*+?^${}()|[\]\\/]/g, '\\$&');
 }
@@ -97,18 +101,23 @@ for (const doc of docs) {
 	css.push(`.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"${doc.num}." counter(tocnum) " ";}`);
 	css.push(`body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"${doc.num}." counter(secnum) " ";}`);
 	html = replaceBlock(html, '/* AUTO:style */', '/* /AUTO:style */', '\n' + css.join('\n') + '\n', doc.file, true);
-	writeFileSync(path, html);
+	writeIfChanged(path, html);
 }
 
-// 資料一覧
-const readmePath = join(docsDir, 'README.html');
-let readme = readFileSync(readmePath, 'utf8');
-const items = series.map((d) => {
-	return `<li><a href="${d.file}" style="${colors(hueOf.get(d.file) ?? 280)}">` +
-		`<span class="part">${partOf(d.num)}</span><span class="ttl">${d.title}</span><span class="desc">${d.lead}</span></a></li>`;
-});
-readme = replaceBlock(readme, '<!-- AUTO:list -->', '<!-- /AUTO:list -->',
-	`\n<ul class="chapters" data-columns="部,タイトル,内容">\n${items.join('\n')}\n</ul>\n`, 'README.html', true);
-writeFileSync(readmePath, readme);
+// 資料一覧。docs/README.html と、トップで資料が目立つように root の README.html の両方に書く
+function chapterList(prefix: string): string {
+	const items = series.map((d) => {
+		return `<li><a href="${prefix}${d.file}" style="${colors(hueOf.get(d.file) ?? 280)}">` +
+			`<span class="part">${partOf(d.num)}</span><span class="ttl">${d.title}</span><span class="desc">${d.lead}</span></a></li>`;
+	});
+	return `\n<ul class="chapters" data-columns="部,タイトル,内容">\n${items.join('\n')}\n</ul>\n`;
+}
+for (const [path, prefix, label] of [
+	[join(docsDir, 'README.html'), '', 'docs/README.html'],
+	[join(docsDir, '..', 'README.html'), 'docs/', 'README.html'],
+]) {
+	const html = readFileSync(path, 'utf8');
+	writeIfChanged(path, replaceBlock(html, '<!-- AUTO:list -->', '<!-- /AUTO:list -->', chapterList(prefix), label, true));
+}
 
 console.log(`資料 ${docs.length} 件にナビ・目次・章の色を書き込みました（一覧 ${series.length} 件）`);
