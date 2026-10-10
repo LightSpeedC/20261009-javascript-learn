@@ -1,0 +1,212 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>17. フォーム</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(186.7,78%,25%);--accent2:hsl(186.7,58%,55%);--soft:hsl(186.7,28%,95%);}
+.ch03{--accent:hsl(93.3,78%,25%);--accent2:hsl(93.3,58%,55%);--soft:hsl(93.3,28%,95%);}
+.ch04{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"17." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"17." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>17. フォーム</h1>
+<p class="lead">入力欄の値を読む、送信を止めて JavaScript で受け取る、入力を確かめる、入力に合わせて表示を変える</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="16-イベント.html" aria-label="前へ" title="16. イベント" style="--accent:hsl(58.9,78%,25%);--accent2:hsl(58.9,58%,55%);--soft:hsl(58.9,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">フォームの部品</a></li>
+<li class="ch02"><a href="#ch02">送信を受け取る</a></li>
+<li class="ch03"><a href="#ch03">入力を確かめる</a></li>
+<li class="ch04"><a href="#ch04">入力に合わせて表示を変える</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>フォームの部品</h1>
+<p>入力を受け取る部品は、<code>&lt;form&gt;</code> の中にまとめて置きます。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>部品</th><th>値の読み方</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>&lt;input&gt;</code>（文字 ・ 数 ・ メール など）</td><td><code>el.value</code>。<strong>いつも文字列</strong>（<code>type="number"</code> でも）</td></tr>
+<tr><td class="nowrap"><code>&lt;input type="checkbox"&gt;</code></td><td><code>el.checked</code>（<code>true</code> ・ <code>false</code>）</td></tr>
+<tr><td class="nowrap"><code>&lt;select&gt;</code></td><td><code>el.value</code>（選ばれた <code>option</code> の <code>value</code>）</td></tr>
+<tr><td class="nowrap"><code>&lt;textarea&gt;</code></td><td><code>el.value</code></td></tr>
+</tbody>
+</table></div>
+<p><code>type="number"</code> の欄でも値は文字列です。04 章のとおり、計算に使う前に <code>Number()</code> で変換します。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>送信を受け取る</h1>
+<p>フォームの送信ボタンを押すと、ブラウザは既定の動きとして、入力をサーバーへ送ってページを読み込み直します。JavaScript で受け取りたいときは、<code>submit</code> イベントで <code>preventDefault()</code> を呼んで止めます。</p>
+<figure>
+<svg viewBox="0 0 880 170" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="フォームの送信を受け取る流れ">
+<defs>
+<linearGradient id="g-17-2a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-17-2b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<linearGradient id="g-17-2c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="g-17-2d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(130,78%,25%)"/><stop offset="1" stop-color="hsl(130,58%,55%)"/></linearGradient>
+<marker id="m-17-2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="10" y="40" width="190" height="80" rx="12" fill="url(#g-17-2a)"/><text x="105" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">送信ボタン</text><text x="105" y="100" fill="#fff" font-size="13" text-anchor="middle">submit イベント</text>
+<rect x="230" y="40" width="190" height="80" rx="12" fill="url(#g-17-2b)"/><text x="325" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">既定の送信を止める</text><text x="325" y="100" fill="#fff" font-size="13" text-anchor="middle">preventDefault()</text>
+<rect x="450" y="40" width="190" height="80" rx="12" fill="url(#g-17-2c)"/><text x="545" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">値を集める</text><text x="545" y="100" fill="#fff" font-size="13" text-anchor="middle">new FormData(form)</text>
+<rect x="670" y="40" width="200" height="80" rx="12" fill="url(#g-17-2d)"/><text x="770" y="74" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">確かめて使う</text><text x="770" y="100" fill="#fff" font-size="13" text-anchor="middle">変換 ・ 表示 ・ 通信（18 章）</text>
+<line x1="202" y1="80" x2="226" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-17-2)"/>
+<line x1="422" y1="80" x2="446" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-17-2)"/>
+<line x1="642" y1="80" x2="666" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-17-2)"/>
+<text x="440" y="155" fill="#4a5568" font-size="14" text-anchor="middle">Enter キーでの送信も submit イベントになるので、ボタンの click ではなく form の submit で受ける</text>
+</svg>
+<figcaption>submit を受けて止め、値を集めて使う</figcaption>
+</figure>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;form id="form"&gt;
+  &lt;label&gt;名前 &lt;input name="name" required&gt;&lt;/label&gt;
+  &lt;label&gt;年齢 &lt;input name="age" type="number" min="0"&gt;&lt;/label&gt;
+  &lt;label&gt;コース
+    &lt;select name="course"&gt;
+      &lt;option value="basic"&gt;基本&lt;/option&gt;
+      &lt;option value="advanced"&gt;応用&lt;/option&gt;
+    &lt;/select&gt;
+  &lt;/label&gt;
+  &lt;label&gt;&lt;input type="checkbox" name="mail"&gt; お知らせを受け取る&lt;/label&gt;
+  &lt;button&gt;送信&lt;/button&gt;
+&lt;/form&gt;
+&lt;p id="result"&gt;&lt;/p&gt;</code></pre>
+<p class="filename">CSS</p>
+<pre><code class="language-css">label { display: block; margin: 4px 0; }</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const form = document.querySelector("#form");
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const data = new FormData(form);
+  const entry = {
+    name: data.get("name"),
+    age: Number(data.get("age")),
+    course: data.get("course"),
+    mail: data.get("mail") === "on",
+  };
+  console.log(entry);
+  document.querySelector("#result").textContent = `${entry.name} さんを受け付けました`;
+});
+
+// コードから入力して送信してみる
+form.elements.name.value = "ゲスト";
+form.elements.age.value = "20";
+form.requestSubmit();</code></pre>
+<pre class="output"><code class="language-text">{ name: 'ゲスト', age: 20, course: 'basic', mail: false }</code></pre>
+</div>
+<ul>
+<li><code>new FormData(form)</code> は、<code>name</code> 属性を持つ部品の値をまとめて集める。<code>data.get("name")</code> で読む</li>
+<li>チェックボックスは、チェックされていれば <code>"on"</code>、されていなければ <code>null</code> になる</li>
+<li><code>form.elements.名前</code> で、フォームの中の部品を <code>name</code> で取り出せる</li>
+<li><code>form.requestSubmit()</code> は、送信ボタンを押したのと同じ動き（確かめも行う）をコードから起こす</li>
+</ul>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>入力を確かめる</h1>
+<p>入力の確かめ（バリデーション）は 2 段で行います。</p>
+<ol>
+<li><strong>HTML の属性</strong>: <code>required</code>（必須） ・ <code>min</code> ・ <code>max</code> ・ <code>type="email"</code> ・ <code>pattern</code> などを書くと、ブラウザが送信の前に確かめ、メッセージを出す</li>
+<li><strong>JavaScript</strong>: 属性で表せない決まりや、表示の仕方を細かく決めたいときに、自分で確かめる</li>
+</ol>
+<p>確かめの決まりは、画面と切り離した関数にしておくと、何度でも試せます（06 章「よい関数の目安」）。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">function validate({ name, age }) {
+  const errors = [];
+  if (name.trim() === "") errors.push("名前を入れてください");
+  if (!Number.isInteger(age) || age &lt; 0) errors.push("年齢は 0 以上の整数で入れてください");
+  return errors;
+}
+console.log(validate({ name: "", age: -1 }));
+console.log(validate({ name: "ゲスト", age: 20 }));</code></pre>
+<pre class="output"><code class="language-text">[ '名前を入れてください', '年齢は 0 以上の整数で入れてください' ]
+[]</code></pre>
+</div>
+<p>入力のたびに確かめて、送信ボタンを押せるかどうかを切り替えることもできます。<code>el.validity.valid</code> は、HTML の属性での確かめに通っているかを返します。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;input id="email" type="email" placeholder="メールアドレス"&gt;
+&lt;button id="send" disabled&gt;送る&lt;/button&gt;
+&lt;p id="hint"&gt;&lt;/p&gt;</code></pre>
+<p class="filename">CSS</p>
+<pre><code class="language-css">#hint { color: #a51f22; }</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const email = document.querySelector("#email");
+const send = document.querySelector("#send");
+const hint = document.querySelector("#hint");
+email.addEventListener("input", () => {
+  const ok = email.validity.valid &amp;&amp; email.value !== "";
+  send.disabled = !ok;
+  hint.textContent = ok ? "" : "メールアドレスの形で入れてください";
+});
+
+for (const v of ["abc", "user1@example.com"]) {
+  email.value = v;
+  email.dispatchEvent(new Event("input"));
+  console.log(v, "→ 送れる:", !send.disabled);
+}</code></pre>
+<pre class="output"><code class="language-text">abc → 送れる: false
+user1@example.com → 送れる: true</code></pre>
+</div>
+<div class="callout callout-important">
+<p><span class="label">決まり:</span> ブラウザでの確かめは、入力する人を助けるためのものです。ブラウザの JavaScript は、見ている人が書き換えられるので、<strong>サーバー側でも必ず同じ確かめを行います</strong>。ブラウザで確かめたから安全、とはなりません。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>入力に合わせて表示を変える</h1>
+<p><code>input</code> ・ <code>change</code> イベントで計算し直すと、入力した瞬間に表示が変わる画面を作れます。計算は 1 つの関数にまとめ、どのイベントからも同じ関数を呼びます。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;label&gt;個数 &lt;input id="qty" type="number" value="1" min="1"&gt;&lt;/label&gt;
+&lt;label&gt;&lt;input id="gift" type="checkbox"&gt; ギフト包装（+200 円）&lt;/label&gt;
+&lt;p&gt;合計: &lt;strong id="total"&gt;&lt;/strong&gt;&lt;/p&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const PRICE = 1200;
+const qty = document.querySelector("#qty");
+const gift = document.querySelector("#gift");
+const total = document.querySelector("#total");
+
+function update() {
+  const sum = PRICE * Number(qty.value) + (gift.checked ? 200 : 0);
+  total.textContent = `${sum.toLocaleString()} 円`;
+  return sum;
+}
+qty.addEventListener("input", update);
+gift.addEventListener("change", update);
+
+console.log(update());
+qty.value = "3";
+gift.checked = true;
+console.log(update());</code></pre>
+<pre class="output"><code class="language-text">1200
+3800</code></pre>
+</div>
+<p>画面の個数を変えたり、チェックを付け外ししたりすると、合計がすぐに変わります。「データ（入力の値）が変わったら、表示を作り直す」という形は、15 章のデータから画面を作る考え方と同じです。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="16-イベント.html" aria-label="前へ" title="16. イベント" style="--accent:hsl(58.9,78%,25%);--accent2:hsl(58.9,58%,55%);--soft:hsl(58.9,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

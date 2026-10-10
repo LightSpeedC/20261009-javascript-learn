@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 180" width="880" height="180" role="img" aria-label="データから画面を作る" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="30" width="250" height="120" rx="14" fill="url(#i1)"/>
+<text x="145" y="64" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">データ（配列）</text>
+<text x="145" y="96" fill="#fff" font-size="14" text-anchor="middle">{ title: "りんご", price: 120 }</text>
+<text x="145" y="122" fill="#fff" font-size="14" text-anchor="middle">{ title: "メロン", price: 980 }</text>
+<rect x="315" y="55" width="250" height="70" rx="14" fill="url(#i2)"/>
+<text x="440" y="86" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">1 件ずつ要素を作る</text>
+<text x="440" y="110" fill="#fff" font-size="13" text-anchor="middle">createElement ・ textContent ・ append</text>
+<rect x="610" y="30" width="250" height="120" rx="14" fill="url(#i3)"/>
+<text x="735" y="64" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">画面（表）</text>
+<text x="735" y="96" fill="#fff" font-size="14" text-anchor="middle">りんご　120 円</text>
+<text x="735" y="122" fill="#fff" font-size="14" text-anchor="middle">メロン　980 円</text>
+<line x1="274" y1="90" x2="309" y2="90" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+<line x1="569" y1="90" x2="604" y2="90" stroke="#7a8699" stroke-width="3" marker-end="url(#i4)"/>
+</svg>

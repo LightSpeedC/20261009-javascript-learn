@@ -1,0 +1,295 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15. DOM</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"15." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"15." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>15. DOM</h1>
+<p class="lead">画面の部品を JavaScript から探し、書き換え、作って足す。HTML の木構造と、安全な書き換え方</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="14-ブラウザで動かす.html" aria-label="前へ" title="14. ブラウザで動かす" style="--accent:hsl(88.4,78%,25%);--accent2:hsl(88.4,58%,55%);--soft:hsl(88.4,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="16-イベント.html" aria-label="次へ" title="16. イベント" style="--accent:hsl(58.9,78%,25%);--accent2:hsl(58.9,58%,55%);--soft:hsl(58.9,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">DOM とは</a></li>
+<li class="ch02"><a href="#ch02">要素を探す</a></li>
+<li class="ch03"><a href="#ch03">中身と見た目を変える</a></li>
+<li class="ch04"><a href="#ch04">要素を作って足す</a></li>
+<li class="ch05"><a href="#ch05">木をたどる</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>DOM とは</h1>
+<p>ブラウザは HTML を読むと、部品（要素）を<strong>木の形</strong>に組み立てて持ちます。この木を JavaScript から読み書きするための仕組みを <strong>DOM</strong>（Document Object Model）と呼びます。木の根元は <code>document</code> で、どの要素もオブジェクトとして触れます。</p>
+<figure>
+<svg viewBox="0 0 880 280" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="DOM の木構造">
+<defs>
+<linearGradient id="g-15-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+<linearGradient id="g-15-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(230,78%,25%)"/><stop offset="1" stop-color="hsl(230,58%,55%)"/></linearGradient>
+<linearGradient id="g-15-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(180,78%,25%)"/><stop offset="1" stop-color="hsl(180,58%,55%)"/></linearGradient>
+<linearGradient id="g-15-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(120,78%,25%)"/><stop offset="1" stop-color="hsl(120,58%,55%)"/></linearGradient>
+<linearGradient id="g-15-1e" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(35,78%,25%)"/><stop offset="1" stop-color="hsl(35,58%,55%)"/></linearGradient>
+</defs>
+<g stroke="#9aa6b8" stroke-width="3">
+<line x1="440" y1="56" x2="440" y2="80"/>
+<line x1="440" y1="116" x2="440" y2="140"/>
+<line x1="230" y1="140" x2="650" y2="140"/>
+<line x1="230" y1="140" x2="230" y2="150"/><line x1="650" y1="140" x2="650" y2="150"/>
+<line x1="650" y1="186" x2="650" y2="206"/>
+<line x1="510" y1="206" x2="790" y2="206"/>
+<line x1="510" y1="206" x2="510" y2="216"/><line x1="650" y1="206" x2="650" y2="216"/><line x1="790" y1="206" x2="790" y2="216"/>
+</g>
+<rect x="360" y="20" width="160" height="36" rx="8" fill="url(#g-15-1a)"/><text x="440" y="44" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">document</text>
+<rect x="360" y="80" width="160" height="36" rx="8" fill="url(#g-15-1b)"/><text x="440" y="104" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">body</text>
+<rect x="130" y="150" width="200" height="36" rx="8" fill="url(#g-15-1c)"/><text x="230" y="174" fill="#fff" font-size="15" text-anchor="middle">h2#title「買い物リスト」</text>
+<rect x="560" y="150" width="180" height="36" rx="8" fill="url(#g-15-1c)"/><text x="650" y="174" fill="#fff" font-size="15" text-anchor="middle">ul#list</text>
+<rect x="450" y="216" width="120" height="36" rx="8" fill="url(#g-15-1d)"/><text x="510" y="240" fill="#fff" font-size="15" text-anchor="middle">li「牛乳」</text>
+<rect x="590" y="216" width="120" height="36" rx="8" fill="url(#g-15-1e)"/><text x="650" y="240" fill="#fff" font-size="15" text-anchor="middle">li.done「パン」</text>
+<rect x="730" y="216" width="120" height="36" rx="8" fill="url(#g-15-1d)"/><text x="790" y="240" fill="#fff" font-size="15" text-anchor="middle">li「たまご」</text>
+<text x="40" y="250" fill="#4a5568" font-size="14">親 → 子 → 孫 と枝分かれする</text>
+</svg>
+<figcaption>HTML の入れ子が、そのまま木の親子になる</figcaption>
+</figure>
+<p>JavaScript で木を書き換えると、ブラウザはすぐに画面へ反映します。画面を描き直す命令を自分で書く必要はありません。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>要素を探す</h1>
+<p>要素は <strong>CSS セレクタ</strong>（CSS で見た目を当てる相手を指定する書き方）で探します。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>返すもの</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>document.querySelector(セレクタ)</code></td><td>当てはまる最初の 1 つ。無ければ <code>null</code></td></tr>
+<tr><td class="nowrap"><code>document.querySelectorAll(セレクタ)</code></td><td>当てはまるものすべて（配列のように <code>for … of</code> で回せる）</td></tr>
+</tbody>
+</table></div>
+<div class="tablewrap"><table>
+<thead><tr><th>セレクタ</th><th>当てはまるもの</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>#title</code></td><td><code>id="title"</code> の要素</td></tr>
+<tr><td class="nowrap"><code>.item</code></td><td><code>class</code> に <code>item</code> を持つ要素</td></tr>
+<tr><td class="nowrap"><code>li</code></td><td><code>li</code> 要素</td></tr>
+<tr><td class="nowrap"><code>#list li</code></td><td><code>#list</code> の中（どの深さでも）の <code>li</code></td></tr>
+<tr><td class="nowrap"><code>ul &gt; li</code></td><td><code>ul</code> のすぐ下の <code>li</code></td></tr>
+<tr><td class="nowrap"><code>[data-id="a1"]</code></td><td>属性 <code>data-id</code> が <code>a1</code> の要素</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;h2 id="title"&gt;買い物リスト&lt;/h2&gt;
+&lt;ul id="list"&gt;
+  &lt;li class="item"&gt;牛乳&lt;/li&gt;
+  &lt;li class="item done"&gt;パン&lt;/li&gt;
+  &lt;li class="item"&gt;たまご&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const title = document.querySelector("#title");
+console.log(title.textContent);
+
+const items = document.querySelectorAll(".item");
+console.log(items.length);
+for (const li of items) {
+  console.log(li.textContent, li.classList.contains("done"));
+}
+console.log(document.querySelector(".nothing"));</code></pre>
+<pre class="output"><code class="language-text">買い物リスト
+3
+牛乳 false
+パン true
+たまご false
+null</code></pre>
+</div>
+<p>見つからなかったときの <code>null</code> に、そのまま <code>.textContent</code> を付けるとエラーになります（03 章）。セレクタの書き間違いでよく起きるので、エラーが出たら、まずセレクタを確かめます。</p>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>中身と見た目を変える</h1>
+<div class="tablewrap"><table>
+<thead><tr><th>変えるもの</th><th>書き方</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">文字</td><td><code>el.textContent = "…"</code></td></tr>
+<tr><td class="nowrap">クラス</td><td><code>el.classList.add("x")</code> ・ <code>remove</code> ・ <code>toggle</code> ・ <code>contains</code></td></tr>
+<tr><td class="nowrap">見た目を直接</td><td><code>el.style.color = "crimson"</code>（CSS の <code>font-size</code> は <code>fontSize</code> と書く）</td></tr>
+<tr><td class="nowrap">属性</td><td><code>el.href = "…"</code> ・ <code>el.getAttribute("href")</code> ・ <code>el.setAttribute("href", "…")</code></td></tr>
+<tr><td class="nowrap">表示 ・ 非表示</td><td><code>el.hidden = true</code></td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;p id="msg"&gt;元の文&lt;/p&gt;
+&lt;a id="link" href="https://example.com/"&gt;リンク&lt;/a&gt;</code></pre>
+<p class="filename">CSS</p>
+<pre><code class="language-css">.big { font-size: 24px; font-weight: bold; }</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const msg = document.querySelector("#msg");
+msg.textContent = "書き換えた文";
+msg.style.color = "crimson";
+msg.classList.add("big");
+
+const link = document.querySelector("#link");
+link.href = "https://developer.mozilla.org/ja/";
+link.textContent = "MDN（JavaScript の資料）";
+
+console.log(msg.className);
+console.log(link.getAttribute("href"));</code></pre>
+<pre class="output"><code class="language-text">big
+https://developer.mozilla.org/ja/</code></pre>
+</div>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> 見た目は <code>style</code> で直接変えるより、CSS にクラスを用意しておき、<code>classList</code> で付け外しするほうが整理しやすくなります。見た目の決まりが CSS に、いつ変えるかが JavaScript に分かれるからです。</p>
+</div>
+<h2>textContent と innerHTML</h2>
+<p>中身を入れる方法は 2 つあります。<code>textContent</code> は文字として入れ、<code>innerHTML</code> は HTML として解釈して入れます。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;div id="a"&gt;&lt;/div&gt;
+&lt;div id="b"&gt;&lt;/div&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const text = "&lt;b&gt;太字&lt;/b&gt;";
+document.querySelector("#a").textContent = text;
+document.querySelector("#b").innerHTML = text;
+console.log(document.querySelector("#a").children.length);
+console.log(document.querySelector("#b").children.length);</code></pre>
+<pre class="output"><code class="language-text">0
+1</code></pre>
+</div>
+<p>上の段は <code>&lt;b&gt;</code> がそのまま文字として見え、下の段は太字になります。</p>
+<div class="callout callout-caution">
+<p><span class="label">注意:</span> 入力欄や通信で受け取った文字を <strong><code>innerHTML</code> に入れてはいけません</strong>。悪意のある人が HTML やスクリプトを書き込むと、それがページの中で動いてしまいます（クロスサイトスクリプティング、XSS）。見た人の情報が盗まれるなど、取り返しのつかない被害につながります。外から来た文字は、いつも <code>textContent</code> で入れます。</p>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>要素を作って足す</h1>
+<p><code>document.createElement("タグ名")</code> で要素を作り、<code>append</code> で親の最後に足します。消すときは <code>remove()</code> です。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;ul id="list"&gt;&lt;/ul&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const fruits = ["りんご", "みかん", "ぶどう"];
+const list = document.querySelector("#list");
+for (const f of fruits) {
+  const li = document.createElement("li");
+  li.textContent = f;
+  list.append(li);
+}
+console.log(list.children.length);
+
+list.firstElementChild.remove();
+console.log(list.children.length);</code></pre>
+<pre class="output"><code class="language-text">3
+2</code></pre>
+</div>
+<h2>データから画面を作る</h2>
+<p>実務でよく書くのは、<strong>配列のデータから画面を組み立てる</strong>処理です。データが先にあり、画面はそれを映したものと考えると、後で 23 章のハンズオンを組み立てやすくなります。</p>
+<figure>
+<svg viewBox="0 0 880 180" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="データから画面を作る">
+<defs>
+<linearGradient id="g-15-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="g-15-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-15-4c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<marker id="m-15-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="30" width="250" height="120" rx="14" fill="url(#g-15-4a)"/>
+<text x="145" y="64" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">データ（配列）</text>
+<text x="145" y="96" fill="#fff" font-size="14" text-anchor="middle">{ title: "りんご", price: 120 }</text>
+<text x="145" y="122" fill="#fff" font-size="14" text-anchor="middle">{ title: "メロン", price: 980 }</text>
+<rect x="315" y="55" width="250" height="70" rx="14" fill="url(#g-15-4b)"/>
+<text x="440" y="86" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">1 件ずつ要素を作る</text>
+<text x="440" y="110" fill="#fff" font-size="13" text-anchor="middle">createElement ・ textContent ・ append</text>
+<rect x="610" y="30" width="250" height="120" rx="14" fill="url(#g-15-4c)"/>
+<text x="735" y="64" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">画面（表）</text>
+<text x="735" y="96" fill="#fff" font-size="14" text-anchor="middle">りんご　120 円</text>
+<text x="735" y="122" fill="#fff" font-size="14" text-anchor="middle">メロン　980 円</text>
+<line x1="274" y1="90" x2="309" y2="90" stroke="#7a8699" stroke-width="3" marker-end="url(#m-15-4)"/>
+<line x1="569" y1="90" x2="604" y2="90" stroke="#7a8699" stroke-width="3" marker-end="url(#m-15-4)"/>
+</svg>
+<figcaption>データが変わったら、作り直して画面に映す</figcaption>
+</figure>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;table id="t"&gt;
+  &lt;thead&gt;&lt;tr&gt;&lt;th&gt;商品&lt;/th&gt;&lt;th&gt;価格&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;
+  &lt;tbody&gt;&lt;/tbody&gt;
+&lt;/table&gt;</code></pre>
+<p class="filename">CSS</p>
+<pre><code class="language-css">table { border-collapse: collapse; }
+th, td { border: 1px solid #9aa6b8; padding: 4px 12px; }</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const items = [
+  { title: "りんご", price: 120 },
+  { title: "メロン", price: 980 },
+];
+const tbody = document.querySelector("#t tbody");
+for (const it of items) {
+  const tr = document.createElement("tr");
+  for (const value of [it.title, `${it.price.toLocaleString()} 円`]) {
+    const td = document.createElement("td");
+    td.textContent = value;
+    tr.append(td);
+  }
+  tbody.append(tr);
+}
+console.log(tbody.rows.length);</code></pre>
+<pre class="output"><code class="language-text">2</code></pre>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>木をたどる</h1>
+<p>見つけた要素から、親や子へたどれます。ボタンが押されたとき「どの行のボタンか」を知る、といった場面で使います（16 章）。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>たどる先</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>el.parentElement</code></td><td>親</td></tr>
+<tr><td class="nowrap"><code>el.children</code> ・ <code>el.firstElementChild</code></td><td>子の要素たち ・ 最初の子の要素</td></tr>
+<tr><td class="nowrap"><code>el.closest(セレクタ)</code></td><td>自分から親の方へさかのぼって、最初に当てはまる要素</td></tr>
+<tr><td class="nowrap"><code>el.dataset.名前</code></td><td><code>data-名前="…"</code> 属性の値（自分で決めた情報を要素に持たせる）</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;ul id="list"&gt;
+  &lt;li data-id="a1"&gt;りんご &lt;button&gt;削除&lt;/button&gt;&lt;/li&gt;
+  &lt;li data-id="b2"&gt;みかん &lt;button&gt;削除&lt;/button&gt;&lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const button = document.querySelectorAll("#list button")[1];
+const li = button.closest("li");
+console.log(li.dataset.id);
+console.log(li.parentElement.id);
+console.log(li.firstChild.textContent.trim());</code></pre>
+<pre class="output"><code class="language-text">b2
+list
+みかん</code></pre>
+</div>
+<p><code>firstChild</code>（<code>Element</code> の付かない方）は、要素だけでなく文字の部分も数えます。ここでは「みかん 」という文字が最初の子です。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="14-ブラウザで動かす.html" aria-label="前へ" title="14. ブラウザで動かす" style="--accent:hsl(88.4,78%,25%);--accent2:hsl(88.4,58%,55%);--soft:hsl(88.4,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="16-イベント.html" aria-label="次へ" title="16. イベント" style="--accent:hsl(58.9,78%,25%);--accent2:hsl(58.9,58%,55%);--soft:hsl(58.9,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

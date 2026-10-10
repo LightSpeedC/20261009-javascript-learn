@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 250" width="880" height="250" role="img" aria-label="イベントの伝わり方" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(270,78%,25%)"/><stop offset="1" stop-color="hsl(270,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(200,78%,25%)"/><stop offset="1" stop-color="hsl(200,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<marker id="i4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#b8620a"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="20" width="560" height="210" rx="16" fill="url(#i1)"/>
+<text x="40" y="50" fill="#fff" font-size="17" font-weight="700">div#outer ③</text>
+<rect x="60" y="70" width="480" height="140" rx="14" fill="url(#i2)"/>
+<text x="80" y="100" fill="#fff" font-size="17" font-weight="700">div#inner ②</text>
+<rect x="100" y="125" width="200" height="60" rx="12" fill="url(#i3)"/>
+<text x="200" y="161" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">button ①</text>
+<path d="M300 150 C 620 150, 640 90, 560 90" fill="none" stroke="#b8620a" stroke-width="4" marker-end="url(#i4)"/>
+<path d="M580 60 C 660 60, 660 30, 600 30" fill="none" stroke="#b8620a" stroke-width="4" marker-end="url(#i4)"/>
+<text x="610" y="150" fill="#b8620a" font-size="16" font-weight="700">押されたボタンから</text>
+<text x="610" y="176" fill="#b8620a" font-size="16" font-weight="700">外側へ順に伝わる</text>
+<text x="610" y="214" fill="#4a5568" font-size="14">止めたいときは event.stopPropagation()</text>
+</svg>
