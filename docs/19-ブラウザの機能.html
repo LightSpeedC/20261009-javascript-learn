@@ -1,0 +1,275 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>19. ブラウザの機能</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"19." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"19." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>19. ブラウザの機能</h1>
+<p class="lead">ブラウザにデータを残す方法の比較（cookie ・ localStorage ・ sessionStorage ・ IndexedDB）、時刻とタイマー、URL、クリップボード</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="18-通信.html" aria-label="前へ" title="18. 通信" style="--accent:hsl(53.3,78%,25%);--accent2:hsl(53.3,58%,55%);--soft:hsl(53.3,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">データを残す方法の比較</a></li>
+<li class="ch02"><a href="#ch02">localStorage と sessionStorage</a></li>
+<li class="ch03"><a href="#ch03">cookie と IndexedDB</a></li>
+<li class="ch04"><a href="#ch04">時刻とタイマー</a></li>
+<li class="ch05"><a href="#ch05">URL とクリップボード</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>データを残す方法の比較</h1>
+<p>ページを閉じても設定や書きかけの内容を覚えておきたいとき、ブラウザの中にデータを残せます。方法は 4 つあり、向いている使いどころが違います。</p>
+<figure>
+<svg viewBox="0 0 880 260" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="ブラウザにデータを残す 4 つの方法">
+<defs>
+<linearGradient id="g-19-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="g-19-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-19-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(170,78%,25%)"/><stop offset="1" stop-color="hsl(170,58%,55%)"/></linearGradient>
+<linearGradient id="g-19-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+</defs>
+<rect x="15" y="15" width="200" height="230" rx="14" fill="url(#g-19-1a)"/>
+<text x="115" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">cookie</text>
+<text x="115" y="84" fill="#fff" font-size="14" text-anchor="middle">小さい（4KB ほど）</text>
+<text x="115" y="110" fill="#fff" font-size="14" text-anchor="middle">期限を決められる</text>
+<text x="115" y="136" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">毎回サーバーへ送られる</text>
+<text x="115" y="196" fill="#fff" font-size="13" text-anchor="middle">ログイン状態など</text>
+<text x="115" y="218" fill="#fff" font-size="13" text-anchor="middle">サーバーが使う情報</text>
+<rect x="232" y="15" width="200" height="230" rx="14" fill="url(#g-19-1b)"/>
+<text x="332" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">localStorage</text>
+<text x="332" y="84" fill="#fff" font-size="14" text-anchor="middle">数 MB</text>
+<text x="332" y="110" fill="#fff" font-size="14" text-anchor="middle">消すまで残る</text>
+<text x="332" y="136" fill="#fff" font-size="14" text-anchor="middle">文字列だけ</text>
+<text x="332" y="196" fill="#fff" font-size="13" text-anchor="middle">設定 ・ 小さなデータ</text>
+<rect x="449" y="15" width="200" height="230" rx="14" fill="url(#g-19-1c)"/>
+<text x="549" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">sessionStorage</text>
+<text x="549" y="84" fill="#fff" font-size="14" text-anchor="middle">数 MB</text>
+<text x="549" y="110" fill="#fff" font-size="14" text-anchor="middle">タブを閉じると消える</text>
+<text x="549" y="136" fill="#fff" font-size="14" text-anchor="middle">文字列だけ</text>
+<text x="549" y="196" fill="#fff" font-size="13" text-anchor="middle">そのタブだけの</text>
+<text x="549" y="218" fill="#fff" font-size="13" text-anchor="middle">書きかけ ・ 一時的な状態</text>
+<rect x="666" y="15" width="200" height="230" rx="14" fill="url(#g-19-1d)"/>
+<text x="766" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">IndexedDB</text>
+<text x="766" y="84" fill="#fff" font-size="14" text-anchor="middle">大きい</text>
+<text x="766" y="110" fill="#fff" font-size="14" text-anchor="middle">消すまで残る</text>
+<text x="766" y="136" fill="#fff" font-size="14" text-anchor="middle">オブジェクトのまま</text>
+<text x="766" y="196" fill="#fff" font-size="13" text-anchor="middle">大量のデータ ・ 検索</text>
+<text x="766" y="218" fill="#fff" font-size="13" text-anchor="middle">オフラインで使うアプリ</text>
+</svg>
+<figcaption>同じ「残す」でも、大きさ ・ 残る期間 ・ サーバーへ送られるかが違う</figcaption>
+</figure>
+<div class="tablewrap"><table>
+<thead><tr><th>方法</th><th>残る期間</th><th>サーバーへ</th><th>書き方</th><th>使いどころ</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">cookie</td><td>期限まで</td><td><span class="badge b-warn">毎回送られる</span></td><td><code>document.cookie</code></td><td>サーバーが知る必要のある情報</td></tr>
+<tr><td class="nowrap">localStorage</td><td>消すまで</td><td><span class="badge b-none">送られない</span></td><td><code>localStorage.setItem</code></td><td>設定 ・ 小さなデータ</td></tr>
+<tr><td class="nowrap">sessionStorage</td><td>タブを閉じるまで</td><td><span class="badge b-none">送られない</span></td><td><code>sessionStorage.setItem</code></td><td>そのタブだけの一時的な状態</td></tr>
+<tr><td class="nowrap">IndexedDB</td><td>消すまで</td><td><span class="badge b-none">送られない</span></td><td>非同期の API（ライブラリ経由が多い）</td><td>大量のデータ ・ オフライン</td></tr>
+</tbody>
+</table></div>
+<div class="callout callout-warning">
+<p><span class="label">注意:</span> どの方法も、ブラウザを使う人が開発者ツールで中身を見たり書き換えたりできます。パスワードのような秘密は残しません。また、同じオリジン（18 章）のページは、すべて同じ置き場を共有します。</p>
+</div>
+<div class="callout">
+<p><span class="label">メモ:</span> 昔は、ブラウザの中で SQL を使える Web SQL Database という仕組みもありましたが、標準になる前に打ち切られ、いまのブラウザからは取り除かれています。古い資料で見かけても使いません。</p>
+</div>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>localStorage と sessionStorage</h1>
+<p>どちらも、キーと値の組を文字列で保存します。書き方は同じで、残る期間だけが違います。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>書き方</th><th>すること</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>setItem(キー, 値)</code></td><td>保存する。値は文字列に変わる</td></tr>
+<tr><td class="nowrap"><code>getItem(キー)</code></td><td>読む。無ければ <code>null</code></td></tr>
+<tr><td class="nowrap"><code>removeItem(キー)</code></td><td>1 つ消す</td></tr>
+</tbody>
+</table></div>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">localStorage.removeItem("jsl-visits"); // 例を何度動かしても同じ結果になるように、まず消す
+const before = Number(localStorage.getItem("jsl-visits") ?? 0);
+localStorage.setItem("jsl-visits", before + 1);
+console.log(localStorage.getItem("jsl-visits"));
+console.log(typeof localStorage.getItem("jsl-visits"));
+
+const settings = { theme: "dark", fontSize: 16 };
+localStorage.setItem("jsl-settings", JSON.stringify(settings));
+const loaded = JSON.parse(localStorage.getItem("jsl-settings"));
+console.log(loaded.theme, loaded.fontSize);
+
+console.log(localStorage.getItem("jsl-nothing"));</code></pre>
+<pre class="output"><code class="language-text">1
+string
+dark 16
+null</code></pre>
+</div>
+<ul>
+<li>数値を入れても、読むと文字列になる。数として使うなら <code>Number()</code>（04 章）</li>
+<li>オブジェクトは <code>JSON.stringify</code> で文字列にして保存し、<code>JSON.parse</code> で戻す（05 章）</li>
+<li>キーは、ほかのページと重ならないよう、アプリの名前などを頭に付ける</li>
+</ul>
+<p>次の例は、開いた回数を数えます。「▶ 実行」を何度か押してみてください。ページを開き直しても、数は続きから増えます。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;p id="count"&gt;&lt;/p&gt;
+&lt;button id="reset"&gt;数え直す&lt;/button&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const KEY = "jsl-open-count";
+const count = Number(localStorage.getItem(KEY) ?? 0) + 1;
+localStorage.setItem(KEY, count);
+document.querySelector("#count").textContent = `この画面を開いた回数: ${count}`;
+
+document.querySelector("#reset").addEventListener("click", () => {
+  localStorage.removeItem(KEY);
+  document.querySelector("#count").textContent = "数え直します。もう一度「▶ 実行」を押してください";
+});</code></pre>
+</div>
+<p><code>sessionStorage</code> は、タブを閉じると消えます。同じページを 2 つのタブで開くと、タブごとに別々です。</p>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">sessionStorage.setItem("jsl-draft", "書きかけの文章");
+console.log(sessionStorage.getItem("jsl-draft"));
+sessionStorage.removeItem("jsl-draft");
+console.log(sessionStorage.getItem("jsl-draft"));</code></pre>
+<pre class="output"><code class="language-text">書きかけの文章
+null</code></pre>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>cookie と IndexedDB</h1>
+<h2>cookie</h2>
+<p>cookie は、<code>document.cookie</code> に「名前=値; 設定」の形の文字列を代入して保存します。読むと、そのページで使えるすべての cookie が「<code>名前=値; 名前=値</code>」とつながった 1 つの文字列で返ります。</p>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">document.cookie = "jsl_theme=dark; max-age=60; path=/";
+console.log(document.cookie.includes("jsl_theme=dark"));
+
+document.cookie = "jsl_theme=; max-age=0; path=/"; // 期限を 0 にすると消える
+console.log(document.cookie.includes("jsl_theme=dark"));</code></pre>
+<pre class="output"><code class="language-text">true
+false</code></pre>
+</div>
+<p>cookie はリクエストのたびにサーバーへ送られるので、ブラウザの中だけで使うデータには向きません。ブラウザだけで使うなら <code>localStorage</code> を使います。ログイン状態のように、サーバーが決めてサーバーが読む情報は、サーバー側が cookie を設定するのがふつうです。</p>
+<h2>IndexedDB</h2>
+<p>IndexedDB は、ブラウザの中のデータベースです。オブジェクトをそのまま大量に保存でき、キーで検索できます。ただし、API が古い形の非同期（イベントで結果を受け取る）で書きにくいため、小さなライブラリを通して使うのがふつうです。この資料では名前と使いどころだけを紹介します。</p>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>時刻とタイマー</h1>
+<p>時刻は <code>Date</code> で扱います。表示の形は <code>toLocaleString</code> や <code>Intl.DateTimeFormat</code> で決めます。<code>timeZone</code> を指定すると、見ている人のパソコンの設定に関係なく、日本時間で表示できます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const d = new Date("2026-10-10T09:30:05+09:00");
+console.log(d.toLocaleString("ja-JP", { timeZone: "Asia/Tokyo" }));
+
+const fmt = new Intl.DateTimeFormat("ja-JP", {
+  timeZone: "Asia/Tokyo",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+  weekday: "short",
+});
+console.log(fmt.format(d));
+
+const later = new Date(d.getTime() + 90 * 60 * 1000); // 90 分後
+console.log(later.toLocaleTimeString("ja-JP", { timeZone: "Asia/Tokyo" }));</code></pre>
+<pre class="output"><code class="language-text">2026/10/10 9:30:05
+2026年10月10日(土)
+11:00:05</code></pre>
+</div>
+<p>11 章のタイマーを画面に使うと、時計が作れます。「動かす」を押すと 1 秒ごとに表示が変わり、「止める」で止まります。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;p id="clock" style="font-size: 32px; font-weight: bold;"&gt;--:--:--&lt;/p&gt;
+&lt;button id="start"&gt;動かす&lt;/button&gt;
+&lt;button id="stop"&gt;止める&lt;/button&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const clock = document.querySelector("#clock");
+const format = (d) => d.toLocaleTimeString("ja-JP", { timeZone: "Asia/Tokyo" });
+let timerId = null;
+
+document.querySelector("#start").addEventListener("click", () => {
+  if (timerId !== null) return;
+  clock.textContent = format(new Date());
+  timerId = setInterval(() => {
+    clock.textContent = format(new Date());
+  }, 1000);
+});
+document.querySelector("#stop").addEventListener("click", () => {
+  clearInterval(timerId);
+  timerId = null;
+});
+console.log(format(new Date("2026-10-10T09:30:05+09:00")));</code></pre>
+<pre class="output"><code class="language-text">9:30:05</code></pre>
+</div>
+<p><code>timerId</code> を覚えておくのは、止めるときに必要だからです。「動かす」を 2 回押してもタイマーが 2 つにならないよう、動いているときは何もしません。</p>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>URL とクリップボード</h1>
+<h2>URL を組み立てる ・ 読む</h2>
+<p><code>new URL(文字列)</code> で、URL を部品に分けて読み書きできます。<code>?</code> の後ろの検索条件は <code>searchParams</code> で扱います。文字列をつなげて組み立てるより、記号の書き間違いや、日本語のエンコードの漏れを防げます。</p>
+<div class="example" data-run="worker">
+<pre><code class="language-javascript">const url = new URL("https://example.com/search?q=JavaScript&amp;page=2#top");
+console.log(url.hostname, url.pathname, url.hash);
+console.log(url.searchParams.get("q"), Number(url.searchParams.get("page")));
+
+url.searchParams.set("page", "3");
+url.searchParams.set("tag", "入門");
+console.log(url.href);</code></pre>
+<pre class="output"><code class="language-text">example.com /search #top
+JavaScript 2
+https://example.com/search?q=JavaScript&amp;page=3&amp;tag=%E5%85%A5%E9%96%80#top</code></pre>
+</div>
+<p>いま開いているページの URL は <code>location.href</code> で読めます。ページを移動せずに URL だけを変える <code>history.pushState</code> という仕組みもあり、1 つのページの中で画面を切り替えるアプリで使われます。</p>
+<h2>クリップボード</h2>
+<p><code>navigator.clipboard.writeText(文字)</code> で、文字をクリップボードにコピーできます。悪用を防ぐため、<strong>ボタンを押すなど、人が操作したとき</strong>にしか使えません。結果は Promise で返ります。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;input id="text" value="コピーする文字" size="20"&gt;
+&lt;button id="copy"&gt;コピー&lt;/button&gt;
+&lt;span id="done"&gt;&lt;/span&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">document.querySelector("#copy").addEventListener("click", async () => {
+  const text = document.querySelector("#text").value;
+  try {
+    await navigator.clipboard.writeText(text);
+    document.querySelector("#done").textContent = "コピーしました";
+  } catch (e) {
+    document.querySelector("#done").textContent = `コピーできませんでした（${e.name}）`;
+  }
+});</code></pre>
+</div>
+<p>この例は、画面の「コピー」を押したときだけ動きます。押した後、メモ帳などに貼り付けて確かめてください。</p>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="18-通信.html" aria-label="前へ" title="18. 通信" style="--accent:hsl(53.3,78%,25%);--accent2:hsl(53.3,58%,55%);--soft:hsl(53.3,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

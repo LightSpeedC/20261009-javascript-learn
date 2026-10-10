@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 260" width="880" height="260" role="img" aria-label="ブラウザにデータを残す 4 つの方法" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(25,78%,25%)"/><stop offset="1" stop-color="hsl(25,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(170,78%,25%)"/><stop offset="1" stop-color="hsl(170,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(280,78%,25%)"/><stop offset="1" stop-color="hsl(280,58%,55%)"/></linearGradient>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="15" y="15" width="200" height="230" rx="14" fill="url(#i1)"/>
+<text x="115" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">cookie</text>
+<text x="115" y="84" fill="#fff" font-size="14" text-anchor="middle">小さい（4KB ほど）</text>
+<text x="115" y="110" fill="#fff" font-size="14" text-anchor="middle">期限を決められる</text>
+<text x="115" y="136" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">毎回サーバーへ送られる</text>
+<text x="115" y="196" fill="#fff" font-size="13" text-anchor="middle">ログイン状態など</text>
+<text x="115" y="218" fill="#fff" font-size="13" text-anchor="middle">サーバーが使う情報</text>
+<rect x="232" y="15" width="200" height="230" rx="14" fill="url(#i2)"/>
+<text x="332" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">localStorage</text>
+<text x="332" y="84" fill="#fff" font-size="14" text-anchor="middle">数 MB</text>
+<text x="332" y="110" fill="#fff" font-size="14" text-anchor="middle">消すまで残る</text>
+<text x="332" y="136" fill="#fff" font-size="14" text-anchor="middle">文字列だけ</text>
+<text x="332" y="196" fill="#fff" font-size="13" text-anchor="middle">設定 ・ 小さなデータ</text>
+<rect x="449" y="15" width="200" height="230" rx="14" fill="url(#i3)"/>
+<text x="549" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">sessionStorage</text>
+<text x="549" y="84" fill="#fff" font-size="14" text-anchor="middle">数 MB</text>
+<text x="549" y="110" fill="#fff" font-size="14" text-anchor="middle">タブを閉じると消える</text>
+<text x="549" y="136" fill="#fff" font-size="14" text-anchor="middle">文字列だけ</text>
+<text x="549" y="196" fill="#fff" font-size="13" text-anchor="middle">そのタブだけの</text>
+<text x="549" y="218" fill="#fff" font-size="13" text-anchor="middle">書きかけ ・ 一時的な状態</text>
+<rect x="666" y="15" width="200" height="230" rx="14" fill="url(#i4)"/>
+<text x="766" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">IndexedDB</text>
+<text x="766" y="84" fill="#fff" font-size="14" text-anchor="middle">大きい</text>
+<text x="766" y="110" fill="#fff" font-size="14" text-anchor="middle">消すまで残る</text>
+<text x="766" y="136" fill="#fff" font-size="14" text-anchor="middle">オブジェクトのまま</text>
+<text x="766" y="196" fill="#fff" font-size="13" text-anchor="middle">大量のデータ ・ 検索</text>
+<text x="766" y="218" fill="#fff" font-size="13" text-anchor="middle">オフラインで使うアプリ</text>
+</svg>

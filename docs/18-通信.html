@@ -1,0 +1,249 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>18. 通信</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(210,78%,25%);--accent2:hsl(210,58%,55%);--soft:hsl(210,28%,95%);}
+.ch03{--accent:hsl(140,78%,25%);--accent2:hsl(140,58%,55%);--soft:hsl(140,28%,95%);}
+.ch04{--accent:hsl(70,78%,25%);--accent2:hsl(70,58%,55%);--soft:hsl(70,28%,95%);}
+.ch05{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"18." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"18." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>18. 通信</h1>
+<p class="lead">fetch でサーバーからデータを受け取り、画面に映す。失敗の扱い、データを送る、CORS の入口</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="17-フォーム.html" aria-label="前へ" title="17. フォーム" style="--accent:hsl(66.7,78%,25%);--accent2:hsl(66.7,58%,55%);--soft:hsl(66.7,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="19-ブラウザの機能.html" aria-label="次へ" title="19. ブラウザの機能" style="--accent:hsl(40,78%,25%);--accent2:hsl(40,58%,55%);--soft:hsl(40,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">fetch で受け取る</a></li>
+<li class="ch02"><a href="#ch02">JSON を受け取って画面に映す</a></li>
+<li class="ch03"><a href="#ch03">失敗を扱う</a></li>
+<li class="ch04"><a href="#ch04">データを送る</a></li>
+<li class="ch05"><a href="#ch05">CORS の入口</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>fetch で受け取る</h1>
+<p>ページを開いた後で、サーバーから追加のデータを受け取るには <code>fetch</code> を使います。通信には時間がかかるので、<code>fetch</code> は Promise を返します（11 章）。<code>await</code> で待ちます。</p>
+<figure>
+<svg viewBox="0 0 880 220" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="リクエストとレスポンス">
+<defs>
+<linearGradient id="g-18-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-18-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<marker id="m-18-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="30" width="240" height="160" rx="16" fill="url(#g-18-1a)"/>
+<text x="140" y="70" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">ブラウザ</text>
+<text x="140" y="104" fill="#fff" font-size="14" text-anchor="middle">await fetch(url)</text>
+<text x="140" y="130" fill="#fff" font-size="14" text-anchor="middle">await res.json()</text>
+<rect x="620" y="30" width="240" height="160" rx="16" fill="url(#g-18-1b)"/>
+<text x="740" y="70" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">サーバー</text>
+<text x="740" y="104" fill="#fff" font-size="14" text-anchor="middle">products.json</text>
+<text x="740" y="130" fill="#fff" font-size="14" text-anchor="middle">などを返す</text>
+<line x1="264" y1="80" x2="614" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#m-18-1)"/>
+<text x="440" y="70" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">リクエスト（GET /samples/api/products.json）</text>
+<line x1="614" y1="150" x2="264" y2="150" stroke="#7a8699" stroke-width="3" marker-end="url(#m-18-1)"/>
+<text x="440" y="140" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">レスポンス（状態 200 ・ 中身は JSON）</text>
+<text x="440" y="180" fill="#4a5568" font-size="13" text-anchor="middle">ページは表示したまま、裏でデータだけをやり取りする</text>
+</svg>
+<figcaption>fetch はリクエストを送り、レスポンスを Promise で返す</figcaption>
+</figure>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const res = await fetch("samples/api/message.txt");
+console.log(res.status, res.ok);
+const text = await res.text();
+console.log(text.trim());</code></pre>
+<pre class="output"><code class="language-text">200 true
+サーバーから届いた文字です</code></pre>
+</div>
+<ul>
+<li><code>fetch</code> が返すのはレスポンス（<code>Response</code>）。<code>status</code> は状態の番号（200 は成功、404 は見つからない）、<code>ok</code> は 200 番台なら <code>true</code></li>
+<li>中身は、もう一度 <code>await</code> して読む。文字なら <code>res.text()</code>、JSON なら <code>res.json()</code></li>
+<li><code>type="module"</code> のスクリプトでは、一番外側で <code>await</code> を書ける（12 章）</li>
+</ul>
+<p>この章の例が読んでいるファイルは <a href="https://github.com/LightSpeedC/20261009-javascript-learn/tree/develop/docs/samples/api">docs/samples/api</a> にあります。手元で試すときは、14 章のローカルサーバーで、このフォルダを返すようにします。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>JSON を受け取って画面に映す</h1>
+<p>Web の API の多くは、データを JSON で返します（05 章）。<code>res.json()</code> は、JSON の文字列をオブジェクトや配列に変えて返します。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;ul id="list"&gt;&lt;/ul&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const res = await fetch("samples/api/products.json");
+const products = await res.json();
+const list = document.querySelector("#list");
+for (const p of products) {
+  const li = document.createElement("li");
+  li.textContent = `${p.title}: ${p.price} 円`;
+  list.append(li);
+}
+console.log(`${products.length} 件を表示しました`);</code></pre>
+<pre class="output"><code class="language-text">3 件を表示しました</code></pre>
+</div>
+<p>受け取ったデータを画面に入れるときは、<code>textContent</code> を使います（15 章の XSS の注意）。</p>
+<h2>まとめて受け取る</h2>
+<p>関係のない通信は、<code>Promise.all</code> で同時に始めます（11 章）。</p>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const [products, message] = await Promise.all([
+  fetch("samples/api/products.json").then((r) => r.json()),
+  fetch("samples/api/message.txt").then((r) => r.text()),
+]);
+console.log(products.map((p) => p.title).join("・"));
+console.log(message.trim());</code></pre>
+<pre class="output"><code class="language-text">りんご・メロン・みかん
+サーバーから届いた文字です</code></pre>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>失敗を扱う</h1>
+<p><code>fetch</code> の失敗には 2 種類あります。扱い方が違うので注意します。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>失敗</th><th>例</th><th>fetch の結果</th></tr></thead>
+<tbody>
+<tr><td class="nowrap">サーバーが「だめ」と返した</td><td>404 見つからない ・ 500 サーバーの不具合</td><td><strong>成功として返る</strong>。<code>res.ok</code> が <code>false</code></td></tr>
+<tr><td class="nowrap">通信そのものができなかった</td><td>ネットワークが切れている ・ CORS で止められた</td><td>失敗（<code>TypeError: Failed to fetch</code>）</td></tr>
+</tbody>
+</table></div>
+<p>404 でも <code>fetch</code> は失敗しません。<code>res.ok</code> を確かめて、だめなら自分で <code>throw</code> します。この確かめを関数にまとめておくと、どこからでも使えます。</p>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const res = await fetch("samples/api/nothing.json");
+console.log(res.ok, res.status);
+
+async function getJson(url) {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`読み込みに失敗しました: ${res.status}`);
+  }
+  return res.json();
+}
+try {
+  await getJson("samples/api/nothing.json");
+} catch (e) {
+  console.log(e.message);
+}</code></pre>
+<pre class="output"><code class="language-text">false 404
+読み込みに失敗しました: 404</code></pre>
+</div>
+<h2>待っている間の表示</h2>
+<p>通信には時間がかかることがあります。読み込み中であることを表示し、二重に押されないようにボタンを止め、終わったら <code>finally</code> で元に戻します（10 章）。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;button id="load"&gt;商品を読み込む&lt;/button&gt;
+&lt;p id="status-text"&gt;&lt;/p&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">async function getJson(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`読み込みに失敗しました: ${res.status}`);
+  return res.json();
+}
+
+const button = document.querySelector("#load");
+const statusText = document.querySelector("#status-text");
+button.addEventListener("click", async () => {
+  button.disabled = true;
+  statusText.textContent = "読み込み中…";
+  try {
+    const products = await getJson("samples/api/products.json");
+    statusText.textContent = `${products.length} 件ありました`;
+  } catch (e) {
+    statusText.textContent = `失敗: ${e.message}`;
+  } finally {
+    button.disabled = false;
+  }
+  console.log(statusText.textContent);
+});
+button.click();</code></pre>
+<pre class="output"><code class="language-text">3 件ありました</code></pre>
+</div>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>データを送る</h1>
+<p>サーバーにデータを送るときは、<code>fetch</code> の 2 つ目の引数で、送り方（<code>method</code>）と中身（<code>body</code>）を指定します。JSON で送るときは、<code>JSON.stringify</code> で文字列にし、中身の種類を <code>content-type</code> で伝えます。</p>
+<pre><code class="language-javascript">const res = await fetch("https://api.example.com/orders", {
+  method: "POST",
+  headers: { "content-type": "application/json" },
+  body: JSON.stringify({ productId: 1, quantity: 3 }),
+});
+if (!res.ok) throw new Error(`送信に失敗しました: ${res.status}`);
+const result = await res.json();</code></pre>
+<p>この例は、受け取る側のサーバーが必要なので、このページでは動かせません。</p>
+<div class="tablewrap"><table>
+<thead><tr><th>method</th><th>意味</th></tr></thead>
+<tbody>
+<tr><td class="nowrap"><code>GET</code></td><td>受け取る（何も書かなければこれ）</td></tr>
+<tr><td class="nowrap"><code>POST</code></td><td>新しく作る ・ 送る</td></tr>
+<tr><td class="nowrap"><code>PUT</code> ・ <code>PATCH</code></td><td>変える</td></tr>
+<tr><td class="nowrap"><code>DELETE</code></td><td>消す</td></tr>
+</tbody>
+</table></div>
+<div class="callout callout-tip">
+<p><span class="label">ヒント:</span> 通信の中身は、開発者ツールの Network タブで確かめられます（14 章）。送ったものと返ってきたもの、状態の番号、かかった時間が見えます。思ったように動かないときは、まずここを見ます。</p>
+</div>
+</section>
+
+<section class="ch05" id="ch05">
+<h1>CORS の入口</h1>
+<p>ブラウザは安全のため、<strong>ページと違う場所（オリジン）のサーバーから、JavaScript でデータを読むこと</strong>を、原則として止めます。オリジンは「<code>https</code>」「<code>lightspeedc.com</code>」「ポート番号」の組です。1 つでも違えば別のオリジンです。</p>
+<figure>
+<svg viewBox="0 0 880 240" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="CORS の仕組み">
+<defs>
+<linearGradient id="g-18-5a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="g-18-5b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-18-5c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(0,78%,25%)"/><stop offset="1" stop-color="hsl(0,58%,55%)"/></linearGradient>
+<marker id="m-18-5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="70" width="240" height="100" rx="14" fill="url(#g-18-5a)"/>
+<text x="140" y="108" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">ページ</text>
+<text x="140" y="136" fill="#fff" font-size="14" text-anchor="middle">https://lightspeedc.com</text>
+<rect x="560" y="10" width="300" height="90" rx="14" fill="url(#g-18-5b)"/>
+<text x="710" y="44" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">許可するサーバー</text>
+<text x="710" y="72" fill="#fff" font-size="13" text-anchor="middle">Access-Control-Allow-Origin を返す</text>
+<rect x="560" y="140" width="300" height="90" rx="14" fill="url(#g-18-5c)"/>
+<text x="710" y="174" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">許可しないサーバー</text>
+<text x="710" y="202" fill="#fff" font-size="13" text-anchor="middle">ブラウザが中身を渡さない</text>
+<line x1="264" y1="100" x2="554" y2="60" stroke="#7a8699" stroke-width="3" marker-end="url(#m-18-5)"/>
+<line x1="264" y1="140" x2="554" y2="180" stroke="#7a8699" stroke-width="3" marker-end="url(#m-18-5)"/>
+<text x="410" y="66" fill="#1d7a3c" font-size="15" font-weight="700" text-anchor="middle">読める</text>
+<text x="410" y="200" fill="#a51f22" font-size="15" font-weight="700" text-anchor="middle">Failed to fetch</text>
+</svg>
+<figcaption>別のオリジンのデータを読めるかは、サーバーが許可するかどうかで決まる</figcaption>
+</figure>
+<p>別のオリジンから読んでよいかは、<strong>サーバー側</strong>が <code>Access-Control-Allow-Origin</code> という見出し（ヘッダー）で答えます。許可されていないと、Console に次のようなエラーが出て、JavaScript には <code>TypeError: Failed to fetch</code> が届きます。</p>
+<pre><code class="language-text">Access to fetch at 'https://api.example.com/data' from origin 'https://lightspeedc.com'
+has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.</code></pre>
+<p>この仕組みを <strong>CORS</strong>（オリジン間リソース共有）と呼びます。<strong>ブラウザ側の JavaScript では解決できません</strong>。使いたい API が許可していないときは、自分のサーバーを経由して取ってくるなど、サーバー側で対応します。</p>
+<div class="callout callout-important">
+<p><span class="label">ここが大事:</span> CORS のエラーは「コードの書き間違い」ではなく「サーバーが許可していない」というお知らせです。調べるときは、相手の API の説明に、ブラウザから直接使えるか（CORS に対応しているか）が書いてあるかを見ます。</p>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="17-フォーム.html" aria-label="前へ" title="17. フォーム" style="--accent:hsl(66.7,78%,25%);--accent2:hsl(66.7,58%,55%);--soft:hsl(66.7,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="19-ブラウザの機能.html" aria-label="次へ" title="19. ブラウザの機能" style="--accent:hsl(40,78%,25%);--accent2:hsl(40,58%,55%);--soft:hsl(40,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

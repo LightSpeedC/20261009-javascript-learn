@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 220" width="880" height="220" role="img" aria-label="リクエストとレスポンス" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(210,78%,25%)"/><stop offset="1" stop-color="hsl(210,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<marker id="i3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="30" width="240" height="160" rx="16" fill="url(#i1)"/>
+<text x="140" y="70" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">ブラウザ</text>
+<text x="140" y="104" fill="#fff" font-size="14" text-anchor="middle">await fetch(url)</text>
+<text x="140" y="130" fill="#fff" font-size="14" text-anchor="middle">await res.json()</text>
+<rect x="620" y="30" width="240" height="160" rx="16" fill="url(#i2)"/>
+<text x="740" y="70" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">サーバー</text>
+<text x="740" y="104" fill="#fff" font-size="14" text-anchor="middle">products.json</text>
+<text x="740" y="130" fill="#fff" font-size="14" text-anchor="middle">などを返す</text>
+<line x1="264" y1="80" x2="614" y2="80" stroke="#7a8699" stroke-width="3" marker-end="url(#i3)"/>
+<text x="440" y="70" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">リクエスト（GET /samples/api/products.json）</text>
+<line x1="614" y1="150" x2="264" y2="150" stroke="#7a8699" stroke-width="3" marker-end="url(#i3)"/>
+<text x="440" y="140" fill="#1c2330" font-size="15" font-weight="700" text-anchor="middle">レスポンス（状態 200 ・ 中身は JSON）</text>
+<text x="440" y="180" fill="#4a5568" font-size="13" text-anchor="middle">ページは表示したまま、裏でデータだけをやり取りする</text>
+</svg>
