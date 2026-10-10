@@ -110,13 +110,31 @@
 	});
 
 	// 画面の高さを親に伝えて、iframe の高さを合わせてもらう
+	// 読み込みが終わったら測り、その後は中身が変わるたびに測り直す。
+	// ResizeObserver は使わない。Firefox では、ResizeObserver が 1 つでもあると、ページの中のすべての iframe の
+	// レイアウトを計算するので、読み込み中のほかの例の iframe で「読み込み前にレイアウトを計算させた」と警告が出る
+	let loaded = false;
+	let queued = false;
 	function reportHeight() {
 		send({ type: 'height', value: document.documentElement.scrollHeight });
 	}
-	window.addEventListener('load', reportHeight);
-	if (window.ResizeObserver) {
-		document.addEventListener('DOMContentLoaded', () => new ResizeObserver(reportHeight).observe(document.body));
+	function queueHeight() {
+		if (!loaded || queued) return;
+		queued = true;
+		window.requestAnimationFrame(() => {
+			queued = false;
+			reportHeight();
+		});
 	}
+	window.addEventListener('load', () => {
+		loaded = true;
+		reportHeight();
+		new MutationObserver(queueHeight).observe(document.body, { childList: true, subtree: true, attributes: true, characterData: true });
+		// 画像 ・ 動画は読み込んでから大きさが決まる。幅が変わると折り返しが変わる
+		document.addEventListener('load', queueHeight, true);
+		document.addEventListener('loadedmetadata', queueHeight, true);
+		window.addEventListener('resize', queueHeight);
+	});
 
 	// 例のスクリプトの後に呼ばれる。タイマーと通信が 0 の状態が続いたら終わりとみなす
 	window.__jslStart = function () {
@@ -124,7 +142,8 @@
 		const tick = () => {
 			idle = window.__jslMainDone && timers.size === 0 && pending === 0 ? idle + 1 : 0;
 			if (idle >= 4) {
-				reportHeight();
+				// 読み込みがまだなら、load のときに測る
+				if (loaded) reportHeight();
 				send({ type: 'done' });
 			} else {
 				native.setTimeout(tick, 50);

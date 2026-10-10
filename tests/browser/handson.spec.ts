@@ -58,3 +58,19 @@ test('23 章の完成形は、追加 ・ 完了 ・ 削除ができ、実行し�
 	await app.locator('#reset').click();
 	await expect(app.locator('#summary')).toHaveText('残り 1 件 / 全 2 件');
 });
+
+// 例の画面（iframe）の高さは、中の frame.js が中身の変化を見て親に伝える。操作で中身が増えたら、画面も伸びること
+test('23 章の完成形で項目を足すと、例の画面（iframe）の高さも伸びる', async ({ page }) => {
+	await page.goto(`${base}/docs/${encodeURIComponent('23-ハンズオン.html')}`);
+	const app = await runFinalApp(page);
+	const frame = page.locator('.example[data-run="dom"]').last().locator('.example-frame');
+	const height = async () => (await frame.boundingBox())?.height ?? 0;
+	await expect.poll(height).toBeGreaterThan(40);
+	const before = await height();
+	for (let i = 1; i <= 5; i++) {
+		await app.locator('#title').fill(`項目 ${i}`);
+		await app.locator('#title').press('Enter');
+	}
+	await expect(app.locator('#summary')).toHaveText('残り 6 件 / 全 7 件');
+	await expect.poll(height).toBeGreaterThan(before + 60);
+});

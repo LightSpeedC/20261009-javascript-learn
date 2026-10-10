@@ -47,7 +47,7 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 
 <nav class="toc"><ol>
 <li class="ch01"><a href="#ch01">実行の仕組み（2 件）</a></li>
-<li class="ch02"><a href="#ch02">資料とテスト（2 件）</a></li>
+<li class="ch02"><a href="#ch02">資料とテスト（3 件）</a></li>
 <li class="ch03"><a href="#ch03">運用（3 件）</a></li>
 </ol></nav>
 
@@ -64,17 +64,22 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 </section>
 
 <section class="ch02" id="ch02">
-<h1>資料とテスト（2 件）</h1>
-<details open><summary><span class="no">i261010-03</span><span class="badge b-warn">着手</span>Firefox でテストするか</summary>
+<h1>資料とテスト（3 件）</h1>
+<details><summary><span class="no">i261010-03</span><span class="badge b-ok">済</span>Firefox でテストするか</summary>
 <p>ブラウザのテストは Chromium だけで流している。PlayWright の共有環境は Firefox も持つので、流すことはできるはず（未実測）。エラーの文面は V8 のものを載せているため、エラーを出す例は Firefox では食い違う見込み。</p>
 <ul>
 <li><span class="badge b-ok">済</span>Firefox で流した。39 件中 27 件が成功、12 件が失敗。失敗は 03 ・ 05 ・ 06 ・ 07 ・ 08 ・ 10 章の 11 例（通常のページと file:// の両方）で、すべてエラーの文面の違いだけ（例: <code>Assignment to constant variable.</code> が <code>invalid assignment to const …</code> になる）。値の表示や、第2部の例の食い違いは無い</li>
-<li><span class="badge b-none">未</span>Chromium だけを対象として閉じるか、エラーの例だけを Firefox で飛ばしてテストに加えるかを決める</li>
+<li><span class="badge b-ok">済</span>一括のテストで Firefox も毎回流すようにした。エラーの文面は、載せた V8 の文面か、対になる Firefox の文面のどちらかが出れば一致とみなす（<code>tests/helpers/browser-errors.ts</code> の対応表）</li>
+<li><span class="badge b-ok">済</span>Firefox で見た目と Console を確かめた。見た目に Firefox だけの崩れは無い。Console の警告は 3 種類あり、すべて直した: iframe の <code>sandbox</code> を外した（同じオリジンとスクリプトの両方を許すと守りにならない）、<code>allow</code> をそのブラウザが知っている機能だけにした、<code>frame.js</code> の高さの追従を ResizeObserver から MutationObserver に替えた（Firefox では ResizeObserver があると、読み込み中のほかの iframe のレイアウトまで計算させて警告が出る）。テストでも、例を実行したあとの Console の警告とエラーが 0 件であることを確かめる</li>
 </ul>
 </details>
 <details><summary><span class="no">i261010-04</span><span class="badge b-ok">済</span>付録が第1部の内容だけ</summary>
 <p>A1 逆引き ・ A2 対応表 ・ A3 落とし穴カタログは、第1部の言語の内容だけを扱う。第2部（DOM ・ イベント ・ 通信 ・ 保存）の項目が無い。</p>
 <ul><li><span class="badge b-ok">済</span>A1 逆引きに 3 章（画面 ・ イベントとフォーム ・ 通信と保存）、A3 落とし穴カタログに 2 章（画面とイベント ・ 通信と保存）を足した。A2 対応表は、Java ・ C# ・ VBA に当たるものが少ないので第1部向けのまま</li></ul>
+</details>
+<details open><summary><span class="no">i261010-08</span><span class="badge b-none">未</span>スマートフォンの幅で、表と図が読みにくい</summary>
+<p>幅 375px で見ると、A1 ・ A3 の 4 列の表は列が細く、いちばん右の「章」の列は横にずらさないと見えない。資料の図（SVG）は幅いっぱいに縮むので、図の中の文字が読めない。Chromium と Firefox のどちらでも同じ。ページ全体が横にはみ出すことは無い。</p>
+<ul><li><span class="badge b-none">未</span>直すか（狭い幅では表を縦に並べ替える、図を横にずらして見せる、など）、このままにするかを決める</li></ul>
 </details>
 </section>
 

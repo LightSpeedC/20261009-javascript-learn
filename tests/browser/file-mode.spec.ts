@@ -4,13 +4,14 @@ import { test, expect } from '@playwright/test';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { examplesOf, pages } from '../helpers/examples.ts';
+import { asV8 } from '../helpers/browser-errors.ts';
 
 const docsDir = join(__dirname, '..', '..', 'docs');
 
 for (const page of pages(docsDir)) {
 	const all = examplesOf(docsDir, page).filter((e) => e.run !== 'file');
 	if (!all.some((e) => e.run === 'worker')) continue;
-	test(`${page} を file:// で開いても、第1部の例は載せた出力のとおりに動く`, async ({ page: p }) => {
+	test(`${page} を file:// で開いても、第1部の例は載せた出力のとおりに動く`, async ({ page: p, browserName }) => {
 		test.setTimeout(30000 + all.length * 6000);
 		await p.goto(pathToFileURL(join(docsDir, page)).href);
 		const blocks = p.locator('.example[data-run="worker"], .example[data-run="node"], .example[data-run="dom"]');
@@ -22,7 +23,7 @@ for (const page of pages(docsDir)) {
 			await expect(panel).toHaveAttribute('data-state', 'done', { timeout: 8000 });
 			await expect(panel.locator('.console-head')).toContainText('iframe');
 			const lines = await panel.locator('.line:not(.note)').allTextContents();
-			expect.soft(lines.join('\n'), `${page} の例 ${all[i].index + 1}`).toBe(all[i].expected);
+			expect.soft(asV8(lines.join('\n'), all[i].expected, browserName), `${page} の例 ${all[i].index + 1}`).toBe(all[i].expected);
 		}
 	});
 }

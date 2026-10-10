@@ -16,6 +16,17 @@
 	const workerUrl = new URL('worker.js', scriptUrl);
 	const inspectUrl = new URL('inspect.js', scriptUrl).href;
 	const frameUrl = new URL('frame.js', scriptUrl).href;
+	// 例を動かす iframe には sandbox を付けない。localStorage と fetch の例のために、ページと同じオリジンが要る。
+	// sandbox で同じオリジンとスクリプトの両方を許すと、中から sandbox を外せて守りにならない（Console にもそう警告が出る）
+	// iframe に使ってよいと渡す機能（20 章のカメラ ・ 動画の再生、19 章のコピー）。そのブラウザが知らない名前を書くと
+	// Console に警告が出るので、知っているものだけにする。調べる仕組み（document.featurePolicy）は Chromium だけが持つので、
+	// 無いブラウザ（Firefox など）には camera だけを渡す
+	const FRAME_ALLOW = (() => {
+		const wanted = ['camera', 'autoplay', 'clipboard-write'];
+		const policy = document.featurePolicy;
+		const known = policy && typeof policy.features === 'function' ? policy.features() : ['camera'];
+		return wanted.filter((name) => known.includes(name)).join('; ');
+	})();
 
 	const KEYWORDS = new Set(('await break case catch class const continue debugger default delete do else export extends ' +
 		'false finally for from function if import in instanceof let new null of return static super switch this throw true ' +
@@ -165,7 +176,6 @@
 				head.textContent = 'ブラウザで実行した結果（file:// で開いているため、Worker ではなく iframe で実行）';
 				frame = document.createElement('iframe');
 				frame.className = 'is-hidden';
-				frame.setAttribute('sandbox', 'allow-scripts allow-same-origin');
 				const js = current().javascript.replace(/<\/script/gi, '<\\/script');
 				frame.srcdoc = '<!doctype html><html><head><meta charset="utf-8">' +
 					'<script src="' + inspectUrl + '"></script><script src="' + frameUrl + '"></script></head><body>' +
@@ -266,8 +276,7 @@
 			frame = document.createElement('iframe');
 			frame.className = 'example-frame';
 			frame.title = '例の画面';
-			frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-modals');
-			frame.setAttribute('allow', 'autoplay; microphone; camera; clipboard-read; clipboard-write');
+			if (FRAME_ALLOW) frame.setAttribute('allow', FRAME_ALLOW);
 			// 例のコードの中の </script> で、外側の <script> が閉じてしまわないようにする
 			const js = code.javascript.replace(/<\/script/gi, '<\\/script');
 			frame.srcdoc = '<!doctype html><html lang="ja"><head><meta charset="utf-8">' +

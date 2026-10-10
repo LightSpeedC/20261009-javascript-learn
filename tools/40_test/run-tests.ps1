@@ -1,7 +1,7 @@
 ﻿# テストを一括で実行する。
 #   1. node --test   … inspect.js の表示と、資料の例を Node で動かした結果
 #   2. bun test      … 同じテストを Bun でも
-#   3. playwright    … 資料の「実行」ボタンをブラウザ（Chromium）で押した結果
+#   3. playwright    … 資料の「実行」ボタンをブラウザ（Chromium ・ Firefox）で押した結果と、ページの見た目の崩れ
 $ErrorActionPreference = 'Stop'
 $root = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $tests = Join-Path $root 'tests'
@@ -24,13 +24,15 @@ if (Get-Command bun -ErrorAction SilentlyContinue) {
 	}
 }
 
-Write-Host '=== playwright（chromium） ==='
-Push-Location $root
-try {
-	& playwright-test --test-dir (Join-Path $tests 'browser') --out-dir (Join-Path $root 'tmp/playwright') --project=chromium
-	if ($LASTEXITCODE -ne 0) { $failed += 'playwright' }
-} finally {
-	Pop-Location
+foreach ($browser in 'chromium', 'firefox') {
+	Write-Host "=== playwright（$browser） ==="
+	Push-Location $root
+	try {
+		& playwright-test --test-dir (Join-Path $tests 'browser') --out-dir (Join-Path $root "tmp/playwright-$browser") --project=$browser
+		if ($LASTEXITCODE -ne 0) { $failed += "playwright（$browser）" }
+	} finally {
+		Pop-Location
+	}
 }
 
 if ($failed.Count -eq 0) {
