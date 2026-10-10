@@ -31,6 +31,13 @@ function partOf(num: string): string {
 	return Number(num) <= 13 ? '第1部 言語編' : '第2部 ブラウザ編';
 }
 
+// 資料一覧で、部ごとに付ける見出しの説明
+const PART_DESC: Record<string, string> = {
+	'第1部 言語編': 'Node.js で、言語そのものを学ぶ（勉強会 第1〜4回。13 は宿題）',
+	'第2部 ブラウザ編': 'ブラウザで、画面を動かす（勉強会 第5〜6回。23 は宿題）',
+	'付録': '順に読まず、困ったときに引く',
+};
+
 const ICON = {
 	prev: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 	next: '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
@@ -105,12 +112,22 @@ for (const doc of docs) {
 }
 
 // 資料一覧。docs/README.html と、トップで資料が目立つように root の README.html の両方に書く
+// 部ごとに見出しを付けて分ける。カードの色は、部をまたいだ通しの色のまま
 function chapterList(prefix: string): string {
-	const items = series.map((d) => {
-		return `<li><a href="${prefix}${d.file}" style="${colors(hueOf.get(d.file) ?? 280)}">` +
-			`<span class="part">${partOf(d.num)}</span><span class="ttl">${d.title}</span><span class="desc">${d.lead}</span></a></li>`;
+	const groups = new Map<string, Doc[]>();
+	for (const d of series) {
+		const part = partOf(d.num);
+		if (!groups.has(part)) groups.set(part, []);
+		groups.get(part)!.push(d);
+	}
+	const blocks = [...groups].map(([part, docs]) => {
+		// 部の名前（span.part）は見出しと重なるので画面では隠すが、html2md が表の 1 列目に使うため残す
+		const items = docs.map((d) => `<li><a href="${prefix}${d.file}" style="${colors(hueOf.get(d.file) ?? 280)}">` +
+			`<span class="part">${part}</span><span class="ttl">${d.title}</span><span class="desc">${d.lead}</span></a></li>`);
+		return `<h3 class="part-head">${part}</h3>\n<p class="part-desc">${PART_DESC[part] ?? ''}</p>\n` +
+			`<ul class="chapters grouped" data-columns="部,タイトル,内容">\n${items.join('\n')}\n</ul>`;
 	});
-	return `\n<ul class="chapters" data-columns="部,タイトル,内容">\n${items.join('\n')}\n</ul>\n`;
+	return `\n${blocks.join('\n')}\n`;
 }
 for (const [path, prefix, label] of [
 	[join(docsDir, 'README.html'), '', 'docs/README.html'],
