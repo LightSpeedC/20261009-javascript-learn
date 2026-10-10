@@ -44,8 +44,11 @@
 		timers.delete(id);
 		native.clearInterval(id);
 	};
+	// ファイルを直接開いたページ（file://）か。fetch が使えず、エラーの詳しい内容もブラウザが隠す
+	const fileMode = document.baseURI.startsWith('file:');
 	if (native.fetch) {
 		window.fetch = function (...args) {
+			if (fileMode) out('error', 'file:// で開いたページでは fetch を使えません。公開ページか、ローカルサーバー経由で開いてください（14 章）');
 			pending++;
 			const p = native.fetch(...args);
 			p.then(() => pending--, () => pending--);
@@ -95,6 +98,10 @@
 		if (ev.target && ev.target !== window) return;
 		ev.preventDefault();
 		window.__jslMainDone = true;
+		if (fileMode && ev.message === 'Script error.' && !ev.error) {
+			out('error', 'Uncaught エラーが起きました（file:// で開いているため、ブラウザが詳しい内容を隠しています。ローカルサーバー経由で開くと分かります）');
+			return;
+		}
 		out('error', 'Uncaught ' + (ev.error !== undefined && ev.error !== null ? describeError(ev.error) : ev.message));
 	}, true);
 	window.addEventListener('unhandledrejection', (ev) => {

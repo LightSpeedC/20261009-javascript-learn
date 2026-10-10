@@ -10,6 +10,8 @@
 	'use strict';
 
 	const TIME_LIMIT_MS = 5000;
+	// ファイルを直接開いたとき（file://）。Worker を作れず、fetch も使えない
+	const FILE_MODE = location.protocol === 'file:';
 	const scriptUrl = document.currentScript ? document.currentScript.src : location.href;
 	const workerUrl = new URL('worker.js', scriptUrl);
 	const inspectUrl = new URL('inspect.js', scriptUrl).href;
@@ -134,10 +136,13 @@
 		bar.append(stopBtn);
 
 		let worker = null;
+		let frame = null;
 		let limitTimer = null;
 		function finish(note) {
 			if (worker) worker.terminate();
 			worker = null;
+			if (frame) frame.remove();
+			frame = null;
 			clearTimeout(limitTimer);
 			if (body.childElementCount === 0) line('（出力なし）', 'note');
 			if (note) line(note, 'note');
@@ -152,14 +157,44 @@
 			panel.dataset.state = 'running';
 			runBtn.disabled = true;
 			head.textContent = 'ブラウザで実行した結果';
+			stopBtn.classList.remove('is-hidden');
+			limitTimer = setTimeout(() => finish('（' + TIME_LIMIT_MS / 1000 + ' 秒たったので止めました）'), TIME_LIMIT_MS);
+			if (FILE_MODE) {
+				// file:// のページからは Worker を作れないので、見えない iframe の中で実行する。
+				// ページと同じ流れで動くため、無限ループを書くとページごと固まる
+				head.textContent = 'ブラウザで実行した結果（file:// で開いているため、Worker ではなく iframe で実行）';
+				frame = document.createElement('iframe');
+				frame.className = 'is-hidden';
+				frame.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+				const js = current().javascript.replace(/<\/script/gi, '<\\/script');
+				frame.srcdoc = '<!doctype html><html><head><meta charset="utf-8">' +
+					'<script src="' + inspectUrl + '"></script><script src="' + frameUrl + '"></script></head><body>' +
+					'<script>' + js + '</script>' +
+					'<script>window.__jslMainDone = true; window.__jslStart();</script></body></html>';
+				const thisFrame = frame;
+				const onMessage = (ev) => {
+					if (frame !== thisFrame) {
+						window.removeEventListener('message', onMessage);
+						return;
+					}
+					if (ev.source !== frame.contentWindow || !ev.data || !ev.data.jsl) return;
+					if (ev.data.type === 'log') line(ev.data.text, ev.data.level);
+					else if (ev.data.type === 'done') {
+						window.removeEventListener('message', onMessage);
+						finish(null);
+					}
+				};
+				window.addEventListener('message', onMessage);
+				panel.append(frame);
+				return;
+			}
 			try {
 				worker = new Worker(workerUrl);
 			} catch (e) {
-				line('実行できませんでした。ファイルを直接開いている（file://）場合は、ローカルサーバー経由で開いてください。', 'error');
+				line('実行できませんでした: ' + e.message, 'error');
 				finish(null);
 				return;
 			}
-			stopBtn.classList.remove('is-hidden');
 			worker.onmessage = (ev) => {
 				const msg = ev.data;
 				if (msg.type === 'log') line(msg.text, msg.level);
@@ -170,7 +205,6 @@
 				line('実行できませんでした: ' + (ev.message || 'Worker を起動できません'), 'error');
 				finish(null);
 			};
-			limitTimer = setTimeout(() => finish('（' + TIME_LIMIT_MS / 1000 + ' 秒たったので止めました）'), TIME_LIMIT_MS);
 			worker.postMessage({ code: current().javascript });
 		});
 	}

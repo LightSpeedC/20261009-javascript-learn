@@ -99,6 +99,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <li><code>js/runner.js</code> が、<code>&lt;div class="example" data-run="…"&gt;</code> で囲んだ例にボタンを付ける</li>
 <li><code>data-run="worker"</code> の例は、Web Worker（<code>js/worker.js</code>）の中で実行する。ページと別のスレッドなので、無限ループでも資料は固まらない。5 秒で打ち切る</li>
 <li>値の表示は <code>js/inspect.js</code> が作る。Node.js の <code>console.log</code> と同じ形になるように、Node の表示の決まりを写している</li>
+<li>資料をファイルとして直接開いた（<code>file://</code>）ときは、Worker を作れないため、<code>data-run="worker"</code> の例も iframe で実行する。この場合は無限ループを書くとページごと固まる。<code>fetch</code> は <code>file://</code> では使えないので、通信を使う例は理由を表示して止まる</li>
 <li><code>data-run="dom"</code> の例（第2部）は、HTML ・ CSS ・ スクリプトの組を iframe の中に置いて動かし、画面と console を見せる。console の受け渡しは <code>js/frame.js</code> が行う。ページと同じ流れで動くので、時間で打ち切れない</li>
 <li><code>data-run="node"</code> の例は、Node.js でしか動かないもの。Node.js で実行した結果を記録しておき、ボタンを押すと表示する</li>
 <li><code>data-run="file"</code> は、置いておくだけのファイル（読み込まれる側のモジュールや <code>package.json</code>）。ボタンは付けない</li>

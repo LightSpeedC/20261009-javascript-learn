@@ -61,6 +61,7 @@ Node.js は v26 系の、資料を作る時点の最新版を使う。版を上�
 - `js/runner.js` が、`<div class="example" data-run="…">` で囲んだ例にボタンを付ける
 - `data-run="worker"` の例は、Web Worker（`js/worker.js`）の中で実行する。ページと別のスレッドなので、無限ループでも資料は固まらない。5 秒で打ち切る
 - 値の表示は `js/inspect.js` が作る。Node.js の `console.log` と同じ形になるように、Node の表示の決まりを写している
+- 資料をファイルとして直接開いた（`file://`）ときは、Worker を作れないため、`data-run="worker"` の例も iframe で実行する。この場合は無限ループを書くとページごと固まる。`fetch` は `file://` では使えないので、通信を使う例は理由を表示して止まる
 - `data-run="dom"` の例（第2部）は、HTML ・ CSS ・ スクリプトの組を iframe の中に置いて動かし、画面と console を見せる。console の受け渡しは `js/frame.js` が行う。ページと同じ流れで動くので、時間で打ち切れない
 - `data-run="node"` の例は、Node.js でしか動かないもの。Node.js で実行した結果を記録しておき、ボタンを押すと表示する
 - `data-run="file"` は、置いておくだけのファイル（読み込まれる側のモジュールや `package.json`）。ボタンは付けない
