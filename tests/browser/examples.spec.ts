@@ -2,38 +2,19 @@
 // examples.test.ts は Node で確かめるが、こちらは Worker ・ inspect.js ・ runner.js を通した表示を見る。
 // 実行: tools/40_test/run-tests.ps1（PlayWright 共有環境の playwright-test を使う）
 import { test, expect } from '@playwright/test';
-import { createServer, type Server } from 'node:http';
-import { readFile } from 'node:fs/promises';
-import { extname, join, normalize } from 'node:path';
+import type { Server } from 'node:http';
+import { join } from 'node:path';
 import { examplesOf, pages } from '../helpers/examples.ts';
+import { startServer } from '../helpers/static-server.ts';
 
 // Playwright は spec を CommonJS に変換して読むので、import.meta ではなく __dirname を使う
 const root = join(__dirname, '..', '..');
 const docsDir = join(root, 'docs');
-const TYPES: Record<string, string> = {
-	'.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml',
-	'.json': 'application/json', '.txt': 'text/plain; charset=utf-8', '.csv': 'text/csv; charset=utf-8', '.png': 'image/png',
-};
 let server: Server;
 let base = '';
 
 test.beforeAll(async () => {
-	server = createServer(async (req, res) => {
-		const path = normalize(join(root, decodeURIComponent(new URL(req.url ?? '/', 'http://x').pathname)));
-		if (!path.startsWith(root)) {
-			res.writeHead(403).end();
-			return;
-		}
-		try {
-			const body = await readFile(path);
-			res.writeHead(200, { 'content-type': TYPES[extname(path)] ?? 'application/octet-stream' }).end(body);
-		} catch {
-			res.writeHead(404).end();
-		}
-	});
-	await new Promise<void>((resolve) => server.listen(0, '127.0.0.1', resolve));
-	const addr = server.address();
-	base = `http://127.0.0.1:${typeof addr === 'object' && addr ? addr.port : 0}`;
+	({ server, base } = await startServer(root));
 });
 test.afterAll(() => {
 	server.close();
