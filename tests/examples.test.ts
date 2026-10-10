@@ -42,7 +42,8 @@ for (const page of pages(docsDir)) {
 	}
 
 	for (const ex of examples) {
-		if (ex.run === 'file') continue;
+		// DOM の例はブラウザでしか動かないので、browser/examples.spec.ts で確かめる
+		if (ex.run === 'file' || ex.run === 'dom') continue;
 		const name = `${page} の例 ${ex.index + 1}${ex.filename ? `（${ex.filename}）` : ''} は載せた出力のとおりに動く`;
 		test(name, () => {
 			assert.notEqual(ex.expected, null, '出力（pre.output）がありません');

@@ -58,6 +58,8 @@ pre.output code{color:#2d3a2a;background:transparent;}
 .code-editor{display:block;width:100%;box-sizing:border-box;font-family:Consolas,"BIZ UDGothic","MS Gothic",monospace;font-size:0.9em;line-height:1.6;padding:12px 14px;border:2px solid var(--accent2,#2f5fbf);border-radius:6px;background:#ffffff;color:#17335f;margin:10px 0;tab-size:4;}
 .console{border-radius:6px;overflow:hidden;margin:0 0 14px;box-shadow:0 2px 6px rgba(0,0,0,0.12);}
 .console-head{font-size:0.8em;font-weight:700;padding:3px 12px;background:#2b3240;color:#e6ecf8;}
+.frame-box{background:#ffffff;color:var(--ink,#1c2330);border-bottom:3px solid #2b3240;}
+.example-frame{display:block;width:100%;height:120px;border:none;background:#ffffff;}
 .console-body{background:#1d222c;color:#e8edf5;padding:8px 12px;font-family:Consolas,"BIZ UDGothic","MS Gothic",monospace;font-size:0.88em;line-height:1.55;}
 .console-body .line{white-space:pre-wrap;word-break:break-all;background:transparent;color:#e8edf5;}
 .console-body .warn{color:#ffd479;background:rgba(255,212,121,0.08);}
