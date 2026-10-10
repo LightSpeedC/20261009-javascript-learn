@@ -49,7 +49,7 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-sof
 <div class="titlebar"><div class="inner">
 <h1>JavaScript 入門 学習資料の計画</h1>
 <p class="lead">ほかの言語を少し触った人向けの JavaScript 学習資料・勉強会資料の計画</p>
-<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-09</p>
+<p class="date">📅 作成: 2026-10-09 / 更新: 2026-10-10</p>
 </div></div>
 
 <div class="wrap">
@@ -165,7 +165,8 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-sof
 <li><strong>第1部</strong>: 01〜13 ・ 付録 A1〜A3 ・ 資料一覧 ・ ZZ 資料の構成を作成した（2026-10-09）。章立ては計画どおり</li>
 <li><strong>例の検証</strong>: 資料の例を Node.js で実行した結果と、ブラウザ（Chromium）で「▶ 実行」を押した結果の両方を、載せた出力と比べるテストを置いた（<code>tools/40_test/run-tests.cmd</code>）</li>
 <li><strong>計画に無かった追加</strong>: 例の種類は 3 つ（<code>data-run="worker"</code> はブラウザで実行、<code>"node"</code> は Node.js の記録を表示、<code>"file"</code> は置いておくだけのファイル）。前後のナビ ・ 目次 ・ 章の色は <code>tools/20_build/build-docs.ts</code> で書き込む</li>
-<li><strong>第2部</strong>: 未着手</li>
+<li><strong>第2部</strong>: 14〜23 を作成した（2026-10-10）。章立ては計画どおり</li>
+<li><strong>第2部で足した仕組み</strong>: DOM を使う例は <code>data-run="dom"</code> とし、iframe の中に HTML ・ CSS ・ スクリプトを置いて、画面と console を見せる（<code>docs/js/frame.js</code>）。CDN から読み込む例には <code>data-net="cdn"</code> を付けた。14 章のローカルサーバー（<code>docs/samples/web/serve.mjs</code>）は、資料のコードとファイルが一致することと、実際に応答することをテストで確かめる</li>
 </ul>
 </section>
 
