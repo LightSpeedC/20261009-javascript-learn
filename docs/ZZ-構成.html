@@ -29,7 +29,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 </div></div>
 
 <div class="wrap">
-<!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="../README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
 <!-- AUTO:toc -->
 <nav class="toc"><ol>
 <li class="ch01"><a href="#ch01">対象読者とゴール</a></li>
@@ -116,7 +116,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <tr><td>第2部の例（<code>data-run="dom"</code>）は時間で打ち切れない</td><td>無限ループを書くと、ページごと固まる。タブを閉じて開き直す</td></tr>
 <tr><td>ネットワークが要る例がある</td><td>20 〜 22 章の CDN を使う例と、18 章の通信の例は、オフラインでは動かない</td></tr>
 <tr><td>ファイルとして直接開いた（<code>file://</code>）とき</td><td>第1部の例も iframe で動くので、5 秒の打ち切りが効かず、無限ループで固まる。<code>globalThis</code> は <code>self</code> ではなく <code>window</code> になる（07 章）。<code>fetch</code> は使えない。エラーの内容をブラウザが隠すことがある。公開ページか、ローカルサーバー経由（14 章）で開けば、どれも起きない</td></tr>
-<tr><td>3 桁区切りなどの書式は、実行する環境の言語設定に従う</td><td><code>toLocaleString()</code> を言語の指定なしで呼ぶ例（04 ・ 10 ・ 13 ・ 15 ・ 17 章）は、日本語 ・ 英語以外の設定では区切りの記号が変わる</td></tr>
+<tr><td>3 桁区切りなどの書式は、実行する環境の言語設定に従う</td><td><code>toLocaleString()</code> を言語の指定なしで呼ぶ例（04 ・ 10 ・ 13 ・ 15 ・ 17 章）は、日本語の環境（<code>ja-JP</code>）で読む前提で書いている。英語の設定でも同じに見えるが、ほかの言語の設定では区切りの記号が変わる（ドイツ語なら <code>1.234.567</code>）。環境によらず揃えたいときは <code>toLocaleString("ja-JP")</code> と言語を指定する</td></tr>
 </tbody>
 </table></div>
 <h2>資料を書き換えたら</h2>
@@ -128,6 +128,6 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 </section>
 
 </div>
-<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink home" href="../README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
 </body>
 </html>

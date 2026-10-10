@@ -2,7 +2,7 @@
 //   <!-- AUTO:nav -->   前へ・次へ・目次のバッジ（上下 2 か所）
 //   <!-- AUTO:toc -->   ページ内の章の目次（section の h1 から作る）
 //   /* AUTO:style */    章の色（章数で虹色を割る）と、番号の数え方
-//   <!-- AUTO:list -->  docs/README.html の資料一覧（本編と付録を通しの色で並べる）
+//   <!-- AUTO:list -->  root の README.html の資料一覧（本編と付録を通しの色で並べる）
 // 使い方: node tools/20_build/build-docs.ts
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
@@ -86,7 +86,7 @@ function link(target: Doc, label: string, icon: string): string {
 	return `<a class="doclink" href="${target.file}" aria-label="${label}" title="${escapeAttr(target.title)}" style="${colors(h)}">${icon}</a>`;
 }
 function homeLink(): string {
-	return `<a class="doclink home" href="README.html" aria-label="目次" title="資料一覧">${ICON.home}</a>`;
+	return `<a class="doclink home" href="../README.html" aria-label="目次" title="資料一覧">${ICON.home}</a>`;
 }
 
 for (const doc of docs) {
@@ -111,9 +111,9 @@ for (const doc of docs) {
 	writeIfChanged(path, html);
 }
 
-// 資料一覧。docs/README.html と、トップで資料が目立つように root の README.html の両方に書く
+// 資料一覧。公開のトップになる root の README.html にだけ書く
 // 部ごとに見出しを付けて分ける。カードの色は、部をまたいだ通しの色のまま
-function chapterList(prefix: string): string {
+function chapterList(): string {
 	const groups = new Map<string, Doc[]>();
 	for (const d of series) {
 		const part = partOf(d.num);
@@ -122,19 +122,14 @@ function chapterList(prefix: string): string {
 	}
 	const blocks = [...groups].map(([part, docs]) => {
 		// 部の名前（span.part）は見出しと重なるので画面では隠すが、html2md が表の 1 列目に使うため残す
-		const items = docs.map((d) => `<li><a href="${prefix}${d.file}" style="${colors(hueOf.get(d.file) ?? 280)}">` +
+		const items = docs.map((d) => `<li><a href="docs/${d.file}" style="${colors(hueOf.get(d.file) ?? 280)}">` +
 			`<span class="part">${part}</span><span class="ttl">${d.title}</span><span class="desc">${d.lead}</span></a></li>`);
 		return `<h3 class="part-head">${part}</h3>\n<p class="part-desc">${PART_DESC[part] ?? ''}</p>\n` +
 			`<ul class="chapters grouped" data-columns="部,タイトル,内容">\n${items.join('\n')}\n</ul>`;
 	});
 	return `\n${blocks.join('\n')}\n`;
 }
-for (const [path, prefix, label] of [
-	[join(docsDir, 'README.html'), '', 'docs/README.html'],
-	[join(docsDir, '..', 'README.html'), 'docs/', 'README.html'],
-]) {
-	const html = readFileSync(path, 'utf8');
-	writeIfChanged(path, replaceBlock(html, '<!-- AUTO:list -->', '<!-- /AUTO:list -->', chapterList(prefix), label, true));
-}
+const readmePath = join(docsDir, '..', 'README.html');
+writeIfChanged(readmePath, replaceBlock(readFileSync(readmePath, 'utf8'), '<!-- AUTO:list -->', '<!-- /AUTO:list -->', chapterList(), 'README.html', true));
 
 console.log(`資料 ${docs.length} 件にナビ・目次・章の色を書き込みました（一覧 ${series.length} 件）`);
