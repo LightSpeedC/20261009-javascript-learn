@@ -16,6 +16,8 @@
 	// 動いているタイマーと、返事を待っている通信の数。両方 0 が続いたら、例の実行が終わったとみなす
 	const timers = new Set();
 	let pending = 0;
+	// 例のスクリプトが最後まで進んだか（一番外側の await で CDN を読み込む例があるため）。エラーで止まったときも立てる
+	window.__jslMainDone = false;
 	let groupIndent = '';
 	const counts = new Map();
 
@@ -92,6 +94,7 @@
 		// 画像などの読み込みの失敗は対象外（ev.error が無く、target が要素）
 		if (ev.target && ev.target !== window) return;
 		ev.preventDefault();
+		window.__jslMainDone = true;
 		out('error', 'Uncaught ' + (ev.error !== undefined && ev.error !== null ? describeError(ev.error) : ev.message));
 	}, true);
 	window.addEventListener('unhandledrejection', (ev) => {
@@ -112,7 +115,7 @@
 	window.__jslStart = function () {
 		let idle = 0;
 		const tick = () => {
-			idle = timers.size === 0 && pending === 0 ? idle + 1 : 0;
+			idle = window.__jslMainDone && timers.size === 0 && pending === 0 ? idle + 1 : 0;
 			if (idle >= 4) {
 				reportHeight();
 				send({ type: 'done' });

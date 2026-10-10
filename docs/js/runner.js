@@ -241,7 +241,7 @@
 				code.css + '</style>' +
 				'<script src="' + inspectUrl + '"></script><script src="' + frameUrl + '"></script>' +
 				'</head><body>' + code.html +
-				'<script type="module">' + js + '</script>' +
+				'<script type="module">' + js + '\n;window.__jslMainDone = true;</script>' +
 				'<script type="module">window.__jslStart();</script>' +
 				'</body></html>';
 			screen.append(frame);
