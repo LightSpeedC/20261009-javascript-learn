@@ -20,8 +20,8 @@
 	const KEYWORDS = new Set(('await break case catch class const continue debugger default delete do else export extends ' +
 		'false finally for from function if import in instanceof let new null of return static super switch this throw true ' +
 		'try typeof undefined var void while with yield async get set').split(' '));
-	const TOKEN = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\[\s\S]|[^`\\])*`)|(\b(?:0[xX][0-9a-fA-F_]+|0[bB][01_]+|\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?)n?\b)|([A-Za-z_$][\w$]*)/g;
-	const HTML_TOKEN = /(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?[A-Za-z][\w-]*|\/?&gt;)|("[^"]*")/g;
+	const CODE_PATTERN = /(\/\/[^\n]*|\/\*[\s\S]*?\*\/)|('(?:\\.|[^'\\\n])*'|"(?:\\.|[^"\\\n])*"|`(?:\\[\s\S]|[^`\\])*`)|(\b(?:0[xX][0-9a-fA-F_]+|0[bB][01_]+|\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?)n?\b)|([A-Za-z_$][\w$]*)/g;
+	const HTML_PATTERN = /(&lt;!--[\s\S]*?--&gt;)|(&lt;\/?[A-Za-z][\w-]*|\/?&gt;)|("[^"]*")/g;
 
 	function escapeHtml(s) {
 		return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -31,9 +31,9 @@
 	function highlight(code) {
 		let html = '';
 		let last = 0;
-		TOKEN.lastIndex = 0;
+		CODE_PATTERN.lastIndex = 0;
 		let m;
-		while ((m = TOKEN.exec(code)) !== null) {
+		while ((m = CODE_PATTERN.exec(code)) !== null) {
 			html += escapeHtml(code.slice(last, m.index));
 			const text = escapeHtml(m[0]);
 			if (m[1]) html += '<span class="tk-com">' + text + '</span>';
@@ -41,12 +41,12 @@
 			else if (m[3]) html += '<span class="tk-num">' + text + '</span>';
 			else if (KEYWORDS.has(m[4])) html += '<span class="tk-key">' + text + '</span>';
 			else html += text;
-			last = TOKEN.lastIndex;
+			last = CODE_PATTERN.lastIndex;
 		}
 		return html + escapeHtml(code.slice(last));
 	}
 	function highlightHtml(code) {
-		return escapeHtml(code).replace(HTML_TOKEN, (all, com, tag, str) => {
+		return escapeHtml(code).replace(HTML_PATTERN, (all, com, tag, str) => {
 			if (com) return '<span class="tk-com">' + all + '</span>';
 			if (tag) return '<span class="tk-key">' + all + '</span>';
 			return '<span class="tk-str">' + all + '</span>';

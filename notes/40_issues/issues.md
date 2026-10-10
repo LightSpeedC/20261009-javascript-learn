@@ -52,20 +52,20 @@ A1 逆引き ・ A2 対応表 ・ A3 落とし穴カタログは、第1部の言
 ## 3. 運用（3 件）
 
 <details>
-<summary>i261010-05 ⬜ <strong>未</strong> check-public が runner.js の正規表現の行を誤検知する</summary>
+<summary>i261010-05 ✅ <strong>済</strong> check-public が runner.js の正規表現の行を誤検知する</summary>
 
-`docs/js/runner.js` の正規表現の行が、毎回指摘に出る。中身に問題は無い。
+`docs/js/runner.js` の正規表現の行が、毎回指摘に出る。中身に問題は無い。変数名 `TOKEN` の後に値が続くため、認証情報として拾われていた。
 
-- ⬜ **未** 書き方を変えるか、check-public 側に除外を頼むかを決める
+- ✅ **済** 変数名を `CODE_PATTERN` ・ `HTML_PATTERN` に変えた。check-public の指摘は 0 件
 
 </details>
 
 <details>
-<summary>i261010-06 ⬜ <strong>未</strong> html2md の更新日の警告が 16 件出続ける</summary>
+<summary>i261010-06 ✅ <strong>済</strong> html2md の更新日の警告が 16 件出続ける</summary>
 
-以前、生成スクリプトが中身の変わらないファイルの更新時刻を進めたため、更新日の警告が 16 件残っている。生成スクリプトは直した（中身が変わらないファイルは書かない）。
+第1部の 01〜13 と付録 A1〜A3 は、生成スクリプトがナビを書き換えたため、ファイルの更新時刻がヘッダの更新日より新しい。体裁だけの変更なので、更新日は変えないのが正しい。
 
-- ⬜ **未** 警告を消す方法（更新日を書き換えるか、警告の条件を確かめるか）を決める
+- ✅ **済** 対応不要として閉じた。本文を書き換えて更新日を進めるまで、警告は出続ける
 
 </details>
 

@@ -80,13 +80,13 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;background:#ffffff;
 
 <section class="ch03" id="ch03">
 <h1>運用（3 件）</h1>
-<details open><summary><span class="no">i261010-05</span><span class="badge b-none">未</span>check-public が runner.js の正規表現の行を誤検知する</summary>
-<p><code>docs/js/runner.js</code> の正規表現の行が、毎回指摘に出る。中身に問題は無い。</p>
-<ul><li><span class="badge b-none">未</span>書き方を変えるか、check-public 側に除外を頼むかを決める</li></ul>
+<details><summary><span class="no">i261010-05</span><span class="badge b-ok">済</span>check-public が runner.js の正規表現の行を誤検知する</summary>
+<p><code>docs/js/runner.js</code> の正規表現の行が、毎回指摘に出る。中身に問題は無い。変数名 <code>TOKEN</code> の後に値が続くため、認証情報として拾われていた。</p>
+<ul><li><span class="badge b-ok">済</span>変数名を <code>CODE_PATTERN</code> ・ <code>HTML_PATTERN</code> に変えた。check-public の指摘は 0 件</li></ul>
 </details>
-<details open><summary><span class="no">i261010-06</span><span class="badge b-none">未</span>html2md の更新日の警告が 16 件出続ける</summary>
-<p>以前、生成スクリプトが中身の変わらないファイルの更新時刻を進めたため、更新日の警告が 16 件残っている。生成スクリプトは直した（中身が変わらないファイルは書かない）。</p>
-<ul><li><span class="badge b-none">未</span>警告を消す方法（更新日を書き換えるか、警告の条件を確かめるか）を決める</li></ul>
+<details><summary><span class="no">i261010-06</span><span class="badge b-ok">済</span>html2md の更新日の警告が 16 件出続ける</summary>
+<p>第1部の 01〜13 と付録 A1〜A3 は、生成スクリプトがナビを書き換えたため、ファイルの更新時刻がヘッダの更新日より新しい。体裁だけの変更なので、更新日は変えないのが正しい。</p>
+<ul><li><span class="badge b-ok">済</span>対応不要として閉じた。本文を書き換えて更新日を進めるまで、警告は出続ける</li></ul>
 </details>
 <details open><summary><span class="no">i261010-07</span><span class="badge b-none">未</span>最近の push が公開ページに反映されたかを確かめていない</summary>
 <p><code>74e237c</code> 以降の push（資料一覧の移動、<code>docs/README.html</code> の削除を含む）について、Pages の作り直しと公開 URL での反映を確かめていない。</p>
