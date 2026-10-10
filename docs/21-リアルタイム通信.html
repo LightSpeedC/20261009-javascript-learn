@@ -1,0 +1,192 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>21. 紹介: リアルタイム通信</title>
+<style>
+/* css/style.css が読めなかったときの代替色 */
+.titlebar, section h1, th, a.doclink, .badge { background: #12224d; color: #fff; }
+</style>
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* AUTO:style */
+.ch01{--accent:hsl(280,78%,25%);--accent2:hsl(280,58%,55%);--soft:hsl(280,28%,95%);}
+.ch02{--accent:hsl(186.7,78%,25%);--accent2:hsl(186.7,58%,55%);--soft:hsl(186.7,28%,95%);}
+.ch03{--accent:hsl(93.3,78%,25%);--accent2:hsl(93.3,58%,55%);--soft:hsl(93.3,28%,95%);}
+.ch04{--accent:hsl(0,78%,25%);--accent2:hsl(0,58%,55%);--soft:hsl(0,28%,95%);}
+.toc ol{counter-reset:tocnum;} .toc ol li{counter-increment:tocnum;} .toc ol a::before{content:"21." counter(tocnum) " ";}
+body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::before{content:"21." counter(secnum) " ";}
+/* /AUTO:style */
+</style>
+<script src="js/runner.js" defer></script>
+</head>
+<body>
+<div class="titlebar"><div class="inner">
+<h1>21. 紹介: リアルタイム通信</h1>
+<p class="lead">Web でできることの紹介 2。サーバーから知らせを受け取る仕組みと、タブ間のチャット、ブラウザ同士の直接通信（WebRTC）</p>
+<p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
+</div></div>
+
+<div class="wrap">
+<!-- AUTO:nav --><p class="docnav"><a class="doclink" href="20-描画とメディア.html" aria-label="前へ" title="20. 紹介: 描画とメディア" style="--accent:hsl(58.3,78%,25%);--accent2:hsl(58.3,58%,55%);--soft:hsl(58.3,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="22-ライブラリを埋め込む.html" aria-label="次へ" title="22. 紹介: ライブラリを埋め込む" style="--accent:hsl(35,78%,25%);--accent2:hsl(35,58%,55%);--soft:hsl(35,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav -->
+<!-- AUTO:toc -->
+<nav class="toc"><ol>
+<li class="ch01"><a href="#ch01">知らせをすぐ受け取るには</a></li>
+<li class="ch02"><a href="#ch02">タブ間のチャット（BroadcastChannel）</a></li>
+<li class="ch03"><a href="#ch03">WebSocket と Server-Sent Events</a></li>
+<li class="ch04"><a href="#ch04">ブラウザ同士がつながる（WebRTC）</a></li>
+</ol></nav>
+<!-- /AUTO:toc -->
+
+<section class="ch01" id="ch01">
+<h1>知らせをすぐ受け取るには</h1>
+<p>18 章の <code>fetch</code> は「こちらから聞いて、答えをもらう」形です。チャットや通知のように、<strong>相手の都合で届く知らせ</strong>をすぐ受け取るには、別の仕組みを使います。</p>
+<figure>
+<svg viewBox="0 0 880 260" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="リアルタイム通信の仕組みの比較">
+<defs>
+<linearGradient id="g-21-1a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="g-21-1b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="g-21-1c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="g-21-1d" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(300,78%,25%)"/><stop offset="1" stop-color="hsl(300,58%,55%)"/></linearGradient>
+<marker id="m-21-1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="10" width="200" height="56" rx="10" fill="url(#g-21-1a)"/><text x="120" y="44" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">ポーリング</text>
+<text x="240" y="44" fill="#1c2330" font-size="14">何秒かおきに fetch で聞きに行く。簡単だが、無駄な通信が多く、遅れる</text>
+<rect x="20" y="72" width="200" height="56" rx="10" fill="url(#g-21-1b)"/><text x="120" y="106" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">Server-Sent Events</text>
+<text x="240" y="106" fill="#1c2330" font-size="14">サーバー → ブラウザの一方通行で、届くたびに受け取る</text>
+<rect x="20" y="134" width="200" height="56" rx="10" fill="url(#g-21-1c)"/><text x="120" y="168" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebSocket</text>
+<text x="240" y="168" fill="#1c2330" font-size="14">つなぎっぱなしで、両方向にいつでも送れる。チャット ・ ゲーム</text>
+<rect x="20" y="196" width="200" height="56" rx="10" fill="url(#g-21-1d)"/><text x="120" y="230" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebRTC</text>
+<text x="240" y="230" fill="#1c2330" font-size="14">ブラウザ同士が直接つながる。ビデオ通話 ・ 画面共有</text>
+</svg>
+<figcaption>下へ行くほど、速く双方向になる代わりに、仕組みが大きくなる</figcaption>
+</figure>
+<p>WebSocket と Server-Sent Events は、受け持つサーバーが必要なので、このページでは書き方を紹介するだけにします。同じオリジンのタブ間で送り合う <code>BroadcastChannel</code> と、ブラウザ同士がつながる WebRTC は、このページの中で動かせます。</p>
+</section>
+
+<section class="ch02" id="ch02">
+<h1>タブ間のチャット（BroadcastChannel）</h1>
+<p><code>BroadcastChannel</code> は、<strong>同じオリジンで開いている別のタブやウィンドウ</strong>に、メッセージを送る仕組みです。サーバーは要りません。まず仕組みだけを見ます。別のタブの代わりに、同じページの中にもう 1 つ受け手を作っています。</p>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const me = new BroadcastChannel("jsl-demo");
+const other = new BroadcastChannel("jsl-demo"); // 別のタブの代わり
+other.addEventListener("message", (event) => {
+  console.log("受け取った:", event.data.text);
+});
+me.postMessage({ text: "こんにちは" });</code></pre>
+<pre class="output"><code class="language-text">受け取った: こんにちは</code></pre>
+</div>
+<p>次はチャットの画面です。<strong>このページをもう 1 つのタブで開き</strong>、両方で「▶ 実行」を押してから、片方で書き込んでみてください。もう片方に届きます。</p>
+<div class="example" data-run="dom">
+<p class="filename">body の中身</p>
+<pre><code class="language-html">&lt;form id="form"&gt;
+  &lt;input id="text" placeholder="メッセージ" autocomplete="off"&gt;
+  &lt;button&gt;送る&lt;/button&gt;
+&lt;/form&gt;
+&lt;ul id="log"&gt;&lt;/ul&gt;</code></pre>
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const channel = new BroadcastChannel("jsl-chat");
+const log = document.querySelector("#log");
+const name = `タブ${Math.floor(Math.random() * 90 + 10)}`;
+
+function show(who, text) {
+  const li = document.createElement("li");
+  li.textContent = `${who}: ${text}`;
+  log.append(li);
+}
+channel.addEventListener("message", (event) => show(event.data.who, event.data.text));
+
+document.querySelector("#form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const input = document.querySelector("#text");
+  if (input.value.trim() === "") return;
+  channel.postMessage({ who: name, text: input.value });
+  show(`${name}（自分）`, input.value);
+  input.value = "";
+});</code></pre>
+</div>
+</section>
+
+<section class="ch03" id="ch03">
+<h1>WebSocket と Server-Sent Events</h1>
+<h2>WebSocket</h2>
+<p>サーバーとつなぎっぱなしにして、どちらからでもいつでも送れます。チャットのサーバーにつなぐブラウザ側のコードは、次のような形です。</p>
+<pre><code class="language-javascript">const socket = new WebSocket("wss://chat.example.com/room/1");
+socket.addEventListener("open", () => {
+  socket.send(JSON.stringify({ type: "join", name: "ゲスト" }));
+});
+socket.addEventListener("message", (event) => {
+  const msg = JSON.parse(event.data);
+  console.log(`${msg.name}: ${msg.text}`);
+});
+socket.addEventListener("close", () => console.log("切れました"));</code></pre>
+<p>サーバー側は、Node.js なら <code>ws</code> などのパッケージ（10 章の npm）を使って書けます。</p>
+<h2>Server-Sent Events</h2>
+<p>サーバーからの一方通行でよいなら、もっと簡単です。ブラウザ側は <code>EventSource</code> で受け取ります。</p>
+<pre><code class="language-javascript">const events = new EventSource("/notifications");
+events.addEventListener("message", (event) => {
+  console.log("お知らせ:", event.data);
+});</code></pre>
+<p>サーバーは、つないだままのレスポンスに「<code>data: 本文</code>」と空行を書き足していくだけです。Node.js の <code>node:http</code>（14 章の <code>serve.mjs</code> と同じ道具）だけで書けます。</p>
+<pre><code class="language-javascript">res.writeHead(200, { "content-type": "text/event-stream" });
+const id = setInterval(() => res.write(`data: ${new Date().toISOString()}\n\n`), 1000);
+req.on("close", () => clearInterval(id));</code></pre>
+</section>
+
+<section class="ch04" id="ch04">
+<h1>ブラウザ同士がつながる（WebRTC）</h1>
+<p>WebRTC は、ブラウザ同士が<strong>サーバーを通さずに直接</strong>データや映像を送り合う仕組みです。ビデオ会議 ・ 画面共有 ・ ファイルの受け渡しに使われます。</p>
+<figure>
+<svg viewBox="0 0 880 220" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="WebRTC のつながり方">
+<defs>
+<linearGradient id="g-21-4a" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="g-21-4b" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(330,78%,25%)"/><stop offset="1" stop-color="hsl(330,58%,55%)"/></linearGradient>
+<linearGradient id="g-21-4c" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(45,78%,25%)"/><stop offset="1" stop-color="hsl(45,58%,55%)"/></linearGradient>
+<marker id="m-21-4" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+<rect x="20" y="120" width="220" height="80" rx="14" fill="url(#g-21-4a)"/><text x="130" y="166" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">ブラウザ A</text>
+<rect x="640" y="120" width="220" height="80" rx="14" fill="url(#g-21-4b)"/><text x="750" y="166" fill="#fff" font-size="18" font-weight="700" text-anchor="middle">ブラウザ B</text>
+<rect x="330" y="10" width="220" height="70" rx="14" fill="url(#g-21-4c)"/><text x="440" y="40" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">仲介役（シグナリング）</text><text x="440" y="64" fill="#fff" font-size="13" text-anchor="middle">つなぎ方の情報だけを渡す</text>
+<line x1="200" y1="116" x2="330" y2="60" stroke="#7a8699" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#m-21-4)"/>
+<line x1="550" y1="60" x2="680" y2="116" stroke="#7a8699" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#m-21-4)"/>
+<line x1="244" y1="170" x2="634" y2="170" stroke="#1d7a3c" stroke-width="5" marker-end="url(#m-21-4)"/>
+<text x="440" y="160" fill="#1d7a3c" font-size="16" font-weight="700" text-anchor="middle">データ ・ 映像は直接</text>
+</svg>
+<figcaption>つなぐための情報（offer と answer）だけを仲介役が渡し、中身は直接やり取りする</figcaption>
+</figure>
+<p>次の例は、仲介役の代わりに、同じページの中で 2 つの接続（<code>a</code> と <code>b</code>）を作って直接つなぎ、文字を送っています。本物のアプリでは、<code>offer</code> と <code>answer</code> を WebSocket などで相手に届けます。</p>
+<div class="example" data-run="dom">
+<p class="filename">スクリプト</p>
+<pre><code class="language-javascript">const a = new RTCPeerConnection();
+const b = new RTCPeerConnection();
+a.addEventListener("icecandidate", (e) => e.candidate &amp;&amp; b.addIceCandidate(e.candidate));
+b.addEventListener("icecandidate", (e) => e.candidate &amp;&amp; a.addIceCandidate(e.candidate));
+
+const channel = a.createDataChannel("chat");
+channel.addEventListener("open", () => channel.send("WebRTC でこんにちは"));
+b.addEventListener("datachannel", (e) => {
+  e.channel.addEventListener("message", (m) => console.log("b が受け取った:", m.data));
+});
+
+// つなぎ方の情報を交換する（本物では仲介役が受け渡す）
+const offer = await a.createOffer();
+await a.setLocalDescription(offer);
+await b.setRemoteDescription(offer);
+const answer = await b.createAnswer();
+await b.setLocalDescription(answer);
+await a.setRemoteDescription(answer);
+
+setTimeout(() => {
+  a.close();
+  b.close();
+}, 2000); // 2 秒後に切る</code></pre>
+<pre class="output"><code class="language-text">b が受け取った: WebRTC でこんにちは</code></pre>
+</div>
+</section>
+
+</div>
+<footer><!-- AUTO:nav --><p class="docnav"><a class="doclink" href="20-描画とメディア.html" aria-label="前へ" title="20. 紹介: 描画とメディア" style="--accent:hsl(58.3,78%,25%);--accent2:hsl(58.3,58%,55%);--soft:hsl(58.3,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M10 2.5 4.5 8l5.5 5.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink" href="22-ライブラリを埋め込む.html" aria-label="次へ" title="22. 紹介: ライブラリを埋め込む" style="--accent:hsl(35,78%,25%);--accent2:hsl(35,58%,55%);--soft:hsl(35,28%,95%);"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M6 2.5 11.5 8 6 13.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></a><a class="doclink home" href="README.html" aria-label="目次" title="資料一覧"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 8 8 2.4 14.2 8M3.8 6.6v7h3.3V10h1.8v3.6h3.3v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></a></p><!-- /AUTO:nav --></footer>
+</body>
+</html>

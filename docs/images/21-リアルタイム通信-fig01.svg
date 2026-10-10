@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 260" width="880" height="260" role="img" aria-label="リアルタイム通信の仕組みの比較" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif">
+<defs>
+<linearGradient id="i1" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(220,78%,25%)"/><stop offset="1" stop-color="hsl(220,58%,55%)"/></linearGradient>
+<linearGradient id="i2" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(30,78%,25%)"/><stop offset="1" stop-color="hsl(30,58%,55%)"/></linearGradient>
+<linearGradient id="i3" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(140,78%,25%)"/><stop offset="1" stop-color="hsl(140,58%,55%)"/></linearGradient>
+<linearGradient id="i4" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="hsl(300,78%,25%)"/><stop offset="1" stop-color="hsl(300,58%,55%)"/></linearGradient>
+<marker id="i5" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 10 5 0 10z" fill="#7a8699"/></marker>
+</defs>
+	<rect width="100%" height="100%" fill="#ffffff"/>
+<rect x="20" y="10" width="200" height="56" rx="10" fill="url(#i1)"/><text x="120" y="44" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">ポーリング</text>
+<text x="240" y="44" fill="#1c2330" font-size="14">何秒かおきに fetch で聞きに行く。簡単だが、無駄な通信が多く、遅れる</text>
+<rect x="20" y="72" width="200" height="56" rx="10" fill="url(#i2)"/><text x="120" y="106" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">Server-Sent Events</text>
+<text x="240" y="106" fill="#1c2330" font-size="14">サーバー → ブラウザの一方通行で、届くたびに受け取る</text>
+<rect x="20" y="134" width="200" height="56" rx="10" fill="url(#i3)"/><text x="120" y="168" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebSocket</text>
+<text x="240" y="168" fill="#1c2330" font-size="14">つなぎっぱなしで、両方向にいつでも送れる。チャット ・ ゲーム</text>
+<rect x="20" y="196" width="200" height="56" rx="10" fill="url(#i4)"/><text x="120" y="230" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebRTC</text>
+<text x="240" y="230" fill="#1c2330" font-size="14">ブラウザ同士が直接つながる。ビデオ通話 ・ 画面共有</text>
+</svg>
