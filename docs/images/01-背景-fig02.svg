@@ -13,7 +13,7 @@
 <rect x="450" y="20" width="380" height="120" rx="12" fill="url(#i3)"/>
 <text x="640" y="52" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">Node.js</text>
 <text x="640" y="84" fill="#fff" font-size="15" text-anchor="middle">ファイルの読み書き・フォルダの一覧</text>
-<text x="640" y="108" fill="#fff" font-size="15" text-anchor="middle">コマンドラインのツール・Web サーバー</text>
+<text x="640" y="108" fill="#fff" font-size="15" text-anchor="middle">コマンドラインのツール・Web サーバ</text>
 <text x="640" y="130" fill="#fff" font-size="13" text-anchor="middle">→ 第1部の実行環境</text>
 <rect x="30" y="160" width="800" height="70" rx="12" fill="url(#i1)"/>
 <text x="430" y="192" fill="#fff" font-size="20" font-weight="700" text-anchor="middle">ECMAScript（言語そのもの）</text>

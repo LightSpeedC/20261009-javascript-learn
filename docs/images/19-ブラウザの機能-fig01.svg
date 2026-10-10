@@ -10,9 +10,9 @@
 <text x="115" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">cookie</text>
 <text x="115" y="84" fill="#fff" font-size="14" text-anchor="middle">小さい（4KB ほど）</text>
 <text x="115" y="110" fill="#fff" font-size="14" text-anchor="middle">期限を決められる</text>
-<text x="115" y="136" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">毎回サーバーへ送られる</text>
+<text x="115" y="136" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">毎回サーバへ送られる</text>
 <text x="115" y="196" fill="#fff" font-size="13" text-anchor="middle">ログイン状態など</text>
-<text x="115" y="218" fill="#fff" font-size="13" text-anchor="middle">サーバーが使う情報</text>
+<text x="115" y="218" fill="#fff" font-size="13" text-anchor="middle">サーバが使う情報</text>
 <rect x="232" y="15" width="200" height="230" rx="14" fill="url(#i2)"/>
 <text x="332" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">localStorage</text>
 <text x="332" y="84" fill="#fff" font-size="14" text-anchor="middle">数 MB</text>

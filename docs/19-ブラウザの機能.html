@@ -25,7 +25,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <body>
 <div class="titlebar"><div class="inner">
 <h1>19. ブラウザの機能</h1>
-<p class="lead">ブラウザにデータを残す方法の比較（cookie ・ localStorage ・ sessionStorage ・ IndexedDB）、時刻とタイマー、URL、クリップボード</p>
+<p class="lead">ブラウザにデータを残す方法の比較（cookie ・ localStorage ・ sessionStorage ・ IndexedDB）、時刻とタイマ、URL、クリップボード</p>
 <p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
 </div></div>
 
@@ -36,7 +36,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <li class="ch01"><a href="#ch01">データを残す方法の比較</a></li>
 <li class="ch02"><a href="#ch02">localStorage と sessionStorage</a></li>
 <li class="ch03"><a href="#ch03">cookie と IndexedDB</a></li>
-<li class="ch04"><a href="#ch04">時刻とタイマー</a></li>
+<li class="ch04"><a href="#ch04">時刻とタイマ</a></li>
 <li class="ch05"><a href="#ch05">URL とクリップボード</a></li>
 </ol></nav>
 <!-- /AUTO:toc -->
@@ -56,9 +56,9 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <text x="115" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">cookie</text>
 <text x="115" y="84" fill="#fff" font-size="14" text-anchor="middle">小さい（4KB ほど）</text>
 <text x="115" y="110" fill="#fff" font-size="14" text-anchor="middle">期限を決められる</text>
-<text x="115" y="136" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">毎回サーバーへ送られる</text>
+<text x="115" y="136" fill="#fff" font-size="14" text-anchor="middle" font-weight="700">毎回サーバへ送られる</text>
 <text x="115" y="196" fill="#fff" font-size="13" text-anchor="middle">ログイン状態など</text>
-<text x="115" y="218" fill="#fff" font-size="13" text-anchor="middle">サーバーが使う情報</text>
+<text x="115" y="218" fill="#fff" font-size="13" text-anchor="middle">サーバが使う情報</text>
 <rect x="232" y="15" width="200" height="230" rx="14" fill="url(#g-19-1b)"/>
 <text x="332" y="48" fill="#fff" font-size="19" font-weight="700" text-anchor="middle">localStorage</text>
 <text x="332" y="84" fill="#fff" font-size="14" text-anchor="middle">数 MB</text>
@@ -80,12 +80,12 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <text x="766" y="196" fill="#fff" font-size="13" text-anchor="middle">大量のデータ ・ 検索</text>
 <text x="766" y="218" fill="#fff" font-size="13" text-anchor="middle">オフラインで使うアプリ</text>
 </svg>
-<figcaption>同じ「残す」でも、大きさ ・ 残る期間 ・ サーバーへ送られるかが違う</figcaption>
+<figcaption>同じ「残す」でも、大きさ ・ 残る期間 ・ サーバへ送られるかが違う</figcaption>
 </figure>
 <div class="tablewrap"><table>
-<thead><tr><th>方法</th><th>残る期間</th><th>サーバーへ</th><th>書き方</th><th>使いどころ</th></tr></thead>
+<thead><tr><th>方法</th><th>残る期間</th><th>サーバへ</th><th>書き方</th><th>使いどころ</th></tr></thead>
 <tbody>
-<tr><td class="nowrap">cookie</td><td>期限まで</td><td><span class="badge b-warn">毎回送られる</span></td><td><code>document.cookie</code></td><td>サーバーが知る必要のある情報</td></tr>
+<tr><td class="nowrap">cookie</td><td>期限まで</td><td><span class="badge b-warn">毎回送られる</span></td><td><code>document.cookie</code></td><td>サーバが知る必要のある情報</td></tr>
 <tr><td class="nowrap">localStorage</td><td>消すまで</td><td><span class="badge b-none">送られない</span></td><td><code>localStorage.setItem</code></td><td>設定 ・ 小さなデータ</td></tr>
 <tr><td class="nowrap">sessionStorage</td><td>タブを閉じるまで</td><td><span class="badge b-none">送られない</span></td><td><code>sessionStorage.setItem</code></td><td>そのタブだけの一時的な状態</td></tr>
 <tr><td class="nowrap">IndexedDB</td><td>消すまで</td><td><span class="badge b-none">送られない</span></td><td>非同期の API（ライブラリ経由が多い）</td><td>大量のデータ ・ オフライン</td></tr>
@@ -176,13 +176,13 @@ console.log(document.cookie.includes("jsl_theme=dark"));</code></pre>
 <pre class="output"><code class="language-text">true
 false</code></pre>
 </div>
-<p>cookie はリクエストのたびにサーバーへ送られるので、ブラウザの中だけで使うデータには向きません。ブラウザだけで使うなら <code>localStorage</code> を使います。ログイン状態のように、サーバーが決めてサーバーが読む情報は、サーバー側が cookie を設定するのがふつうです。</p>
+<p>cookie はリクエストのたびにサーバへ送られるので、ブラウザの中だけで使うデータには向きません。ブラウザだけで使うなら <code>localStorage</code> を使います。ログイン状態のように、サーバが決めてサーバが読む情報は、サーバ側が cookie を設定するのがふつうです。</p>
 <h2>IndexedDB</h2>
 <p>IndexedDB は、ブラウザの中のデータベースです。オブジェクトをそのまま大量に保存でき、キーで検索できます。ただし、API が古い形の非同期（イベントで結果を受け取る）で書きにくいため、小さなライブラリを通して使うのがふつうです。この資料では名前と使いどころだけを紹介します。</p>
 </section>
 
 <section class="ch04" id="ch04">
-<h1>時刻とタイマー</h1>
+<h1>時刻とタイマ</h1>
 <p>時刻は <code>Date</code> で扱います。表示の形は <code>toLocaleString</code> や <code>Intl.DateTimeFormat</code> で決めます。<code>timeZone</code> を指定すると、見ている人のパソコンの設定に関係なく、日本時間で表示できます。</p>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">const d = new Date("2026-10-10T09:30:05+09:00");
@@ -203,7 +203,7 @@ console.log(later.toLocaleTimeString("ja-JP", { timeZone: "Asia/Tokyo" }));</cod
 2026年10月10日(土)
 11:00:05</code></pre>
 </div>
-<p>11 章のタイマーを画面に使うと、時計が作れます。「動かす」を押すと 1 秒ごとに表示が変わり、「止める」で止まります。</p>
+<p>11 章のタイマを画面に使うと、時計が作れます。「動かす」を押すと 1 秒ごとに表示が変わり、「止める」で止まります。</p>
 <div class="example" data-run="dom">
 <p class="filename">body の中身</p>
 <pre><code class="language-html">&lt;p id="clock" style="font-size: 32px; font-weight: bold;"&gt;--:--:--&lt;/p&gt;
@@ -228,7 +228,7 @@ document.querySelector("#stop").addEventListener("click", () => {
 console.log(format(new Date("2026-10-10T09:30:05+09:00")));</code></pre>
 <pre class="output"><code class="language-text">9:30:05</code></pre>
 </div>
-<p><code>timerId</code> を覚えておくのは、止めるときに必要だからです。「動かす」を 2 回押してもタイマーが 2 つにならないよう、動いているときは何もしません。</p>
+<p><code>timerId</code> を覚えておくのは、止めるときに必要だからです。「動かす」を 2 回押してもタイマが 2 つにならないよう、動いているときは何もしません。</p>
 </section>
 
 <section class="ch05" id="ch05">

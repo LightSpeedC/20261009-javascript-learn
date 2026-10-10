@@ -1,4 +1,4 @@
-// 静的なファイルを返すだけの小さな Web サーバー。node serve.mjs で起動する
+// 静的なファイルを返すだけの小さな Web サーバ。node serve.mjs で起動する
 import { createServer } from "node:http";
 import { readFile } from "node:fs/promises";
 import { extname, join, normalize } from "node:path";

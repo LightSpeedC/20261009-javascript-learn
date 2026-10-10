@@ -10,7 +10,7 @@
 <rect x="20" y="10" width="200" height="56" rx="10" fill="url(#i1)"/><text x="120" y="44" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">ポーリング</text>
 <text x="240" y="44" fill="#1c2330" font-size="14">何秒かおきに fetch で聞きに行く。簡単だが、無駄な通信が多く、遅れる</text>
 <rect x="20" y="72" width="200" height="56" rx="10" fill="url(#i2)"/><text x="120" y="106" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">Server-Sent Events</text>
-<text x="240" y="106" fill="#1c2330" font-size="14">サーバー → ブラウザの一方通行で、届くたびに受け取る</text>
+<text x="240" y="106" fill="#1c2330" font-size="14">サーバ → ブラウザの一方通行で、届くたびに受け取る</text>
 <rect x="20" y="134" width="200" height="56" rx="10" fill="url(#i3)"/><text x="120" y="168" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebSocket</text>
 <text x="240" y="168" fill="#1c2330" font-size="14">つなぎっぱなしで、両方向にいつでも送れる。チャット ・ ゲーム</text>
 <rect x="20" y="196" width="200" height="56" rx="10" fill="url(#i4)"/><text x="120" y="230" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebRTC</text>

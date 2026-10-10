@@ -1,4 +1,4 @@
-// ブラウザのテストで、プロジェクトのフォルダをそのまま返す小さなサーバー。
+// ブラウザのテストで、プロジェクトのフォルダをそのまま返す小さなサーバ。
 // Playwright は spec を CommonJS に変換して読むので、ここでも import.meta は使わない。
 import { createServer, type Server } from 'node:http';
 import { readFile } from 'node:fs/promises';

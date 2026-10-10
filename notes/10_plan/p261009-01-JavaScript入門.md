@@ -59,12 +59,12 @@
 
 | 回 | 章 | タイトル | 主な内容 |
 |---|---|---|---|
-| 第5回 | 14 | ブラウザで動かす | `<script type="module">`、開発者ツール、ローカルサーバー |
+| 第5回 | 14 | ブラウザで動かす | `<script type="module">`、開発者ツール、ローカルサーバ |
 |  | 15 | DOM | 要素の取得・作成・書き換え、`textContent` と `innerHTML` |
 |  | 16 | イベント | `addEventListener`、伝播と委譲、イベントの中の `this` |
 |  | 17 | フォーム | 入力値の取得、検証、送信を止める |
 | 第6回 | 18 | 通信 | `fetch`、JSON、CORS の入口 |
-|  | 19 | ブラウザの機能 | 保存の方法の比較（cookie ・ `localStorage` ・ `sessionStorage` ・ IndexedDB の使いどころだけ）、タイマー、履歴、クリップボード |
+|  | 19 | ブラウザの機能 | 保存の方法の比較（cookie ・ `localStorage` ・ `sessionStorage` ・ IndexedDB の使いどころだけ）、タイマ、履歴、クリップボード |
 |  | 20 | 紹介: 描画とメディア | Canvas、SVG、3D（three.js など）、動画、マイク・カメラ、音声合成、音の生成（Web Audio） |
 |  | 21 | 紹介: リアルタイム通信 | WebSocket、Server-Sent Events、WebRTC、チャット |
 |  | 22 | 紹介: ライブラリを埋め込む | CDN で React、UMD を `<script>` で読み込む、Mermaid でシーケンス図など |
@@ -91,7 +91,7 @@ jsprimer は、GitBook のプラグイン js-console（codemirror-console）を�
 | コードの種類 | ボタンを押したとき |
 |---|---|
 | ブラウザで動くもの（値・関数・クラス・クロージャ等） | その場で実行し、出力とエラーを表示する。コードは書き換えて再実行できる |
-| タイマー・Promise ・ `async` ・ `await` | 同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする） |
+| タイマ・Promise ・ `async` ・ `await` | 同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする） |
 | Node.js でしか動かないもの（ファイルの読み書き・ディレクトリ一覧・`require` 等） | 実行はせず、Node.js で実際に動かしたときの出力を、あらかじめ記録したものとして表示する。「Node.js での実行結果」と明示し、書き換えはできない |
 
 仕組みは自前で書き、`docs/js/` に置く。CDN は使わない。実行する場所は部で分ける。
@@ -99,7 +99,7 @@ jsprimer は、GitBook のプラグイン js-console（codemirror-console）を�
 - **第1部: Web Worker**。ページと別のスレッドで動くので、無限ループでも資料が固まらず、時間で打ち切れる。`console` を差し替えて出力を `postMessage` でページへ送る
 - **第2部の DOM の例: iframe**。Worker には DOM が無いため
 - Worker のグローバルは `window` ではなく `self`。07 章の例は実際に動かし、ブラウザ本体と結果が違えば本文で説明する
-- `file://` で直接開いたときに Worker が動くかは未確認。動かなければ、ローカルサーバーで開くよう案内する
+- `file://` で直接開いたときに Worker が動くかは未確認。動かなければ、ローカルサーバで開くよう案内する
 
 記録する出力は、`docs/samples/` のコードを実際に Node.js で動かして得る。
 
@@ -113,6 +113,6 @@ jsprimer は、GitBook のプラグイン js-console（codemirror-console）を�
 - **例の検証**: 資料の例を Node.js で実行した結果と、ブラウザ（Chromium ・ Firefox）で「▶ 実行」を押した結果の両方を、載せた出力と比べるテストを置いた（`tools/40_test/run-tests.cmd`）
 - **計画に無かった追加**: 例の種類は 3 つ（`data-run="worker"` はブラウザで実行、`"node"` は Node.js の記録を表示、`"file"` は置いておくだけのファイル）。前後のナビ ・ 目次 ・ 章の色は `tools/20_build/build-docs.ts` で書き込む
 - **第2部**: 14〜23 を作成した（2026-10-10）。章立ては計画どおり
-- **第2部で足した仕組み**: DOM を使う例は `data-run="dom"` とし、iframe の中に HTML ・ CSS ・ スクリプトを置いて、画面と console を見せる（`docs/js/frame.js`）。CDN から読み込む例には `data-net="cdn"` を付けた。14 章のローカルサーバー（`docs/samples/web/serve.mjs`）は、資料のコードとファイルが一致することと、実際に応答することをテストで確かめる
+- **第2部で足した仕組み**: DOM を使う例は `data-run="dom"` とし、iframe の中に HTML ・ CSS ・ スクリプトを置いて、画面と console を見せる（`docs/js/frame.js`）。CDN から読み込む例には `data-net="cdn"` を付けた。14 章のローカルサーバ（`docs/samples/web/serve.mjs`）は、資料のコードとファイルが一致することと、実際に応答することをテストで確かめる
 
 [^^](../../README.md)

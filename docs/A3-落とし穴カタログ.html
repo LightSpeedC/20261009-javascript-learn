@@ -119,7 +119,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <tr><td><code>SyntaxError: await is only valid in async functions and the top level bodies of modules</code></td><td><code>async</code> の付いていない関数の中で <code>await</code> を使った</td><td>関数に <code>async</code> を付ける ・ 一番外側なら <code>.mjs</code> にする</td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
 <tr><td><code>Uncaught (in promise) Error: …</code></td><td>失敗した Promise を誰も受けていない</td><td><code>await</code> して <code>try</code> ・ <code>catch</code> ・ <code>.catch(…)</code> を付ける</td><td class="nowrap"><a href="11-非同期.html#ch06">11</a></td></tr>
 <tr><td><code>try</code> で囲んだのにエラーが捕まらない</td><td>エラーが起きたのは、<code>try</code> を抜けた後で動いた処理の中</td><td>Promise にして <code>await</code> する</td><td class="nowrap"><a href="11-非同期.html#ch06">11</a></td></tr>
-<tr><td>タイマーが時刻どおりに呼ばれない</td><td>重い処理が流れを止めている</td><td>重い処理を分ける ・ 短くする</td><td class="nowrap"><a href="11-非同期.html#ch01">11</a></td></tr>
+<tr><td>タイマが時刻どおりに呼ばれない</td><td>重い処理が流れを止めている</td><td>重い処理を分ける ・ 短くする</td><td class="nowrap"><a href="11-非同期.html#ch01">11</a></td></tr>
 <tr><td>2 つの待ちに、合計の時間がかかる</td><td><code>await</code> を 1 つずつ順に書いた</td><td>関係が無ければ <code>Promise.all</code></td><td class="nowrap"><a href="11-非同期.html#ch05">11</a></td></tr>
 </tbody>
 </table></div>
@@ -146,7 +146,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <div class="tablewrap"><table>
 <thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
 <tbody>
-<tr><td>HTML をダブルクリックで開くと、スクリプトが動かない。Console に <code>… has been blocked by CORS policy</code></td><td><code>file://</code> で開いたページからは、<code>type="module"</code> のファイルを読み込めない</td><td>ローカルサーバーを立てて <code>http://localhost:…</code> で開く</td><td class="nowrap"><a href="14-ブラウザで動かす.html#ch04">14</a></td></tr>
+<tr><td>HTML をダブルクリックで開くと、スクリプトが動かない。Console に <code>… has been blocked by CORS policy</code></td><td><code>file://</code> で開いたページからは、<code>type="module"</code> のファイルを読み込めない</td><td>ローカルサーバを立てて <code>http://localhost:…</code> で開く</td><td class="nowrap"><a href="14-ブラウザで動かす.html#ch04">14</a></td></tr>
 <tr><td><code>TypeError: Cannot read properties of null (reading 'textContent')</code></td><td><code>querySelector</code> が要素を見つけられず <code>null</code> を返した。<code>#</code> ・ <code>.</code> の付け忘れ、綴りの違い</td><td>セレクタを確かめる</td><td class="nowrap"><a href="15-DOM.html#ch02">15</a></td></tr>
 <tr><td>入力した文字の中の HTML が、そのまま動いてしまう</td><td>外から来た文字を <code>innerHTML</code> に入れた</td><td><code>textContent</code> で入れる</td><td class="nowrap"><a href="15-DOM.html#ch03">15</a></td></tr>
 <tr><td>親で受けたクリックの <code>e.target</code> が、思った要素と違う</td><td><code>target</code> は実際に押された、一番内側の要素</td><td><code>e.target.closest("li")</code> で目当ての要素までさかのぼる ・ 登録した要素なら <code>e.currentTarget</code></td><td class="nowrap"><a href="16-イベント.html#ch03">16</a></td></tr>
@@ -164,7 +164,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <thead><tr><th>症状</th><th>原因</th><th>直し方</th><th>章</th></tr></thead>
 <tbody>
 <tr><td>404 なのに <code>catch</code> に入らない</td><td><code>fetch</code> は 404 ・ 500 でも成功として返る</td><td><code>res.ok</code> を確かめて、だめなら自分で <code>throw</code> する</td><td class="nowrap"><a href="18-通信.html#ch03">18</a></td></tr>
-<tr><td><code>TypeError: Failed to fetch</code></td><td>通信そのものができなかった。ネットワークが切れている ・ CORS で止められた</td><td>Console の CORS のエラーを見る。別のオリジンなら、サーバー側で許可してもらう</td><td class="nowrap"><a href="18-通信.html#ch05">18</a></td></tr>
+<tr><td><code>TypeError: Failed to fetch</code></td><td>通信そのものができなかった。ネットワークが切れている ・ CORS で止められた</td><td>Console の CORS のエラーを見る。別のオリジンなら、サーバ側で許可してもらう</td><td class="nowrap"><a href="18-通信.html#ch05">18</a></td></tr>
 <tr><td>保存した回数に 1 を足すと <code>"11"</code> になる</td><td>localStorage は値を文字列にして保存する</td><td>読むときに <code>Number(…)</code></td><td class="nowrap"><a href="19-ブラウザの機能.html#ch02">19</a></td></tr>
 <tr><td>保存したオブジェクトを読むと <code>"[object Object]"</code></td><td>オブジェクトを、そのまま文字列にして保存した</td><td><code>JSON.stringify</code> で保存し、<code>JSON.parse</code> で戻す</td><td class="nowrap"><a href="19-ブラウザの機能.html#ch02">19</a></td></tr>
 <tr><td>sessionStorage に入れた値が、別のタブで読めない</td><td>sessionStorage はタブごとに分かれ、タブを閉じると消える</td><td>タブをまたぐなら localStorage</td><td class="nowrap"><a href="19-ブラウザの機能.html#ch02">19</a></td></tr>

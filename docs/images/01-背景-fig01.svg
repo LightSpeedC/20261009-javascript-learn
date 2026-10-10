@@ -16,7 +16,7 @@
 <text x="265" y="78" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">として標準化</text>
 <rect x="360" y="30" width="150" height="62" rx="10" fill="url(#i3)"/>
 <text x="435" y="56" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">Node.js 登場</text>
-<text x="435" y="78" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">サーバーでも動く</text>
+<text x="435" y="78" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">サーバでも動く</text>
 <rect x="530" y="30" width="150" height="62" rx="10" fill="url(#i4)"/>
 <text x="605" y="56" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">ES2015 で</text>
 <text x="605" y="78" fill="#fff" font-size="15" font-weight="700" text-anchor="middle">大きく進化</text>

@@ -252,7 +252,7 @@ console.log(bound("いらっしゃいませ"));
 
 ```javascript
 const timer = {
-  label: "タイマー",
+  label: "タイマ",
   show() {
     console.log(this.label);
   },
@@ -264,8 +264,8 @@ setTimeout(() => timer.show(), 0);
 
 ```text
 undefined
-タイマー
-タイマー
+タイマ
+タイマ
 ```
 
 1 つ目は `this` を失っています。2 つ目は `bind` で固定し、3 つ目はアロー関数の中で `timer.show()` と点付きで呼び直しています。
@@ -276,7 +276,7 @@ undefined
 
 ```javascript
 const timer = {
-  label: "タイマー",
+  label: "タイマ",
   start() {
     setTimeout(function () {
       console.log("function:", this.label);
@@ -291,7 +291,7 @@ timer.start();
 
 ```text
 function: undefined
-アロー関数: タイマー
+アロー関数: タイマ
 ```
 
 > [!WARNING]

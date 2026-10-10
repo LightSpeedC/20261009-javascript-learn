@@ -56,7 +56,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 
 <section class="ch02" id="ch02">
 <h1>送信を受け取る</h1>
-<p>フォームの送信ボタンを押すと、ブラウザは既定の動きとして、入力をサーバーへ送ってページを読み込み直します。JavaScript で受け取りたいときは、<code>submit</code> イベントで <code>preventDefault()</code> を呼んで止めます。</p>
+<p>フォームの送信ボタンを押すと、ブラウザは既定の動きとして、入力をサーバへ送ってページを読み込み直します。JavaScript で受け取りたいときは、<code>submit</code> イベントで <code>preventDefault()</code> を呼んで止めます。</p>
 <figure>
 <svg viewBox="0 0 880 170" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="フォームの送信を受け取る流れ">
 <defs>
@@ -170,7 +170,7 @@ for (const v of ["abc", "user1@example.com"]) {
 user1@example.com → 送れる: true</code></pre>
 </div>
 <div class="callout callout-important">
-<p><span class="label">決まり:</span> ブラウザでの確かめは、入力する人を助けるためのものです。ブラウザの JavaScript は、見ている人が書き換えられるので、<strong>サーバー側でも必ず同じ確かめを行います</strong>。ブラウザで確かめたから安全、とはなりません。</p>
+<p><span class="label">決まり:</span> ブラウザでの確かめは、入力する人を助けるためのものです。ブラウザの JavaScript は、見ている人が書き換えられるので、<strong>サーバ側でも必ず同じ確かめを行います</strong>。ブラウザで確かめたから安全、とはなりません。</p>
 </div>
 </section>
 

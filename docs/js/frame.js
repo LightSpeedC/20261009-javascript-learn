@@ -13,7 +13,7 @@
 		clearInterval: window.clearInterval.bind(window),
 		fetch: window.fetch ? window.fetch.bind(window) : null,
 	};
-	// 動いているタイマーと、返事を待っている通信の数。両方 0 が続いたら、例の実行が終わったとみなす
+	// 動いているタイマと、返事を待っている通信の数。両方 0 が続いたら、例の実行が終わったとみなす
 	const timers = new Set();
 	let pending = 0;
 	// 例のスクリプトが最後まで進んだか（一番外側の await で CDN を読み込む例があるため）。エラーで止まったときも立てる
@@ -48,7 +48,7 @@
 	const fileMode = document.baseURI.startsWith('file:');
 	if (native.fetch) {
 		window.fetch = function (...args) {
-			if (fileMode) out('error', 'file:// で開いたページでは fetch を使えません。公開ページか、ローカルサーバー経由で開いてください（14 章）');
+			if (fileMode) out('error', 'file:// で開いたページでは fetch を使えません。公開ページか、ローカルサーバ経由で開いてください（14 章）');
 			pending++;
 			const p = native.fetch(...args);
 			p.then(() => pending--, () => pending--);
@@ -99,7 +99,7 @@
 		ev.preventDefault();
 		window.__jslMainDone = true;
 		if (fileMode && ev.message === 'Script error.' && !ev.error) {
-			out('error', 'Uncaught エラーが起きました（file:// で開いているため、ブラウザが詳しい内容を隠しています。ローカルサーバー経由で開くと分かります）');
+			out('error', 'Uncaught エラーが起きました（file:// で開いているため、ブラウザが詳しい内容を隠しています。ローカルサーバ経由で開くと分かります）');
 			return;
 		}
 		out('error', 'Uncaught ' + (ev.error !== undefined && ev.error !== null ? describeError(ev.error) : ev.message));
@@ -136,7 +136,7 @@
 		window.addEventListener('resize', queueHeight);
 	});
 
-	// 例のスクリプトの後に呼ばれる。タイマーと通信が 0 の状態が続いたら終わりとみなす
+	// 例のスクリプトの後に呼ばれる。タイマと通信が 0 の状態が続いたら終わりとみなす
 	window.__jslStart = function () {
 		let idle = 0;
 		const tick = () => {

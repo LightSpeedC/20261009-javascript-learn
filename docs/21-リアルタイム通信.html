@@ -24,7 +24,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <body>
 <div class="titlebar"><div class="inner">
 <h1>21. 紹介: リアルタイム通信</h1>
-<p class="lead">Web でできることの紹介 2。サーバーから知らせを受け取る仕組みと、タブ間のチャット、ブラウザ同士の直接通信（WebRTC）</p>
+<p class="lead">Web でできることの紹介 2。サーバから知らせを受け取る仕組みと、タブ間のチャット、ブラウザ同士の直接通信（WebRTC）</p>
 <p class="date">📅 作成: 2026-10-10 / 更新: 2026-10-10</p>
 </div></div>
 
@@ -54,7 +54,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 <rect x="20" y="10" width="200" height="56" rx="10" fill="url(#g-21-1a)"/><text x="120" y="44" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">ポーリング</text>
 <text x="240" y="44" fill="#1c2330" font-size="14">何秒かおきに fetch で聞きに行く。簡単だが、無駄な通信が多く、遅れる</text>
 <rect x="20" y="72" width="200" height="56" rx="10" fill="url(#g-21-1b)"/><text x="120" y="106" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">Server-Sent Events</text>
-<text x="240" y="106" fill="#1c2330" font-size="14">サーバー → ブラウザの一方通行で、届くたびに受け取る</text>
+<text x="240" y="106" fill="#1c2330" font-size="14">サーバ → ブラウザの一方通行で、届くたびに受け取る</text>
 <rect x="20" y="134" width="200" height="56" rx="10" fill="url(#g-21-1c)"/><text x="120" y="168" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebSocket</text>
 <text x="240" y="168" fill="#1c2330" font-size="14">つなぎっぱなしで、両方向にいつでも送れる。チャット ・ ゲーム</text>
 <rect x="20" y="196" width="200" height="56" rx="10" fill="url(#g-21-1d)"/><text x="120" y="230" fill="#fff" font-size="16" font-weight="700" text-anchor="middle">WebRTC</text>
@@ -62,12 +62,12 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 </svg>
 <figcaption>下へ行くほど、速く双方向になる代わりに、仕組みが大きくなる</figcaption>
 </figure>
-<p>WebSocket と Server-Sent Events は、受け持つサーバーが必要なので、このページでは書き方を紹介するだけにします。同じオリジンのタブ間で送り合う <code>BroadcastChannel</code> と、ブラウザ同士がつながる WebRTC は、このページの中で動かせます。</p>
+<p>WebSocket と Server-Sent Events は、受け持つサーバが必要なので、このページでは書き方を紹介するだけにします。同じオリジンのタブ間で送り合う <code>BroadcastChannel</code> と、ブラウザ同士がつながる WebRTC は、このページの中で動かせます。</p>
 </section>
 
 <section class="ch02" id="ch02">
 <h1>タブ間のチャット（BroadcastChannel）</h1>
-<p><code>BroadcastChannel</code> は、<strong>同じオリジンで開いている別のタブやウィンドウ</strong>に、メッセージを送る仕組みです。サーバーは要りません。まず仕組みだけを見ます。別のタブの代わりに、同じページの中にもう 1 つ受け手を作っています。</p>
+<p><code>BroadcastChannel</code> は、<strong>同じオリジンで開いている別のタブやウィンドウ</strong>に、メッセージを送る仕組みです。サーバは要りません。まず仕組みだけを見ます。別のタブの代わりに、同じページの中にもう 1 つ受け手を作っています。</p>
 <div class="example" data-run="dom">
 <p class="filename">スクリプト</p>
 <pre><code class="language-javascript">const me = new BroadcastChannel("jsl-demo");
@@ -112,7 +112,7 @@ document.querySelector("#form").addEventListener("submit", (event) => {
 <section class="ch03" id="ch03">
 <h1>WebSocket と Server-Sent Events</h1>
 <h2>WebSocket</h2>
-<p>サーバーとつなぎっぱなしにして、どちらからでもいつでも送れます。チャットのサーバーにつなぐブラウザ側のコードは、次のような形です。</p>
+<p>サーバとつなぎっぱなしにして、どちらからでもいつでも送れます。チャットのサーバにつなぐブラウザ側のコードは、次のような形です。</p>
 <pre><code class="language-javascript">const socket = new WebSocket("wss://chat.example.com/room/1");
 socket.addEventListener("open", () => {
   socket.send(JSON.stringify({ type: "join", name: "ゲスト" }));
@@ -122,14 +122,14 @@ socket.addEventListener("message", (event) => {
   console.log(`${msg.name}: ${msg.text}`);
 });
 socket.addEventListener("close", () => console.log("切れました"));</code></pre>
-<p>サーバー側は、Node.js なら <code>ws</code> などのパッケージ（10 章の npm）を使って書けます。</p>
+<p>サーバ側は、Node.js なら <code>ws</code> などのパッケージ（10 章の npm）を使って書けます。</p>
 <h2>Server-Sent Events</h2>
-<p>サーバーからの一方通行でよいなら、もっと簡単です。ブラウザ側は <code>EventSource</code> で受け取ります。</p>
+<p>サーバからの一方通行でよいなら、もっと簡単です。ブラウザ側は <code>EventSource</code> で受け取ります。</p>
 <pre><code class="language-javascript">const events = new EventSource("/notifications");
 events.addEventListener("message", (event) => {
   console.log("お知らせ:", event.data);
 });</code></pre>
-<p>サーバーは、つないだままのレスポンスに「<code>data: 本文</code>」と空行を書き足していくだけです。Node.js の <code>node:http</code>（14 章の <code>serve.mjs</code> と同じ道具）だけで書けます。</p>
+<p>サーバは、つないだままのレスポンスに「<code>data: 本文</code>」と空行を書き足していくだけです。Node.js の <code>node:http</code>（14 章の <code>serve.mjs</code> と同じ道具）だけで書けます。</p>
 <pre><code class="language-javascript">res.writeHead(200, { "content-type": "text/event-stream" });
 const id = setInterval(() => res.write(`data: ${new Date().toISOString()}\n\n`), 1000);
 req.on("close", () => clearInterval(id));</code></pre>
@@ -137,7 +137,7 @@ req.on("close", () => clearInterval(id));</code></pre>
 
 <section class="ch04" id="ch04">
 <h1>ブラウザ同士がつながる（WebRTC）</h1>
-<p>WebRTC は、ブラウザ同士が<strong>サーバーを通さずに直接</strong>データや映像を送り合う仕組みです。ビデオ会議 ・ 画面共有 ・ ファイルの受け渡しに使われます。</p>
+<p>WebRTC は、ブラウザ同士が<strong>サーバを通さずに直接</strong>データや映像を送り合う仕組みです。ビデオ会議 ・ 画面共有 ・ ファイルの受け渡しに使われます。</p>
 <figure>
 <svg viewBox="0 0 880 220" font-family="Segoe UI, Yu Gothic UI, Meiryo, sans-serif" role="img" aria-label="WebRTC のつながり方">
 <defs>

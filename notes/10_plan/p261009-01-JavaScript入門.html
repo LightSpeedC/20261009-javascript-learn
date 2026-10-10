@@ -114,12 +114,12 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-sof
 <div class="tablewrap"><table>
 <thead><tr><th>回</th><th>章</th><th>タイトル</th><th>主な内容</th></tr></thead>
 <tbody>
-<tr><td class="nowrap" rowspan="4">第5回</td><td class="nowrap">14</td><td class="nowrap">ブラウザで動かす</td><td><code>&lt;script type="module"&gt;</code>、開発者ツール、ローカルサーバー</td></tr>
+<tr><td class="nowrap" rowspan="4">第5回</td><td class="nowrap">14</td><td class="nowrap">ブラウザで動かす</td><td><code>&lt;script type="module"&gt;</code>、開発者ツール、ローカルサーバ</td></tr>
 <tr><td class="nowrap">15</td><td class="nowrap">DOM</td><td>要素の取得・作成・書き換え、<code>textContent</code> と <code>innerHTML</code></td></tr>
 <tr><td class="nowrap">16</td><td class="nowrap">イベント</td><td><code>addEventListener</code>、伝播と委譲、イベントの中の <code>this</code></td></tr>
 <tr><td class="nowrap">17</td><td class="nowrap">フォーム</td><td>入力値の取得、検証、送信を止める</td></tr>
 <tr><td class="nowrap" rowspan="5">第6回</td><td class="nowrap">18</td><td class="nowrap">通信</td><td><code>fetch</code>、JSON、CORS の入口</td></tr>
-<tr><td class="nowrap">19</td><td class="nowrap">ブラウザの機能</td><td>保存の方法の比較（cookie ・ <code>localStorage</code> ・ <code>sessionStorage</code> ・ IndexedDB の使いどころだけ）、タイマー、履歴、クリップボード</td></tr>
+<tr><td class="nowrap">19</td><td class="nowrap">ブラウザの機能</td><td>保存の方法の比較（cookie ・ <code>localStorage</code> ・ <code>sessionStorage</code> ・ IndexedDB の使いどころだけ）、タイマ、履歴、クリップボード</td></tr>
 <tr><td class="nowrap">20</td><td class="nowrap">紹介: 描画とメディア</td><td>Canvas、SVG、3D（three.js など）、動画、マイク・カメラ、音声合成、音の生成（Web Audio）</td></tr>
 <tr><td class="nowrap">21</td><td class="nowrap">紹介: リアルタイム通信</td><td>WebSocket、Server-Sent Events、WebRTC、チャット</td></tr>
 <tr><td class="nowrap">22</td><td class="nowrap">紹介: ライブラリを埋め込む</td><td>CDN で React、UMD を <code>&lt;script&gt;</code> で読み込む、Mermaid でシーケンス図など</td></tr>
@@ -146,7 +146,7 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-sof
 <thead><tr><th>コードの種類</th><th>ボタンを押したとき</th></tr></thead>
 <tbody>
 <tr><td>ブラウザで動くもの（値・関数・クラス・クロージャ等）</td><td>その場で実行し、出力とエラーを表示する。コードは書き換えて再実行できる</td></tr>
-<tr><td>タイマー・Promise ・ <code>async</code> ・ <code>await</code></td><td>同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする）</td></tr>
+<tr><td>タイマ・Promise ・ <code>async</code> ・ <code>await</code></td><td>同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする）</td></tr>
 <tr><td>Node.js でしか動かないもの（ファイルの読み書き・ディレクトリ一覧・<code>require</code> 等）</td><td>実行はせず、Node.js で実際に動かしたときの出力を、あらかじめ記録したものとして表示する。「Node.js での実行結果」と明示し、書き換えはできない</td></tr>
 </tbody>
 </table></div>
@@ -155,7 +155,7 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-sof
 <li><strong>第1部: Web Worker</strong>。ページと別のスレッドで動くので、無限ループでも資料が固まらず、時間で打ち切れる。<code>console</code> を差し替えて出力を <code>postMessage</code> でページへ送る</li>
 <li><strong>第2部の DOM の例: iframe</strong>。Worker には DOM が無いため</li>
 <li>Worker のグローバルは <code>window</code> ではなく <code>self</code>。07 章の例は実際に動かし、ブラウザ本体と結果が違えば本文で説明する</li>
-<li><code>file://</code> で直接開いたときに Worker が動くかは未確認。動かなければ、ローカルサーバーで開くよう案内する</li>
+<li><code>file://</code> で直接開いたときに Worker が動くかは未確認。動かなければ、ローカルサーバで開くよう案内する</li>
 </ul>
 <p>記録する出力は、<code>docs/samples/</code> のコードを実際に Node.js で動かして得る。</p>
 <h2>未決事項</h2>
@@ -166,7 +166,7 @@ footer{max-width:1600px;margin:0 auto;padding:18px 30px 30px;color:var(--ink-sof
 <li><strong>例の検証</strong>: 資料の例を Node.js で実行した結果と、ブラウザ（Chromium ・ Firefox）で「▶ 実行」を押した結果の両方を、載せた出力と比べるテストを置いた（<code>tools/40_test/run-tests.cmd</code>）</li>
 <li><strong>計画に無かった追加</strong>: 例の種類は 3 つ（<code>data-run="worker"</code> はブラウザで実行、<code>"node"</code> は Node.js の記録を表示、<code>"file"</code> は置いておくだけのファイル）。前後のナビ ・ 目次 ・ 章の色は <code>tools/20_build/build-docs.ts</code> で書き込む</li>
 <li><strong>第2部</strong>: 14〜23 を作成した（2026-10-10）。章立ては計画どおり</li>
-<li><strong>第2部で足した仕組み</strong>: DOM を使う例は <code>data-run="dom"</code> とし、iframe の中に HTML ・ CSS ・ スクリプトを置いて、画面と console を見せる（<code>docs/js/frame.js</code>）。CDN から読み込む例には <code>data-net="cdn"</code> を付けた。14 章のローカルサーバー（<code>docs/samples/web/serve.mjs</code>）は、資料のコードとファイルが一致することと、実際に応答することをテストで確かめる</li>
+<li><strong>第2部で足した仕組み</strong>: DOM を使う例は <code>data-run="dom"</code> とし、iframe の中に HTML ・ CSS ・ スクリプトを置いて、画面と console を見せる（<code>docs/js/frame.js</code>）。CDN から読み込む例には <code>data-net="cdn"</code> を付けた。14 章のローカルサーバ（<code>docs/samples/web/serve.mjs</code>）は、資料のコードとファイルが一致することと、実際に応答することをテストで確かめる</li>
 </ul>
 </section>
 

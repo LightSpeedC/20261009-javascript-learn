@@ -308,7 +308,7 @@ console.log(bound("いらっしゃいませ"));</code></pre>
 <p>実務で <code>this</code> を失うのは、ほとんどが<strong>メソッドをコールバックとして渡したとき</strong>です。渡した先では、点なしで呼ばれるからです。</p>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">const timer = {
-  label: "タイマー",
+  label: "タイマ",
   show() {
     console.log(this.label);
   },
@@ -317,15 +317,15 @@ setTimeout(timer.show, 0);
 setTimeout(timer.show.bind(timer), 0);
 setTimeout(() => timer.show(), 0);</code></pre>
 <pre class="output"><code class="language-text">undefined
-タイマー
-タイマー</code></pre>
+タイマ
+タイマ</code></pre>
 </div>
 <p>1 つ目は <code>this</code> を失っています。2 つ目は <code>bind</code> で固定し、3 つ目はアロー関数の中で <code>timer.show()</code> と点付きで呼び直しています。</p>
 <h2>アロー関数は外側の this を使う</h2>
 <p>アロー関数は自分の <code>this</code> を持たず、<strong>書かれた場所の外側の <code>this</code></strong> をそのまま使います。メソッドの中でコールバックを書くときは、アロー関数にしておくと <code>this</code> を失いません。</p>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">const timer = {
-  label: "タイマー",
+  label: "タイマ",
   start() {
     setTimeout(function () {
       console.log("function:", this.label);
@@ -337,7 +337,7 @@ setTimeout(() => timer.show(), 0);</code></pre>
 };
 timer.start();</code></pre>
 <pre class="output"><code class="language-text">function: undefined
-アロー関数: タイマー</code></pre>
+アロー関数: タイマ</code></pre>
 </div>
 <div class="callout callout-warning">
 <p><span class="label">注意:</span> 逆に、<strong>メソッドそのものをアロー関数で書くと</strong>、<code>this</code> がオブジェクトになりません。オブジェクトの外側の <code>this</code> を使ってしまうからです。メソッドは <code>up() { … }</code> の形で書き、その中のコールバックをアロー関数にします。</p>

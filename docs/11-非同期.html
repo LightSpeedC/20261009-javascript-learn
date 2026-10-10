@@ -47,7 +47,7 @@ body{counter-reset:secnum;} section h1{counter-increment:secnum;} section h1::be
 
 <section class="ch01" id="ch01">
 <h1>待たずに先へ進む</h1>
-<p>プログラムには「時間のかかる処理」があります。タイマー、ファイルの読み込み、ネットワークの通信などです。JavaScript は、こうした処理を<strong>頼んだら結果を待たずに次の行へ進み</strong>、結果が出たときに続きを実行します。これを<strong>非同期</strong>処理と呼びます。</p>
+<p>プログラムには「時間のかかる処理」があります。タイマ、ファイルの読み込み、ネットワークの通信などです。JavaScript は、こうした処理を<strong>頼んだら結果を待たずに次の行へ進み</strong>、結果が出たときに続きを実行します。これを<strong>非同期</strong>処理と呼びます。</p>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">console.log("1. 注文を受けた");
 setTimeout(() => {
@@ -81,14 +81,14 @@ console.log("2. 次のお客さんの注文を受けた");</code></pre>
 <figcaption>非同期では、待ち時間の間に別の仕事を進められる</figcaption>
 </figure>
 <h2>JavaScript は 1 本の流れで動く</h2>
-<p>JavaScript のコードは、<strong>1 本の流れ（シングルスレッド）</strong>で順に実行されます。同時に 2 つの関数が動くことはありません。だからこそ、待ち時間で流れを止めないように、非同期の仕組みがあります。逆に、重い計算で流れを止めてしまうと、タイマーの時刻になっても呼ばれません。</p>
+<p>JavaScript のコードは、<strong>1 本の流れ（シングルスレッド）</strong>で順に実行されます。同時に 2 つの関数が動くことはありません。だからこそ、待ち時間で流れを止めないように、非同期の仕組みがあります。逆に、重い計算で流れを止めてしまうと、タイマの時刻になっても呼ばれません。</p>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">const start = Date.now();
-setTimeout(() => console.log("タイマー: 0 ミリ秒後のはず"), 0);
+setTimeout(() => console.log("タイマ: 0 ミリ秒後のはず"), 0);
 while (Date.now() - start &lt; 500) {} // 0.5 秒、何もせずに回り続ける
 console.log("重い処理が終わった");</code></pre>
 <pre class="output"><code class="language-text">重い処理が終わった
-タイマー: 0 ミリ秒後のはず</code></pre>
+タイマ: 0 ミリ秒後のはず</code></pre>
 </div>
 <div class="callout callout-important">
 <p><span class="label">Java ・ C# から来た人へ:</span> 非同期をスレッドで実現するのではありません。<code>Thread.sleep</code> のように「その場で待つ」命令もありません。ブラウザでは、流れを止めると画面がまるごと固まります。</p>
@@ -114,7 +114,7 @@ console.log("重い処理が終わった");</code></pre>
 <text x="145" y="160" fill="#fff" font-size="15" text-anchor="middle">終わるまで割り込めない</text>
 <rect x="330" y="20" width="230" height="110" rx="14" fill="url(#g-11-2d)"/>
 <text x="445" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">裏で進む待ち</text>
-<text x="445" y="82" fill="#fff" font-size="14" text-anchor="middle">タイマー ・ ファイル</text>
+<text x="445" y="82" fill="#fff" font-size="14" text-anchor="middle">タイマ ・ ファイル</text>
 <text x="445" y="106" fill="#fff" font-size="14" text-anchor="middle">通信 …</text>
 <rect x="620" y="20" width="240" height="110" rx="14" fill="url(#g-11-2c)"/>
 <text x="740" y="52" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">① マイクロタスク</text>
@@ -122,7 +122,7 @@ console.log("重い処理が終わった");</code></pre>
 <text x="740" y="106" fill="#fff" font-size="14" text-anchor="middle">先に全部片付ける</text>
 <rect x="620" y="170" width="240" height="110" rx="14" fill="url(#g-11-2b)"/>
 <text x="740" y="202" fill="#fff" font-size="17" font-weight="700" text-anchor="middle">② タスクの列</text>
-<text x="740" y="232" fill="#fff" font-size="14" text-anchor="middle">時間になったタイマー</text>
+<text x="740" y="232" fill="#fff" font-size="14" text-anchor="middle">時間になったタイマ</text>
 <text x="740" y="256" fill="#fff" font-size="14" text-anchor="middle">読み終わったファイル …</text>
 <line x1="274" y1="75" x2="324" y2="75" stroke="#7a8699" stroke-width="3" marker-end="url(#m-11-2)"/>
 <text x="299" y="66" fill="#1c2330" font-size="12" text-anchor="middle">頼む</text>
@@ -136,20 +136,20 @@ console.log("重い処理が終わった");</code></pre>
 <ol>
 <li>いま実行中の処理（コードの上から下まで）を、最後まで実行する</li>
 <li>手が空いたら、<strong>マイクロタスク</strong>（Promise の続き）を全部片付ける</li>
-<li>次に、<strong>タスクの列</strong>（時間になったタイマーなど）から 1 つ取り出して実行する</li>
+<li>次に、<strong>タスクの列</strong>（時間になったタイマなど）から 1 つ取り出して実行する</li>
 <li>2 に戻る。これをずっとくり返す</li>
 </ol>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">console.log("A");
-setTimeout(() => console.log("B（タイマー）"), 0);
+setTimeout(() => console.log("B（タイマ）"), 0);
 Promise.resolve().then(() => console.log("C（Promise）"));
 console.log("D");</code></pre>
 <pre class="output"><code class="language-text">A
 D
 C（Promise）
-B（タイマー）</code></pre>
+B（タイマ）</code></pre>
 </div>
-<p>A と D は、いま実行中の処理なので先に出ます。C は Promise の続き（マイクロタスク）なので、0 ミリ秒のタイマー B よりも先に呼ばれます。</p>
+<p>A と D は、いま実行中の処理なので先に出ます。C は Promise の続き（マイクロタスク）なので、0 ミリ秒のタイマ B よりも先に呼ばれます。</p>
 </section>
 
 <section class="ch03" id="ch03">
@@ -411,16 +411,16 @@ Uncaught (in promise) Error: 読み込み失敗</code></pre>
 <div class="example" data-run="worker">
 <pre><code class="language-javascript">try {
   setTimeout(() => {
-    throw new Error("タイマーの中のエラー");
+    throw new Error("タイマの中のエラー");
   }, 0);
 } catch (e) {
   console.log("捕まえた？", e.message);
 }
 console.log("try を抜けた");</code></pre>
 <pre class="output"><code class="language-text">try を抜けた
-Uncaught Error: タイマーの中のエラー</code></pre>
+Uncaught Error: タイマの中のエラー</code></pre>
 </div>
-<p>タイマーなどの古い仕組みは、Promise で包んでから <code>await</code> すると、<code>try</code> ・ <code>catch</code> で扱えるようになります（前の節の <code>wait</code> や <code>fetchStock</code> がその形です）。</p>
+<p>タイマなどの古い仕組みは、Promise で包んでから <code>await</code> すると、<code>try</code> ・ <code>catch</code> で扱えるようになります（前の節の <code>wait</code> や <code>fetchStock</code> がその形です）。</p>
 </section>
 
 <section class="ch07" id="ch07">
