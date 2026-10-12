@@ -234,7 +234,7 @@ const result = await res.json();</code></pre>
 </svg>
 <figcaption>別のオリジンのデータを読めるかは、サーバが許可するかどうかで決まる</figcaption>
 </figure>
-<p>別のオリジンから読んでよいかは、<strong>サーバ側</strong>が <code>Access-Control-Allow-Origin</code> という見出し（ヘッダ）で答えます。許可されていないと、Console に次のようなエラーが出て、JavaScript には <code>TypeError: Failed to fetch</code> が届きます。</p>
+<p>別のオリジンから読んでよいかは、<strong>サーバ側</strong>が <code>Access-Control-Allow-Origin</code> という見出し（ヘッダー）で答えます。許可されていないと、Console に次のようなエラーが出て、JavaScript には <code>TypeError: Failed to fetch</code> が届きます。</p>
 <pre><code class="language-text">Access to fetch at 'https://api.example.com/data' from origin 'https://lightspeedc.com'
 has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.</code></pre>
 <p>この仕組みを <strong>CORS</strong>（オリジン間リソース共有）と呼びます。<strong>ブラウザ側の JavaScript では解決できません</strong>。使いたい API が許可していないときは、自分のサーバを経由して取ってくるなど、サーバ側で対応します。</p>

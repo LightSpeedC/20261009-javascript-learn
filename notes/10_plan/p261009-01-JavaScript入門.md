@@ -64,7 +64,7 @@
 |  | 16 | イベント | `addEventListener`、伝播と委譲、イベントの中の `this` |
 |  | 17 | フォーム | 入力値の取得、検証、送信を止める |
 | 第6回 | 18 | 通信 | `fetch`、JSON、CORS の入口 |
-|  | 19 | ブラウザの機能 | 保存の方法の比較（cookie ・ `localStorage` ・ `sessionStorage` ・ IndexedDB の使いどころだけ）、タイマ、履歴、クリップボード |
+|  | 19 | ブラウザの機能 | 保存の方法の比較（cookie ・ `localStorage` ・ `sessionStorage` ・ IndexedDB の使いどころだけ）、タイマー、履歴、クリップボード |
 |  | 20 | 紹介: 描画とメディア | Canvas、SVG、3D（three.js など）、動画、マイク・カメラ、音声合成、音の生成（Web Audio） |
 |  | 21 | 紹介: リアルタイム通信 | WebSocket、Server-Sent Events、WebRTC、チャット |
 |  | 22 | 紹介: ライブラリを埋め込む | CDN で React、UMD を `<script>` で読み込む、Mermaid でシーケンス図など |
@@ -91,7 +91,7 @@ jsprimer は、GitBook のプラグイン js-console（codemirror-console）を�
 | コードの種類 | ボタンを押したとき |
 |---|---|
 | ブラウザで動くもの（値・関数・クラス・クロージャ等） | その場で実行し、出力とエラーを表示する。コードは書き換えて再実行できる |
-| タイマ・Promise ・ `async` ・ `await` | 同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする） |
+| タイマー・Promise ・ `async` ・ `await` | 同じく実行する。出力は時間差で順に追加されていく（11 章の例はこちらを多めにする） |
 | Node.js でしか動かないもの（ファイルの読み書き・ディレクトリ一覧・`require` 等） | 実行はせず、Node.js で実際に動かしたときの出力を、あらかじめ記録したものとして表示する。「Node.js での実行結果」と明示し、書き換えはできない |
 
 仕組みは自前で書き、`docs/js/` に置く。CDN は使わない。実行する場所は部で分ける。

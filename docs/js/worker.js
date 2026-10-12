@@ -13,7 +13,7 @@ importScripts('inspect.js');
 		setInterval: self.setInterval.bind(self),
 		clearInterval: self.clearInterval.bind(self),
 	};
-	// 動いているタイマ。0 になったら、例の実行が終わったとみなす
+	// 動いているタイマー。0 になったら、例の実行が終わったとみなす
 	const timers = new Set();
 	let groupIndent = '';
 	const counts = new Map();
@@ -103,7 +103,7 @@ importScripts('inspect.js');
 		reportError(ev.reason, true);
 	});
 
-	// タイマが 0 の状態が続いたら終わりとみなして知らせる
+	// タイマーが 0 の状態が続いたら終わりとみなして知らせる
 	function watchIdle() {
 		let idle = 0;
 		const tick = () => {
